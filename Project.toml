@@ -1,0 +1,7 @@
+name = "Kroki"
+uuid = "b3565e16-c1f2-4fe9-b4ab-221c88942068"
+authors = ["Joris Kraak <me@joriskraak.nl>"]
+version = "0.1.0"
+
+[compat]
+julia = "1.2"
