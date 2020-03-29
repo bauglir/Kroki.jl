@@ -2,7 +2,36 @@ module KrokiTest
 
 using Test: @testset, @test, @test_nowarn, @test_throws
 
-using Kroki: Diagram, InvalidDiagramSpecificationError, render
+using Kroki: Diagram, InvalidDiagramSpecificationError,
+             InvalidOutputFormatError, render
+
+testRenderError(
+  title::AbstractString,
+  diagram_type::Symbol,
+  content::AbstractString,
+  output_format::AbstractString,
+  expected_error_type::DataType
+) = @testset "$(title)" begin
+  diagram = Diagram(diagram_type, content)
+
+  @test_throws(expected_error_type, render(diagram, output_format))
+
+  @testset "rendering" begin
+    service_response = "$(title) response"
+    captured_error = IOBuffer()
+
+    Base.showerror(
+      captured_error,
+      expected_error_type(service_response, diagram)
+    )
+
+    rendered_error = String(take!(captured_error))
+
+    @test occursin("Kroki service responded with:", rendered_error)
+    @test occursin(content, rendered_error)
+    @test occursin(service_response, rendered_error)
+  end
+end
 
 @testset "Kroki" begin
   @testset "`Diagram`" begin
@@ -61,28 +90,23 @@ using Kroki: Diagram, InvalidDiagramSpecificationError, render
     end
 
     @testset "errors" begin
-      @testset "invalid diagram specification" begin
+      testRenderError(
+        "invalid diagram specification",
+        :PlantUML,
         # A missing `>` and message cause the specification to be invalid
-        broken_content = "Julia - Kroki:"
-        diagram = Diagram(:PlantUML, broken_content)
+        "Julia - Kroki:",
+        "svg",
+        InvalidDiagramSpecificationError
+      )
 
-        @test_throws(InvalidDiagramSpecificationError, render(diagram, "svg"))
-
-        @testset "rendering" begin
-          service_response = "Invalid diagram specification response"
-          capture = IOBuffer()
-
-          Base.showerror(
-            capture,
-            InvalidDiagramSpecificationError(service_response, diagram)
-          )
-
-          rendered_error = String(take!(capture))
-
-          @test occursin(broken_content, rendered_error)
-          @test occursin(service_response, rendered_error)
-        end
-      end
+      testRenderError(
+        "invalid output format",
+        :Mermaid,
+        # The Mermaid renderer does not support PNG output
+        "graph TD; A --> B;",
+        "png",
+        InvalidOutputFormatError
+      )
     end
   end
 end
