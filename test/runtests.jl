@@ -2,7 +2,7 @@ module KrokiTest
 
 using Test: @testset, @test, @test_nowarn, @test_throws
 
-using Kroki: Diagram, render
+using Kroki: Diagram, InvalidDiagramSpecificationError, render
 
 @testset "Kroki" begin
   @testset "`Diagram`" begin
@@ -58,6 +58,31 @@ using Kroki: Diagram, render
       # Some renderers (e.g. Graphviz) include additional whitespace/newlines
       # after the render, these should be ignored when matching
       @test endswith(rendered, r"</svg>\s?")
+    end
+
+    @testset "errors" begin
+      @testset "invalid diagram specification" begin
+        # A missing `>` and message cause the specification to be invalid
+        broken_content = "Julia - Kroki:"
+        diagram = Diagram(:PlantUML, broken_content)
+
+        @test_throws(InvalidDiagramSpecificationError, render(diagram, "svg"))
+
+        @testset "rendering" begin
+          service_response = "Invalid diagram specification response"
+          capture = IOBuffer()
+
+          Base.showerror(
+            capture,
+            InvalidDiagramSpecificationError(service_response, diagram)
+          )
+
+          rendered_error = String(take!(capture))
+
+          @test occursin(broken_content, rendered_error)
+          @test occursin(service_response, rendered_error)
+        end
+      end
     end
   end
 end

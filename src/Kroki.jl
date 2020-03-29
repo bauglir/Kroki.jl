@@ -32,6 +32,29 @@ parametric part.
 Diagram(type::Symbol, specification::AbstractString) = Diagram{Val{type}}(specification)
 
 """
+An `Exception` to be thrown when a [`Diagram`](@ref) representing an invalid
+specification is passed to [`render`](@ref).
+"""
+struct InvalidDiagramSpecificationError <: Exception
+  error::String
+  cause::Diagram
+end
+
+function Base.showerror(io::IO, error::InvalidDiagramSpecificationError)
+  diagram_type = typeof(error.cause).parameters[1].parameters[1]
+
+  print(io, """
+  The Kroki service responded with:
+  $(error.error)
+
+  In response to a '$(diagram_type)' diagram with the specification:
+  $(error.cause.specification)
+
+  This is (likely) caused by an invalid diagram specification.
+  """)
+end
+
+"""
 Compresses a [`Diagram`](@ref)'s `specification` using
 [zlib](https://zlib.net), turning the resulting bytes into a URL-safe Base64
 encoded payload (i.e. replacing `+` by `-` and `/` by `_`) to be used in
@@ -48,14 +71,24 @@ UriSafeBase64Payload(diagram::Diagram) = foldl(
 Renders a [`Diagram`](@ref) through a Kroki service to the specified output
 format.
 """
-render(diagram::Diagram{T}, output_format::AbstractString) where T <: Val = getfield(
-  request("GET", join([
-    "https://kroki.io",
-    lowercase("$(T.parameters[1])"),
-    output_format,
-    UriSafeBase64Payload(diagram)
-  ], '/')),
-  :body
-)
+render(diagram::Diagram{T}, output_format::AbstractString) where T <: Val = try
+  getfield(
+    request("GET", join([
+      "https://kroki.io",
+      lowercase("$(T.parameters[1])"),
+      output_format,
+      UriSafeBase64Payload(diagram)
+    ], '/')),
+    :body
+  )
+catch exception
+  if exception.status == 400
+    throw(InvalidDiagramSpecificationError(
+      String(exception.response.body), diagram
+    ))
+  else
+    throw(exception)
+  end
+end
 
 end
