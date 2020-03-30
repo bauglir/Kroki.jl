@@ -117,11 +117,16 @@ RenderError(::Diagram, exception::Exception) = exception
 """
 Renders a [`Diagram`](@ref) through a Kroki service to the specified output
 format.
+
+A `KROKI_ENDPOINT` environment variable can be set, specifying the URI of a
+specific instance of Kroki to use (e.g. when using a [privately hosted
+instance](https://docs.kroki.io/kroki/setup/install/)). By default the
+[publicly hosted service](https://kroki.io) is used.
 """
 render(diagram::Diagram{T}, output_format::AbstractString) where T <: Val = try
   getfield(
     request("GET", join([
-      "https://kroki.io",
+      get(ENV, "KROKI_ENDPOINT", "https://kroki.io"),
       lowercase("$(T.parameters[1])"),
       output_format,
       UriSafeBase64Payload(diagram)
