@@ -14,6 +14,8 @@ $(DOCSTRING)
 """
 A representation of a diagram that can be rendered by a Kroki service.
 
+$(TYPEDFIELDS)
+
 # Examples
 
 ```
