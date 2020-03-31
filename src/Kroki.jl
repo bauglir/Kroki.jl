@@ -2,9 +2,13 @@ module Kroki
 
 using Base64: base64encode
 using CodecZlib: ZlibCompressor, transcode
+using DocStringExtensions
 using HTTP: request
 using HTTP.ExceptionRequest: StatusError
 
+@template (FUNCTIONS, METHODS, MACROS) = """
+$(TYPEDSIGNATURES)
+$(DOCSTRING)
 """
 
 """
