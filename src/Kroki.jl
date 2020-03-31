@@ -82,7 +82,8 @@ Compresses a [`Diagram`](@ref)'s `specification` using
 encoded payload (i.e. replacing `+` by `-` and `/` by `_`) to be used in
 communication with a Kroki service.
 
-See https://docs.kroki.io/kroki/setup/encode-diagram/ for more information.
+See the [Kroki documentation](https://docs.kroki.io/kroki/setup/encode-diagram)
+for more information.
 """
 UriSafeBase64Payload(diagram::Diagram) = foldl(
   replace, [ '+' => '-', '/' => '_'];
