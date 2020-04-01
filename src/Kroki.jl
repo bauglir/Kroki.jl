@@ -137,6 +137,30 @@ catch exception
   throw(RenderError(diagram, exception))
 end
 
+"""
+Some MIME types are not supported by all diagram types, this constant contains
+all these limitations. The union of all is the support for SVG
+"""
+const LIMITED_DIAGRAM_SUPPORT = Dict{AbstractString, Tuple{Symbol,Vararg{Symbol}}}(
+  "image/png" => (:blockdiag, :seqdiag, :actdiag, :nwdiag, :packetdiag,
+                  :rackdiag, :c4plantuml, :ditaa, :erd, :graphviz, :plantuml,
+                  :umlet, :vega, :vegalite)
+)
+
+# `Base.show` methods should only be defined for diagram types that actually
+# support the desired output format. This would make sure incompatible formats
+# are not accidentally rendered on compatible `AbstractDisplay`s causing
+# [`InvalidOutputFormatError`](@ref)s. As the diagram type information is only
+# available within [`Diagram`](@ref) instances, the `show` method is defined
+# generically, but then restricted using `Base.showable` to only those types
+# that actually support the format
+Base.show(
+  io::IO, ::MIME{Symbol("image/png")}, diagram::Diagram
+) = write(io, render(diagram, "png"))
+Base.showable(
+  ::MIME{Symbol("image/png")}, diagram::Diagram
+) = diagram.type ∈ LIMITED_DIAGRAM_SUPPORT["image/png"]
+
 # SVG output is supported by _all_ diagram types, so there's no additional
 # checking for support. This makes sure SVG output also works for new diagram
 # types if they get added to Kroki, but not yet to this package

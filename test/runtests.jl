@@ -33,6 +33,18 @@ testRenderError(
   end
 end
 
+function testShowMethodRenders(
+  diagram::Diagram,
+  mime_type::AbstractString,
+  render_output_format::AbstractString
+)
+  output = IOBuffer()
+  Base.show(output, mime_type, diagram)
+  rendered_output = String(take!(output))
+
+  @test rendered_output == String(render(diagram, render_output_format))
+end
+
 @testset "Kroki" begin
   @testset "`render`" begin
     # This is not an exhaustive list of supported diagram types or output
@@ -121,15 +133,24 @@ end
   end
 
   @testset "`Base.show`" begin
-    @testset "`image/svg+xml`" begin
-      diagram = Diagram(:PlantUML, "A -> B: C")
+    # Svgbob diagrams only support SVG output. Any other formats should throw
+    # `InvalidOutputFormatError`s when called directly.
+    #
+    # To prevent compatible `AbstractDisplay`s from trying to render
+    # incompatible diagram types in certain formats resulting in errors,
+    # `Base.showable` should be overridden to indicate the diagram cannot be
+    # rendered in the specified MIME type
+    svgbob_diagram = Diagram(:svgbob, "-->[_...__... ]")
+    @test_throws(
+      InvalidOutputFormatError,
+      Base.show(IOBuffer(), "image/png", svgbob_diagram)
+    )
+    @test !showable("image/png", svgbob_diagram)
+    testShowMethodRenders(svgbob_diagram, "image/svg+xml", "svg")
 
-      output = IOBuffer()
-      Base.show(output, "image/svg+xml", diagram)
-      rendered_output = take!(output)
-
-      @test rendered_output == render(diagram, "svg")
-    end
+    plantuml_diagram = Diagram(:PlantUML, "A -> B: C")
+    testShowMethodRenders(plantuml_diagram, "image/png", "png")
+    testShowMethodRenders(plantuml_diagram, "image/svg+xml", "svg")
   end
 end
 
