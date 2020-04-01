@@ -137,4 +137,11 @@ catch exception
   throw(RenderError(diagram, exception))
 end
 
+# SVG output is supported by _all_ diagram types, so there's no additional
+# checking for support. This makes sure SVG output also works for new diagram
+# types if they get added to Kroki, but not yet to this package
+Base.show(
+  io::IO, ::MIME"image/svg+xml", diagram::Diagram
+) = write(io, render(diagram, "svg"))
+
 end

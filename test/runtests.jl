@@ -119,6 +119,18 @@ end
       end
     end
   end
+
+  @testset "`Base.show`" begin
+    @testset "`image/svg+xml`" begin
+      diagram = Diagram(:PlantUML, "A -> B: C")
+
+      output = IOBuffer()
+      Base.show(output, "image/svg+xml", diagram)
+      rendered_output = take!(output)
+
+      @test rendered_output == render(diagram, "svg")
+    end
+  end
 end
 
 end
