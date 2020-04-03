@@ -168,4 +168,12 @@ Base.show(
   io::IO, ::MIME"image/svg+xml", diagram::Diagram
 ) = write(io, render(diagram, "svg"))
 
+# PlantUML is capable of rendering textual representations, all other diagram
+# types are not
+Base.show(io::IO, diagram::Diagram) = if endswith(lowercase("$(diagram.type)"), "plantuml")
+  write(io, render(diagram, "utxt"))
+else
+  write(io, diagram.specification)
+end
+
 end

@@ -151,6 +151,19 @@ end
     plantuml_diagram = Diagram(:PlantUML, "A -> B: C")
     testShowMethodRenders(plantuml_diagram, "image/png", "png")
     testShowMethodRenders(plantuml_diagram, "image/svg+xml", "svg")
+
+    @testset "`text/plain`" begin
+      # PlantUML diagrams can be rendered nicely in text/plain based
+      # environments
+      testShowMethodRenders(plantuml_diagram, "text/plain", "utxt")
+
+      # Other diagram types should simply display their `specification`
+      output = IOBuffer()
+      Base.show(output, "text/plain", svgbob_diagram)
+      rendered_output = String(take!(output))
+
+      @test rendered_output == svgbob_diagram.specification
+    end
   end
 end
 
