@@ -184,4 +184,25 @@ else
   write(io, diagram.specification)
 end
 
+for diagram_type = map(
+  # The union of the values of `LIMITED_DIAGRAM_SUPPORT` correspond to all
+  # supported `Diagram` types. Converting the `Symbol`s to `String`s improves
+  # readability of the `macro` bodies
+  String, collect(Set(Iterators.flatten(values(LIMITED_DIAGRAM_SUPPORT))))
+)
+  macro_name = Symbol("$(diagram_type)_str")
+  macro_signature = Symbol("@$macro_name")
+
+  docstring = "Shorthand for instantiating $diagram_type [`Diagram`](@ref)s."
+
+  @eval begin
+    export $macro_signature
+
+    @doc $docstring ->
+    macro $macro_name(specification::AbstractString)
+      Diagram(Symbol($diagram_type), specification)
+    end
+  end
+end
+
 end

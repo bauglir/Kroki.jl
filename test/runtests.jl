@@ -2,8 +2,8 @@ module KrokiTest
 
 using Test: @testset, @test, @test_nowarn, @test_throws
 
-using Kroki: Diagram, InvalidDiagramSpecificationError,
-             InvalidOutputFormatError, render
+using Kroki: @mermaid_str, @plantuml_str, Diagram,
+             InvalidDiagramSpecificationError, InvalidOutputFormatError, render
 
 testRenderError(
   title::AbstractString,
@@ -130,6 +130,23 @@ end
         end
       end
     end
+  end
+
+  @testset "string literal shorthand for diagram types" begin
+    # String literal macros should be defined as a convenient way for
+    # specifying diagrams.
+    #
+    # This is not an exhaustive test as these are dynamically generated. The
+    # basic functionality is only verified for key diagram types.
+    shorthand_plantuml = plantuml"A -> B: C"
+    longhand_plantuml = Diagram(:PlantUML, "A -> B: C")
+    # The leading newlines make sure the alignment of the plain text
+    # representations is identical across both calling methods
+    @test "\n$shorthand_plantuml" == "\n$longhand_plantuml"
+
+    shorthand_mermaid = mermaid"graph TD; A --> B"
+    longhand_mermaid = Diagram(:mermaid, "graph TD; A --> B")
+    @test shorthand_mermaid == longhand_mermaid
   end
 
   @testset "`Base.show`" begin
