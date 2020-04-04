@@ -122,6 +122,12 @@ A `KROKI_ENDPOINT` environment variable can be set, specifying the URI of a
 specific instance of Kroki to use (e.g. when using a [privately hosted
 instance](https://docs.kroki.io/kroki/setup/install/)). By default the
 [publicly hosted service](https://kroki.io) is used.
+
+If the Kroki service responds with an error throws an
+[`InvalidDiagramSpecificationError`](@ref) or
+[`InvalidOutputFormatError`](@ref) if a know type of error occurs. Other errors
+(e.g. `HTTP.ExceptionRequest.StatusError` for connection errors) are propagated
+if they occur.
 """
 render(diagram::Diagram, output_format::AbstractString) = try
   getfield(
