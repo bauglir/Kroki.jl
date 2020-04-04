@@ -35,3 +35,9 @@ good looking visuals whenever possible, e.g. in the context of
 [Documenter](https://juliadocs.github.io/Documenter.jl/stable/) or
 [Jupyter](https://jupyter.org)/[IJulia](https://github.com/JuliaLang/IJulia.jl),
 using SVG or other output formats.
+
+## Contents
+
+```@contents
+Pages = [ "api.md" ]
+```
