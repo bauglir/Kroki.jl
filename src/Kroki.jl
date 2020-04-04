@@ -1,3 +1,12 @@
+"""
+The main `Module` containing the necessary types of functions for integration
+with a Kroki service.
+
+Defines `Base.show` and corresponding `Base.showable` methods for different
+output formats and [`Diagram`](@ref Kroki.Diagram) types, so they render in
+their most optimal form in different environments (e.g. the documentation
+system, Documenter output, Jupyter, etc.).
+"""
 module Kroki
 
 using Base64: base64encode
