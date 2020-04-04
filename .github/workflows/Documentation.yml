@@ -1,0 +1,29 @@
+name: Documentation
+
+on:
+  pull_request:
+  push:
+    branches:
+      - development
+      - master
+    tags: 'v*'
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: julia-actions/setup-julia@v1
+        with:
+          version: '1.4'
+      - name: Install dependencies
+        run: |
+          julia --project=docs -e '
+            using Pkg
+            Pkg.develop(PackageSpec(path=pwd()))
+            Pkg.instantiate()'
+      - name: Build & Deploy
+        run: julia --project=docs docs/make.jl
+        env:
+          # For authentication with GitHub Actions
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
