@@ -139,12 +139,20 @@ end
 
 """
 Some MIME types are not supported by all diagram types, this constant contains
-all these limitations. The union of all is the support for SVG
+all these limitations. The union of all values corresponds to all supported
+[`Diagram`](@ref) `type`s.
 """
 const LIMITED_DIAGRAM_SUPPORT = Dict{AbstractString, Tuple{Symbol,Vararg{Symbol}}}(
+  "application/pdf" => (:blockdiag, :seqdiag, :actdiag, :nwdiag, :packetdiag,
+                        :rackdiag, :erd, :graphviz, :vega, :vegalite),
+  "image/jpeg" => (:c4plantuml, :erd, :graphviz, :plantuml, :umlet),
   "image/png" => (:blockdiag, :seqdiag, :actdiag, :nwdiag, :packetdiag,
                   :rackdiag, :c4plantuml, :ditaa, :erd, :graphviz, :plantuml,
-                  :umlet, :vega, :vegalite)
+                  :umlet, :vega, :vegalite),
+  # Although all diagram types support SVG, these _only_ support SVG so are
+  # included separately
+  "image/svg+xml" => (:mermaid, :nomnoml, :svgbob, :wavedrom),
+  "text/plain" => (:c4plantuml, :plantuml)
 )
 
 # `Base.show` methods should only be defined for diagram types that actually
