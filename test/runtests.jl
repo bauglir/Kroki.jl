@@ -2,15 +2,20 @@ module KrokiTest
 
 using Test: @testset, @test, @test_nowarn, @test_throws
 
-using Kroki: @mermaid_str, @plantuml_str, Diagram,
-             InvalidDiagramSpecificationError, InvalidOutputFormatError, render
+using Kroki:
+  @mermaid_str,
+  @plantuml_str,
+  Diagram,
+  InvalidDiagramSpecificationError,
+  InvalidOutputFormatError,
+  render
 
 testRenderError(
   title::AbstractString,
   diagram_type::Symbol,
   content::AbstractString,
   output_format::AbstractString,
-  expected_error_type::DataType
+  expected_error_type::DataType,
 ) = @testset "$(title)" begin
   diagram = Diagram(diagram_type, content)
 
@@ -20,10 +25,7 @@ testRenderError(
     service_response = "$(title) response"
     captured_error = IOBuffer()
 
-    Base.showerror(
-      captured_error,
-      expected_error_type(service_response, diagram)
-    )
+    Base.showerror(captured_error, expected_error_type(service_response, diagram))
 
     rendered_error = String(take!(captured_error))
 
@@ -36,7 +38,7 @@ end
 function testShowMethodRenders(
   diagram::Diagram,
   mime_type::AbstractString,
-  render_output_format::AbstractString
+  render_output_format::AbstractString,
 )
   output = IOBuffer()
   Base.show(output, mime_type, diagram)
@@ -62,7 +64,7 @@ end
       +--------+     +---------+
       """,
       # The specification of the diagram type is case-insensitive
-      :plantuml => "Kroki <- Julia: Hello"
+      :plantuml => "Kroki <- Julia: Hello",
     ]
 
     # The PNG specification defines the structure of PNG files (see
@@ -71,14 +73,16 @@ end
     # marker (i.e. the 'IEND image trailer'), both consisting of 8 bytes
     PNG_HEADER = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]
     PNG_EOF = [0x0, 0x49, 0x45, 0x4e, 0x44, 0xae, 0x42, 0x60, 0x82]
-    @testset "$(diagram_format) to PNG" for (diagram_format, specification) = DIAGRAM_EXAMPLES
+    @testset "$(diagram_format) to PNG" for (diagram_format, specification) in
+                                            DIAGRAM_EXAMPLES
       rendered = render(Diagram(diagram_format, specification), "png")
 
       @test rendered[1:length(PNG_HEADER)] == PNG_HEADER
-      @test rendered[end-8:end] == PNG_EOF
+      @test rendered[(end - 8):end] == PNG_EOF
     end
 
-    @testset "$(diagram_format) to SVG" for (diagram_format, specification) = DIAGRAM_EXAMPLES
+    @testset "$(diagram_format) to SVG" for (diagram_format, specification) in
+                                            DIAGRAM_EXAMPLES
       rendered = String(render(Diagram(diagram_format, specification), "svg"))
 
       @test startswith(rendered, "<?xml")
@@ -94,7 +98,7 @@ end
         # A missing `>` and message cause the specification to be invalid
         "Julia - Kroki:",
         "svg",
-        InvalidDiagramSpecificationError
+        InvalidDiagramSpecificationError,
       )
 
       testRenderError(
@@ -103,7 +107,7 @@ end
         # The Mermaid renderer does not support PNG output
         "graph TD; A --> B;",
         "png",
-        InvalidOutputFormatError
+        InvalidOutputFormatError,
       )
     end
 
@@ -125,7 +129,8 @@ end
 
           @test occursin("ECONNREFUSED", rendered_buffer)
           @test occursin(
-            "$(expected_service_host)/$(expected_diagram_type)", rendered_buffer
+            "$(expected_service_host)/$(expected_diagram_type)",
+            rendered_buffer,
           )
         end
       end

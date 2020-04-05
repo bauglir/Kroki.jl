@@ -53,12 +53,13 @@ struct InvalidDiagramSpecificationError <: Exception
   cause::Diagram
 end
 
-Base.showerror(io::IO, error::InvalidDiagramSpecificationError) = print(io,
+Base.showerror(io::IO, error::InvalidDiagramSpecificationError) = print(
+  io,
   """
   $(RenderErrorHeader(error))
 
   This is (likely) caused by an invalid diagram specification.
-  """
+  """,
 )
 
 """
@@ -70,17 +71,18 @@ struct InvalidOutputFormatError <: Exception
   cause::Diagram
 end
 
-Base.showerror(io::IO, error::InvalidOutputFormatError) = print(io,
+Base.showerror(io::IO, error::InvalidOutputFormatError) = print(
+  io,
   """
   $(RenderErrorHeader(error))
 
   This is (likely) caused by an invalid or unknown output format.
-  """
+  """,
 )
 
 # Helper function to render common headers when showing render errors
 function RenderErrorHeader(
-  error::Union{InvalidDiagramSpecificationError, InvalidOutputFormatError}
+  error::Union{InvalidDiagramSpecificationError, InvalidOutputFormatError},
 )
   """
   The Kroki service responded with:
@@ -101,8 +103,9 @@ See the [Kroki documentation](https://docs.kroki.io/kroki/setup/encode-diagram)
 for more information.
 """
 UriSafeBase64Payload(diagram::Diagram) = foldl(
-  replace, [ '+' => '-', '/' => '_'];
-  init = base64encode(transcode(ZlibCompressor, diagram.specification))
+  replace,
+  ['+' => '-', '/' => '_'];
+  init = base64encode(transcode(ZlibCompressor, diagram.specification)),
 )
 
 # Rewrites generic `HTTP.ExceptionRequest.StatusError`s into more specific
@@ -138,36 +141,66 @@ If the Kroki service responds with an error throws an
 (e.g. `HTTP.ExceptionRequest.StatusError` for connection errors) are propagated
 if they occur.
 """
-render(diagram::Diagram, output_format::AbstractString) = try
-  getfield(
-    request("GET", join([
-      get(ENV, "KROKI_ENDPOINT", "https://kroki.io"),
-      lowercase("$(diagram.type)"),
-      output_format,
-      UriSafeBase64Payload(diagram)
-    ], '/')),
-    :body
-  )
-catch exception
-  throw(RenderError(diagram, exception))
-end
+render(diagram::Diagram, output_format::AbstractString) =
+  try
+    getfield(
+      request(
+        "GET",
+        join(
+          [
+            get(ENV, "KROKI_ENDPOINT", "https://kroki.io"),
+            lowercase("$(diagram.type)"),
+            output_format,
+            UriSafeBase64Payload(diagram),
+          ],
+          '/',
+        ),
+      ),
+      :body,
+    )
+  catch exception
+    throw(RenderError(diagram, exception))
+  end
 
 """
 Some MIME types are not supported by all diagram types, this constant contains
 all these limitations. The union of all values corresponds to all supported
 [`Diagram`](@ref) `type`s.
 """
-const LIMITED_DIAGRAM_SUPPORT = Dict{AbstractString, Tuple{Symbol,Vararg{Symbol}}}(
-  "application/pdf" => (:blockdiag, :seqdiag, :actdiag, :nwdiag, :packetdiag,
-                        :rackdiag, :erd, :graphviz, :vega, :vegalite),
+const LIMITED_DIAGRAM_SUPPORT = Dict{AbstractString, Tuple{Symbol, Vararg{Symbol}}}(
+  "application/pdf" => (
+    :blockdiag,
+    :seqdiag,
+    :actdiag,
+    :nwdiag,
+    :packetdiag,
+    :rackdiag,
+    :erd,
+    :graphviz,
+    :vega,
+    :vegalite,
+  ),
   "image/jpeg" => (:c4plantuml, :erd, :graphviz, :plantuml, :umlet),
-  "image/png" => (:blockdiag, :seqdiag, :actdiag, :nwdiag, :packetdiag,
-                  :rackdiag, :c4plantuml, :ditaa, :erd, :graphviz, :plantuml,
-                  :umlet, :vega, :vegalite),
+  "image/png" => (
+    :blockdiag,
+    :seqdiag,
+    :actdiag,
+    :nwdiag,
+    :packetdiag,
+    :rackdiag,
+    :c4plantuml,
+    :ditaa,
+    :erd,
+    :graphviz,
+    :plantuml,
+    :umlet,
+    :vega,
+    :vegalite,
+  ),
   # Although all diagram types support SVG, these _only_ support SVG so are
   # included separately
   "image/svg+xml" => (:mermaid, :nomnoml, :svgbob, :wavedrom),
-  "text/plain" => (:c4plantuml, :plantuml)
+  "text/plain" => (:c4plantuml, :plantuml),
 )
 
 # `Base.show` methods should only be defined for diagram types that actually
@@ -177,33 +210,32 @@ const LIMITED_DIAGRAM_SUPPORT = Dict{AbstractString, Tuple{Symbol,Vararg{Symbol}
 # available within [`Diagram`](@ref) instances, the `show` method is defined
 # generically, but then restricted using `Base.showable` to only those types
 # that actually support the format
-Base.show(
-  io::IO, ::MIME{Symbol("image/png")}, diagram::Diagram
-) = write(io, render(diagram, "png"))
-Base.showable(
-  ::MIME{Symbol("image/png")}, diagram::Diagram
-) = diagram.type ∈ LIMITED_DIAGRAM_SUPPORT["image/png"]
+Base.show(io::IO, ::MIME{Symbol("image/png")}, diagram::Diagram) =
+  write(io, render(diagram, "png"))
+Base.showable(::MIME{Symbol("image/png")}, diagram::Diagram) =
+  diagram.type ∈ LIMITED_DIAGRAM_SUPPORT["image/png"]
 
 # SVG output is supported by _all_ diagram types, so there's no additional
 # checking for support. This makes sure SVG output also works for new diagram
 # types if they get added to Kroki, but not yet to this package
-Base.show(
-  io::IO, ::MIME"image/svg+xml", diagram::Diagram
-) = write(io, render(diagram, "svg"))
+Base.show(io::IO, ::MIME"image/svg+xml", diagram::Diagram) =
+  write(io, render(diagram, "svg"))
 
 # PlantUML is capable of rendering textual representations, all other diagram
 # types are not
-Base.show(io::IO, diagram::Diagram) = if endswith(lowercase("$(diagram.type)"), "plantuml")
-  write(io, render(diagram, "utxt"))
-else
-  write(io, diagram.specification)
-end
+Base.show(io::IO, diagram::Diagram) =
+  if endswith(lowercase("$(diagram.type)"), "plantuml")
+    write(io, render(diagram, "utxt"))
+  else
+    write(io, diagram.specification)
+  end
 
-for diagram_type = map(
+for diagram_type in map(
   # The union of the values of `LIMITED_DIAGRAM_SUPPORT` correspond to all
   # supported `Diagram` types. Converting the `Symbol`s to `String`s improves
   # readability of the `macro` bodies
-  String, collect(Set(Iterators.flatten(values(LIMITED_DIAGRAM_SUPPORT))))
+  String,
+  collect(Set(Iterators.flatten(values(LIMITED_DIAGRAM_SUPPORT)))),
 )
   macro_name = Symbol("$(diagram_type)_str")
   macro_signature = Symbol("@$macro_name")
@@ -213,8 +245,7 @@ for diagram_type = map(
   @eval begin
     export $macro_signature
 
-    @doc $docstring ->
-    macro $macro_name(specification::AbstractString)
+    @doc $docstring macro $macro_name(specification::AbstractString)
       Diagram(Symbol($diagram_type), specification)
     end
   end
