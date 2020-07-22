@@ -43,7 +43,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           parallel: true
           path-to-lcov: ./lcov.info
-  Aggregate Coveralls:
+  Aggregate_Coveralls:
     needs: test
     runs-on: ubuntu-latest
     steps:
