@@ -5,7 +5,7 @@ on:
   push:
     branches:
       - development
-      - master
+      - main
     tags: 'v*'
 
 jobs:
