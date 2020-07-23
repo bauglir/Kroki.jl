@@ -1,0 +1,38 @@
+name: Code Format Check
+
+on:
+  push:
+    branches:
+      - development
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        julia-version: [1.4.0]
+        julia-arch: [x86]
+        os: [ubuntu-latest]
+    steps:
+      - uses: julia-actions/setup-julia@latest
+        with:
+          version: ${{ matrix.julia-version }}
+
+      - uses: actions/checkout@v1
+      - name: Install JuliaFormatter and format
+        run: |
+          julia  -e 'using Pkg; Pkg.add(PackageSpec(name="JuliaFormatter", version="0.3.9"))'
+          julia  -e 'using JuliaFormatter; format("."; indent = 2, remove_extra_newlines = true, verbose = true, whitespace_typedefs = true, whitespace_ops_in_indices = true)'
+
+      - name: Format check
+        run: |
+          julia -e '
+          out = Cmd(`git diff --name-only`) |> read |> String
+          if out == ""
+              exit(0)
+          else
+              @error "Some files have not been formatted properly!"
+              write(stdout, out)
+              exit(1)
+          end'
