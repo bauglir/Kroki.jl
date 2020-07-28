@@ -11,19 +11,15 @@ module Kroki
 
 using Base64: base64encode
 using CodecZlib: ZlibCompressor, transcode
-using DocStringExtensions
 using HTTP: request
 using HTTP.ExceptionRequest: StatusError
 
-@template (FUNCTIONS, METHODS, MACROS) = """
-$(TYPEDSIGNATURES)
-$(DOCSTRING)
-"""
+include("./kroki/documentation.jl")
+using .Documentation
+@setupDocstringMarkup()
 
 """
 A representation of a diagram that can be rendered by a Kroki service.
-
-$(TYPEDFIELDS)
 
 # Examples
 

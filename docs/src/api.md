@@ -26,3 +26,9 @@ LIMITED_DIAGRAM_SUPPORT
 UriSafeBase64Payload
 render
 ```
+
+### Documentation
+
+```@autodocs
+Modules = [ Kroki.Documentation ]
+```
