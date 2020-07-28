@@ -1,0 +1,18 @@
+version: "3"
+services:
+ core:
+   image: yuzutech/kroki
+   environment:
+     - KROKI_BPMN_HOST=bpmn
+     - KROKI_BLOCKDIAG_HOST=blockdiag
+     - KROKI_MERMAID_HOST=mermaid
+     # Enable inclusion of external PlantUML descriptions and Vega datasets
+     - KROKI_SAFE_MODE=unsafe
+   ports:
+     - 8000:8000
+ blockdiag:
+   image: yuzutech/kroki-blockdiag
+ bpmn:
+   image: yuzutech/kroki-bpmn
+ mermaid:
+   image: yuzutech/kroki-mermaid
