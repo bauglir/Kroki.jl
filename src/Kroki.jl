@@ -28,7 +28,15 @@ $(TYPEDFIELDS)
 # Examples
 
 ```
-Diagram(:PlantUML, "Kroki -> Julia: Hello Julia!")
+julia> Kroki.Diagram(:PlantUML, "Kroki -> Julia: Hello Julia!")
+     ┌─────┐          ┌─────┐
+     │Kroki│          │Julia│
+     └──┬──┘          └──┬──┘
+        │ Hello Julia!   │
+        │───────────────>│
+     ┌──┴──┐          ┌──┴──┐
+     │Kroki│          │Julia│
+     └─────┘          └─────┘
 ```
 """
 struct Diagram
