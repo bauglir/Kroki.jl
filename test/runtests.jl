@@ -110,31 +110,6 @@ end
         InvalidOutputFormatError,
       )
     end
-
-    @testset "`KROKI_ENDPOINT` environment variable" begin
-      # The instance of the Kroki service that is used for rendering can be
-      # controlled through the `KROKI_ENDPOINT` environment variable. The most
-      # straight-forward way for testing this is by pointing to an invalid
-      # endpoint and testing for a corresponding connection error
-      expected_diagram_type = :plantuml
-      expected_service_host = "https://localhost"
-
-      withenv("KROKI_ENDPOINT" => expected_service_host) do
-        try
-          render(Diagram(expected_diagram_type, "A -> B: C"), "svg")
-        catch exception
-          buffer = IOBuffer()
-          showerror(buffer, exception)
-          rendered_buffer = String(take!(buffer))
-
-          @test occursin("ECONNREFUSED", rendered_buffer)
-          @test occursin(
-            "$(expected_service_host)/$(expected_diagram_type)",
-            rendered_buffer,
-          )
-        end
-      end
-    end
   end
 
   @testset "string literal shorthand for diagram types" begin
@@ -187,6 +162,8 @@ end
       @test rendered_output == svgbob_diagram.specification
     end
   end
+
+  include("./kroki/service_test.jl")
 end
 
 end

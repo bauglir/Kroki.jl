@@ -11,6 +11,13 @@ Kroki
 Diagram
 ```
 
+### Service Management
+
+```@autodocs
+Modules = [ Kroki.Service ]
+Order = [ :module, :function ]
+```
+
 ### Shorthands
 
 ```@autodocs
@@ -33,4 +40,11 @@ render
 
 ```@autodocs
 Modules = [ Kroki.Documentation ]
+```
+
+### Service Management
+
+```@autodocs
+Modules = [ Kroki.Service ]
+Order = [ :constant ]
 ```
