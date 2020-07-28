@@ -11,6 +11,8 @@ Kroki
 Diagram
 ```
 
+### Shorthands
+
 ```@autodocs
 Modules = [ Kroki ]
 Order = [ :macro ]
