@@ -15,7 +15,8 @@ Diagram
 
 ```@autodocs
 Modules = [ Kroki.Service ]
-Order = [ :module, :function ]
+Order = [ :module, :type, :function ]
+Filter = name -> "$name" !== "executeDockerCompose"
 ```
 
 ### Shorthands
@@ -47,4 +48,8 @@ Modules = [ Kroki.Documentation ]
 ```@autodocs
 Modules = [ Kroki.Service ]
 Order = [ :constant ]
+```
+
+```@docs
+Kroki.Service.executeDockerCompose
 ```

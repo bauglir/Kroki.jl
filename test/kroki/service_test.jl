@@ -1,7 +1,8 @@
 module ServiceTest
 
-using Kroki.Service: DEFAULT_ENDPOINT, ENDPOINT, EXECUTE_DOCKER_COMPOSE,
-                     executeDockerCompose, setEndpoint!, status
+using Kroki.Service: DEFAULT_ENDPOINT, DockerComposeExecutionError, ENDPOINT,
+                     EXECUTE_DOCKER_COMPOSE, executeDockerCompose,
+                     setEndpoint!, status
 using SimpleMock
 using Test: @testset, @test, @test_logs
 
@@ -63,6 +64,35 @@ end
   end
 
   @testset "local instance management" begin
+    @testset "`executeDockerCompose` throws descriptive errors" begin
+      @testset "indicating dependencies are missing" begin
+        try
+          # Breaking the path should ensure neither Docker, nor Docker Compose
+          # can be found
+          withenv(() -> executeDockerCompose("ps"), "PATH" => nothing)
+        catch exception
+          @test exception isa ErrorException
+
+          error_message = sprint(showerror, exception)
+          @test startswith(error_message, "Missing dependencies!")
+          @test occursin("Docker Compose", error_message)
+        end
+      end
+
+      @testset "indicating to file an issue on indications of errors in Kroki.jl" begin
+        try
+          executeDockerCompose(["--non-existent", "ps"])
+        catch exception
+          @test exception isa DockerComposeExecutionError
+
+          error_message = sprint(showerror, exception)
+          @test occursin("docker-compose", error_message)
+          @test occursin("file an issue", error_message)
+          @test occursin("The reported error was", error_message)
+        end
+      end
+    end
+
     @testset "`status` reports individual Kroki service component status" begin
       status_mock = Mock((cmd::Vector{String}) -> (
         any(cmd .== "status=running")

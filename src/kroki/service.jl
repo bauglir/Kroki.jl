@@ -13,6 +13,26 @@ version](https://kroki.io).
 """
 const DEFAULT_ENDPOINT = "https://kroki.io"
 
+"""
+A specialized `Exception` to include reporting instructions for specific types
+of errors that may occur while trying to execute `docker-compose`.
+"""
+struct DockerComposeExecutionError <: Exception
+  message::String
+end
+Base.showerror(io::IO, error::DockerComposeExecutionError) = print(io, """
+An error occurred while executing `docker-compose`.
+
+This may be caused by a change in its interface. If you believe this error to
+be caused by Kroki.jl itself instead of a configuration error on the system,
+please file an issue through https://github.com/bauglir/Kroki.jl/issues/new
+including the error message below and a description of when the error occurred.
+
+The reported error was:
+
+$(error.message)
+""")
+
 "The currently active Kroki service endpoint being used."
 const ENDPOINT = Ref{String}("https://kroki.io")
 
@@ -21,14 +41,32 @@ const SERVICE_DEFINITION_FILE = realpath(
   "$(@__DIR__)/../../support/docker-services.yml"
 )
 
-"Helper function for executing Docker Compose commands."
+"""
+Helper function for executing Docker Compose commands.
+
+Returns captured stdout.
+
+Throws an `ErrorException` if Docker and/or Docker Compose aren't available.
+Throws a `DockerComposeExecutionError` if any other exception occurs during
+execution.
+"""
 function executeDockerCompose(cmd::Vector{String})
+  captured_stderr = IOBuffer()
   captured_stdout = IOBuffer()
 
-  run(pipeline(
-    `docker-compose --file $(SERVICE_DEFINITION_FILE) --project-name krokijl $cmd`;
-    stdout = captured_stdout
-  ))
+  try
+    run(pipeline(
+      `docker-compose --file $(SERVICE_DEFINITION_FILE) --project-name krokijl $cmd`;
+      stderr = captured_stderr,
+      stdout = captured_stdout
+    ))
+  catch exception
+    exception isa Base.IOError && throw(ErrorException(
+      "Missing dependencies! Docker and/or Docker Compose do not appear to be available"
+    ))
+
+    throw(DockerComposeExecutionError(String(take!(captured_stderr))))
+  end
 
   String(take!(captured_stdout))
 end
