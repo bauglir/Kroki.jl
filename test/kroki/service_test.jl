@@ -1,7 +1,18 @@
 module ServiceTest
 
-using Kroki.Service: DEFAULT_ENDPOINT, ENDPOINT, setEndpoint!
+using Kroki.Service: DEFAULT_ENDPOINT, ENDPOINT, EXECUTE_DOCKER_COMPOSE,
+                     executeDockerCompose, setEndpoint!, status
+using SimpleMock
 using Test: @testset, @test, @test_logs
+
+# Helper function to temporarily replace `EXECUTE_DOCKER_COMPOSE` with a
+# `Mock`. Used to gain control over `docker-compose` behavior for local service
+# instance management tests
+function mockExecuteDockerCompose(f::Function, mock::Mock)
+  EXECUTE_DOCKER_COMPOSE[] = mock
+  f(mock)
+  EXECUTE_DOCKER_COMPOSE[] = executeDockerCompose
+end
 
 @testset "Service" begin
   @testset "`ENDPOINT`" begin
@@ -49,6 +60,38 @@ using Test: @testset, @test, @test_logs
 
     # Restore the original endpoint
     ENDPOINT[] = original_endpoint
+  end
+
+  @testset "local instance management" begin
+    @testset "`status` reports individual Kroki service component status" begin
+      status_mock = Mock((cmd::Vector{String}) -> (
+        any(cmd .== "status=running")
+        ? """
+          core
+          blockdiag
+          mermaid
+          """
+        : "bpmn"
+      ))
+
+      mockExecuteDockerCompose(status_mock) do _executeDockerCompose
+        service_statuses = status()
+
+        @test service_statuses.core
+        @test service_statuses.blockdiag
+        @test !service_statuses.bpmn
+        @test service_statuses.mermaid
+
+        @test called_with(
+          _executeDockerCompose,
+          ["ps", "--filter", "status=running", "--services"]
+        )
+        @test called_with(
+          _executeDockerCompose,
+          ["ps", "--filter", "status=stopped", "--services"]
+        )
+      end
+    end
   end
 end
 
