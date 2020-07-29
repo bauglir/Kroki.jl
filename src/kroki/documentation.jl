@@ -8,31 +8,28 @@ using DocStringExtensions
 
 export @setupDocstringMarkup
 
-@template (FUNCTIONS, MACROS, METHODS) =
-"""
-$(TYPEDSIGNATURES)
-$(DOCSTRING)
-"""
+@template (FUNCTIONS, MACROS, METHODS) = """
+                                         $(TYPEDSIGNATURES)
+                                         $(DOCSTRING)
+                                         """
 
-@template MODULES =
-"""
-$(DOCSTRING)
+@template MODULES = """
+                    $(DOCSTRING)
 
-# Exports
-$(EXPORTS)
+                    # Exports
+                    $(EXPORTS)
 
-# Imports
-$(IMPORTS)
-"""
+                    # Imports
+                    $(IMPORTS)
+                    """
 
-@template TYPES =
-"""
-$(TYPEDEF)
-$(DOCSTRING)
+@template TYPES = """
+                  $(TYPEDEF)
+                  $(DOCSTRING)
 
-# Fields
-$(TYPEDFIELDS)
-"""
+                  # Fields
+                  $(TYPEDFIELDS)
+                  """
 
 """
 Helper macro ensuring consistent docstring markup across modules through
