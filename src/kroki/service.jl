@@ -129,6 +129,12 @@ function status()
   merge(services_by_state...)
 end
 
+"Updates the Docker images for the individual Kroki service components."
+function update!()
+  EXECUTE_DOCKER_COMPOSE[](["pull", "--quiet"])
+  return
+end
+
 # Ensure `ENDPOINT` has a valid value
 __init__() = setEndpoint!()
 

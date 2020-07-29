@@ -2,7 +2,7 @@ module ServiceTest
 
 using Kroki.Service: DEFAULT_ENDPOINT, DockerComposeExecutionError, ENDPOINT,
                      EXECUTE_DOCKER_COMPOSE, executeDockerCompose,
-                     setEndpoint!, status
+                     setEndpoint!, status, update!
 using SimpleMock
 using Test: @testset, @test, @test_logs
 
@@ -120,6 +120,15 @@ end
           _executeDockerCompose,
           ["ps", "--filter", "status=stopped", "--services"]
         )
+      end
+    end
+
+    @testset "`update!` pulls Kroki service component Docker images" begin
+      mockExecuteDockerCompose(Mock()) do _executeDockerCompose
+        # Ensure nothing gets returned from a call to `update!` instead of
+        # `Process`es from the `docker-compose` execution
+        @test update!() === nothing
+        @test called_with(_executeDockerCompose, ["pull", "--quiet"])
       end
     end
   end
