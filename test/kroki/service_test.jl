@@ -1,8 +1,16 @@
 module ServiceTest
 
-using Kroki.Service: DEFAULT_ENDPOINT, DockerComposeExecutionError, ENDPOINT,
-                     EXECUTE_DOCKER_COMPOSE, executeDockerCompose,
-                     setEndpoint!, start!, status, stop!, update!
+using Kroki.Service:
+  DEFAULT_ENDPOINT,
+  DockerComposeExecutionError,
+  ENDPOINT,
+  EXECUTE_DOCKER_COMPOSE,
+  executeDockerCompose,
+  setEndpoint!,
+  start!,
+  status,
+  stop!,
+  update!
 using SimpleMock
 using Test: @testset, @test, @test_logs
 
@@ -54,7 +62,9 @@ end
       @testset "logs `ENDPOINT` updates only if changed" begin
         expected_endpoint = "http://logged.endpoint.jl"
 
-        @test_logs (:info, "Setting Kroki service endpoint to $(expected_endpoint).") setEndpoint!(expected_endpoint)
+        @test_logs (:info, "Setting Kroki service endpoint to $(expected_endpoint).") setEndpoint!(
+          expected_endpoint,
+        )
         @test_logs setEndpoint!(expected_endpoint)
       end
     end
@@ -108,7 +118,8 @@ end
 
           # The following explicitly uses `match_mode=:any` to prevent having
           # to specify log messages caused by changes to `ENDPOINT`
-          returned = @test_logs (:info, "Starting Kroki service components.") match_mode=:any start!()
+          returned = @test_logs (:info, "Starting Kroki service components.") match_mode =
+            :any start!()
 
           # Ensure nothing gets returned from a call to `start!` instead of
           # `Process`es from the `docker-compose` execution
@@ -138,15 +149,11 @@ end
     end
 
     @testset "`status` reports individual Kroki service component status" begin
-      status_mock = Mock((cmd::Vector{String}) -> (
-        any(cmd .== "status=running")
-        ? """
-          core
-          blockdiag
-          mermaid
-          """
-        : "bpmn"
-      ))
+      status_mock = Mock((cmd::Vector{String}) -> (any(cmd .== "status=running") ? """
+                                                                                   core
+                                                                                   blockdiag
+                                                                                   mermaid
+                                                                                   """ : "bpmn"))
 
       mockExecuteDockerCompose(status_mock) do _executeDockerCompose
         service_statuses = status()
@@ -158,11 +165,11 @@ end
 
         @test called_with(
           _executeDockerCompose,
-          ["ps", "--filter", "status=running", "--services"]
+          ["ps", "--filter", "status=running", "--services"],
         )
         @test called_with(
           _executeDockerCompose,
-          ["ps", "--filter", "status=stopped", "--services"]
+          ["ps", "--filter", "status=stopped", "--services"],
         )
       end
     end
@@ -181,7 +188,8 @@ end
 
         # The following explicitly uses `match_mode=:any` to prevent having to
         # specify log messages caused by changes to `ENDPOINT`
-        returned = @test_logs (:info, "Stopping Kroki service components.") match_mode=:any stop!()
+        returned = @test_logs (:info, "Stopping Kroki service components.") match_mode =
+          :any stop!()
 
         # Ensure nothing gets returned from a call to `stop!` instead of
         # `Process`es from the `docker-compose` execution

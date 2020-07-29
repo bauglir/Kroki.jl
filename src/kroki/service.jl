@@ -24,7 +24,9 @@ of errors that may occur while trying to execute `docker-compose`.
 struct DockerComposeExecutionError <: Exception
   message::String
 end
-Base.showerror(io::IO, error::DockerComposeExecutionError) = print(io, """
+Base.showerror(io::IO, error::DockerComposeExecutionError) = print(
+  io,
+  """
 An error occurred while executing `docker-compose`.
 
 This may be caused by a change in its interface. If you believe this error to
@@ -35,15 +37,14 @@ including the error message below and a description of when the error occurred.
 The reported error was:
 
 $(error.message)
-""")
+""",
+)
 
 "The currently active Kroki service endpoint being used."
 const ENDPOINT = Ref{String}("https://kroki.io")
 
 "Path to the Docker Compose definitions for running a local Kroki service."
-const SERVICE_DEFINITION_FILE = realpath(
-  "$(@__DIR__)/../../support/docker-services.yml"
-)
+const SERVICE_DEFINITION_FILE = realpath("$(@__DIR__)/../../support/docker-services.yml")
 
 """
 Helper function for executing Docker Compose commands.
@@ -62,12 +63,11 @@ function executeDockerCompose(cmd::Vector{String})
     run(pipeline(
       `docker-compose --file $(SERVICE_DEFINITION_FILE) --project-name krokijl $cmd`;
       stderr = captured_stderr,
-      stdout = captured_stdout
+      stdout = captured_stdout,
     ))
   catch exception
-    exception isa Base.IOError && throw(ErrorException(
-      "Missing dependencies! Docker and/or Docker Compose do not appear to be available"
-    ))
+    exception isa Base.IOError &&
+    throw(ErrorException("Missing dependencies! Docker and/or Docker Compose do not appear to be available"))
 
     throw(DockerComposeExecutionError(String(take!(captured_stderr))))
   end
@@ -100,7 +100,7 @@ Returns the value that [`ENDPOINT`](@ref) got set to.
 - `setEndpoint!("http://localhost:8000")`
 """
 function setEndpoint!(
-  endpoint::AbstractString = get(ENV, "KROKI_ENDPOINT", DEFAULT_ENDPOINT)
+  endpoint::AbstractString = get(ENV, "KROKI_ENDPOINT", DEFAULT_ENDPOINT),
 )
   ENDPOINT[] != endpoint && @info "Setting Kroki service endpoint to $(endpoint)."
   ENDPOINT[] = String(endpoint)
@@ -131,18 +131,15 @@ julia> status()
 ```
 """
 function status()
-  states_to_bool = Pair{String,Bool}["running" => true, "stopped" => false]
+  states_to_bool = Pair{String, Bool}["running" => true, "stopped" => false]
 
-  services_by_state = map(states_to_bool) do (state, running)::Pair{String,Bool}
-    services_with_state = EXECUTE_DOCKER_COMPOSE[](
-      ["ps", "--filter", "status=$state", "--services"]
-    )
+  services_by_state = map(states_to_bool) do (state, running)::Pair{String, Bool}
+    services_with_state =
+      EXECUTE_DOCKER_COMPOSE[](["ps", "--filter", "status=$state", "--services"])
 
-    service_symbols = Symbol.(
-      split(services_with_state, '\n'; keepempty = false)
-    )
+    service_symbols = Symbol.(split(services_with_state, '\n'; keepempty = false))
 
-    (; zip(service_symbols, Iterators.repeated(running))... )
+    (; zip(service_symbols, Iterators.repeated(running))...)
   end
 
   merge(services_by_state...)
