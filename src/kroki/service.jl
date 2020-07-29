@@ -129,6 +129,21 @@ function status()
   merge(services_by_state...)
 end
 
+"""
+Stops any running Kroki service components ensuring [`ENDPOINT`](@ref) no
+longer points to the stopped service.
+
+Cleans up left-over containers by default. This behavior can be turned off by
+passing `false` to the function.
+"""
+function stop!(perform_cleanup::Bool = true)
+  @info "Stopping Kroki service components."
+  EXECUTE_DOCKER_COMPOSE[]("stop")
+  perform_cleanup && EXECUTE_DOCKER_COMPOSE[](["rm", "--force"])
+  setEndpoint!()
+  return
+end
+
 "Updates the Docker images for the individual Kroki service components."
 function update!()
   EXECUTE_DOCKER_COMPOSE[](["pull", "--quiet"])

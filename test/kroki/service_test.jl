@@ -2,7 +2,7 @@ module ServiceTest
 
 using Kroki.Service: DEFAULT_ENDPOINT, DockerComposeExecutionError, ENDPOINT,
                      EXECUTE_DOCKER_COMPOSE, executeDockerCompose,
-                     setEndpoint!, status, update!
+                     setEndpoint!, status, stop!, update!
 using SimpleMock
 using Test: @testset, @test, @test_logs
 
@@ -121,6 +121,46 @@ end
           ["ps", "--filter", "status=stopped", "--services"]
         )
       end
+    end
+
+    @testset "`stop!` stops any running Kroki service components" begin
+      # The `stop!` function adjusts the `ENDPOINT` to ensure it doesn't point
+      # to a stopped local Kroki service
+      original_endpoint = ENDPOINT[]
+
+      mockExecuteDockerCompose(Mock()) do _executeDockerCompose
+        # Set the `ENDPOINT` to a known value specific to the test, so it can
+        # be detected that `stop!` modifies it's value
+        local_instance_endpoint = "http://local.instance.jl"
+        setEndpoint!(local_instance_endpoint)
+        @test ENDPOINT[] === local_instance_endpoint
+
+        # The following explicitly uses `match_mode=:any` to prevent having to
+        # specify log messages caused by changes to `ENDPOINT`
+        returned = @test_logs (:info, "Stopping Kroki service components.") match_mode=:any stop!()
+
+        # Ensure nothing gets returned from a call to `stop!` instead of
+        # `Process`es from the `docker-compose` execution
+        @test returned === nothing
+        @test called_with(_executeDockerCompose, "stop")
+        @test called_with(_executeDockerCompose, ["rm", "--force"])
+
+        # The `ENDPOINT` should have been updated to the 'default' (which can
+        # be either the `KROKI_ENDPOINT` environment variable of the
+        # `DEFAULT_ENDPOINT`
+        @test ENDPOINT[] !== local_instance_endpoint
+      end
+
+      @testset "optionally without cleaning up containers" begin
+        mockExecuteDockerCompose(Mock()) do _executeDockerCompose
+          # Ensure nothing gets returned from a call to `stop!` instead of
+          # `Process`es from the `docker-compose` execution
+          @test stop!(false) === nothing
+          @test called_once_with(_executeDockerCompose, "stop")
+        end
+      end
+
+      ENDPOINT[] = original_endpoint
     end
 
     @testset "`update!` pulls Kroki service component Docker images" begin
