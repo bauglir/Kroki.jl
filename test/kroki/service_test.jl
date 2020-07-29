@@ -2,7 +2,7 @@ module ServiceTest
 
 using Kroki.Service: DEFAULT_ENDPOINT, DockerComposeExecutionError, ENDPOINT,
                      EXECUTE_DOCKER_COMPOSE, executeDockerCompose,
-                     setEndpoint!, status, stop!, update!
+                     setEndpoint!, start!, status, stop!, update!
 using SimpleMock
 using Test: @testset, @test, @test_logs
 
@@ -91,6 +91,50 @@ end
           @test occursin("The reported error was", error_message)
         end
       end
+    end
+
+    @testset "`start!` starts Kroki service components" begin
+      # The `start!` function adjusts the `ENDPOINT` so the started Kroki
+      # service is immediately ready for use. This needs to be restored
+      original_endpoint = ENDPOINT[]
+
+      @testset "updating the `ENDPOINT` by default" begin
+        mockExecuteDockerCompose(Mock()) do _executeDockerCompose
+          # Set the `ENDPOINT` to a known value specific to the test, so it can
+          # be detected that `start!` modifies it's value
+          unstarted_instance_endpoint = "http://unstarted.instance.jl"
+          setEndpoint!(unstarted_instance_endpoint)
+          @test ENDPOINT[] === unstarted_instance_endpoint
+
+          # The following explicitly uses `match_mode=:any` to prevent having
+          # to specify log messages caused by changes to `ENDPOINT`
+          returned = @test_logs (:info, "Starting Kroki service components.") match_mode=:any start!()
+
+          # Ensure nothing gets returned from a call to `start!` instead of
+          # `Process`es from the `docker-compose` execution
+          @test returned === nothing
+          @test called_with(_executeDockerCompose, ["up", "--detach"])
+
+          @test ENDPOINT[] == "http://localhost:8000"
+        end
+      end
+
+      @testset "while not updating `ENDPOINT` if asked" begin
+        mockExecuteDockerCompose(Mock()) do _executeDockerCompose
+          # Set the `ENDPOINT` to a known value specific to the test, so it can
+          # be detected that `start!` modifies it's value
+          non_modified_endpoint = "http://non.modified.endpoint.jl"
+          setEndpoint!(non_modified_endpoint)
+          @test ENDPOINT[] === non_modified_endpoint
+
+          # Instruct `start!` to _not_ update the `ENDPOINT`
+          start!(false)
+
+          @test ENDPOINT[] === non_modified_endpoint
+        end
+      end
+
+      ENDPOINT[] = original_endpoint
     end
 
     @testset "`status` reports individual Kroki service component status" begin

@@ -1,6 +1,10 @@
 """
 Defines functions and constants managing the Kroki service the rest of the
 package uses to render diagrams. These services can be either local or remote.
+
+This module also enables management of a local service instance, provided
+[Docker](https://docker.com) and [Docker
+Compose](https://docs.docker.com/compose/) are available on the system.
 """
 module Service
 
@@ -85,7 +89,8 @@ environment variable is also not present the [`DEFAULT_ENDPOINT`](@ref) is
 used.
 
 This can, for instance, be used in cases where a [privately hosted
-instance](https://docs.kroki.io/kroki/setup/install/) is available.
+instance](https://docs.kroki.io/kroki/setup/install/) is available or when a
+local service has been [`start!`](@ref)ed.
 
 Returns the value that [`ENDPOINT`](@ref) got set to.
 
@@ -99,6 +104,20 @@ function setEndpoint!(
 )
   ENDPOINT[] != endpoint && @info "Setting Kroki service endpoint to $(endpoint)."
   ENDPOINT[] = String(endpoint)
+end
+
+"""
+Starts the Kroki service components on the local system, optionally, ensuring
+[`ENDPOINT`](@ref) points to them.
+
+Pass `false` to the function to prevent the [`ENDPOINT`](@ref) from being
+updated. The default behavior is to update.
+"""
+function start!(update_endpoint::Bool = true)
+  @info "Starting Kroki service components."
+  EXECUTE_DOCKER_COMPOSE[](["up", "--detach"])
+  update_endpoint && setEndpoint!("http://localhost:8000")
+  return
 end
 
 """
