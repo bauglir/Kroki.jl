@@ -12,7 +12,7 @@ using Kroki.Service:
   stop!,
   update!
 using SimpleMock
-using Test: @testset, @test, @test_logs
+using Test: @testset, @test, @test_logs, @test_skip
 
 # Helper function to temporarily replace `EXECUTE_DOCKER_COMPOSE` with a
 # `Mock`. Used to gain control over `docker-compose` behavior for local service
@@ -74,8 +74,8 @@ end
   end
 
   @testset "local instance management" begin
-    @testset "`executeDockerCompose` throws descriptive errors" begin
-      @testset "indicating dependencies are missing" begin
+    @testset "`executeDockerCompose` throws descriptive errors indicating" begin
+      @testset "dependencies are missing" begin
         try
           # Breaking the path should ensure neither Docker, nor Docker Compose
           # can be found
@@ -89,17 +89,26 @@ end
         end
       end
 
-      @testset "indicating to file an issue on indications of errors in Kroki.jl" begin
-        try
-          executeDockerCompose(["--non-existent", "ps"])
-        catch exception
-          @test exception isa DockerComposeExecutionError
+      # These tests require `docker-compose` to be available, as they
+      # specifically test errors in the interface from Kroki.jl to it.
+      #
+      # This construct ensures the tests are always run if possible and clearly
+      # marked broken on unsupported platforms
+      @static if Sys.which("docker-compose") !== nothing
+        @testset "to file an issue on indications of errors in Kroki.jl" begin
+          try
+            executeDockerCompose(["--non-existent", "ps"])
+          catch exception
+            @test exception isa DockerComposeExecutionError
 
-          error_message = sprint(showerror, exception)
-          @test occursin("docker-compose", error_message)
-          @test occursin("file an issue", error_message)
-          @test occursin("The reported error was", error_message)
+            error_message = sprint(showerror, exception)
+            @test occursin("docker-compose", error_message)
+            @test occursin("file an issue", error_message)
+            @test occursin("The reported error was", error_message)
+          end
         end
+      else
+        @test_skip "Tests requiring `docker-compose` are skipped"
       end
     end
 
