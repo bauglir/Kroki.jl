@@ -9,6 +9,7 @@ using Kroki:
   InvalidDiagramSpecificationError,
   InvalidOutputFormatError,
   render
+using Kroki.Service: setEndpoint!
 
 testRenderError(
   title::AbstractString,
@@ -91,24 +92,55 @@ end
       @test endswith(rendered, r"</svg>\s?")
     end
 
-    @testset "errors" begin
-      testRenderError(
-        "invalid diagram specification",
-        :PlantUML,
-        # A missing `>` and message cause the specification to be invalid
-        "Julia - Kroki:",
-        "svg",
-        InvalidDiagramSpecificationError,
-      )
+    @testset "`RenderError`" begin
+      # `RenderError`s are thrown from the `render` function whenever an error
+      # occurs. Some of these benefit from rewrites into more descriptive
+      # errors
+      @testset "transforms rewritable `HTTP.ExceptionRequest.StatusError`s" begin
+        # Errors in the Kroki service are thrown as
+        # `HTTP.ExceptionRequest.StatusError` and should be rewritten in more
+        # descriptive errors
+        testRenderError(
+          "invalid diagram specification",
+          :PlantUML,
+          # A missing `>` and message cause the specification to be invalid
+          "Julia - Kroki:",
+          "svg",
+          InvalidDiagramSpecificationError,
+        )
 
-      testRenderError(
-        "invalid output format",
-        :Mermaid,
-        # The Mermaid renderer does not support PNG output
-        "graph TD; A --> B;",
-        "png",
-        InvalidOutputFormatError,
-      )
+        testRenderError(
+          "invalid output format",
+          :Mermaid,
+          # The Mermaid renderer does not support PNG output
+          "graph TD; A --> B;",
+          "png",
+          InvalidOutputFormatError,
+        )
+      end
+
+      @testset "passes unknown `HTTP.ExceptionRequest.StatusError`s as-is" begin
+        # Any HTTP related errors that are not due to rendering errors in the
+        # Kroki service (e.g. connection errors), should be thrown (i.e.
+        # returned from `RenderError`) as-is
+        expected_service_host = "http://localhost:1"
+        expected_diagram_type = :plantuml
+        setEndpoint!(expected_service_host)
+
+        try
+          render(Diagram(expected_diagram_type, "A -> B: C"), "svg")
+        catch exception
+          rendered_buffer = sprint(showerror, exception)
+
+          @test occursin("ECONNREFUSED", rendered_buffer)
+          @test occursin(
+            "$(expected_service_host)/$(expected_diagram_type)",
+            rendered_buffer,
+          )
+        end
+
+        setEndpoint!()
+      end
     end
   end
 
