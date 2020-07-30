@@ -24,11 +24,8 @@ testRenderError(
 
   @testset "rendering" begin
     service_response = "$(title) response"
-    captured_error = IOBuffer()
 
-    Base.showerror(captured_error, expected_error_type(service_response, diagram))
-
-    rendered_error = String(take!(captured_error))
+    rendered_error = sprint(showerror, expected_error_type(service_response, diagram))
 
     @test occursin("Kroki service responded with:", rendered_error)
     @test occursin(content, rendered_error)
@@ -41,11 +38,7 @@ function testShowMethodRenders(
   mime_type::AbstractString,
   render_output_format::AbstractString,
 )
-  output = IOBuffer()
-  Base.show(output, mime_type, diagram)
-  rendered_output = String(take!(output))
-
-  @test rendered_output == String(render(diagram, render_output_format))
+  @test sprint(show, mime_type, diagram) == String(render(diagram, render_output_format))
 end
 
 @testset "Kroki" begin
@@ -170,10 +163,7 @@ end
     # `Base.showable` should be overridden to indicate the diagram cannot be
     # rendered in the specified MIME type
     svgbob_diagram = Diagram(:svgbob, "-->[_...__... ]")
-    @test_throws(
-      InvalidOutputFormatError,
-      Base.show(IOBuffer(), "image/png", svgbob_diagram)
-    )
+    @test_throws(InvalidOutputFormatError, sprint(show, "image/png", svgbob_diagram))
     @test !showable("image/png", svgbob_diagram)
     testShowMethodRenders(svgbob_diagram, "image/svg+xml", "svg")
 
@@ -187,11 +177,7 @@ end
       testShowMethodRenders(plantuml_diagram, "text/plain", "utxt")
 
       # Other diagram types should simply display their `specification`
-      output = IOBuffer()
-      Base.show(output, "text/plain", svgbob_diagram)
-      rendered_output = String(take!(output))
-
-      @test rendered_output == svgbob_diagram.specification
+      @test sprint(show, "text/plain", svgbob_diagram) == svgbob_diagram.specification
     end
   end
 
