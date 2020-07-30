@@ -8,6 +8,7 @@ using Kroki:
   Diagram,
   InvalidDiagramSpecificationError,
   InvalidOutputFormatError,
+  StatusError, # Imported from HTTP through Kroki
   render
 using Kroki.Service: setEndpoint!
 
@@ -114,9 +115,15 @@ end
 
       @testset "passes unknown `HTTP.ExceptionRequest.StatusError`s as-is" begin
         # Any HTTP related errors that are not due to rendering errors in the
-        # Kroki service (e.g. connection errors), should be thrown (i.e.
-        # returned from `RenderError`) as-is
-        expected_service_host = "http://localhost:1"
+        # Kroki service (e.g. unknown endpoints), should be thrown from
+        # `RenderError` as-is
+        @test_throws(StatusError, render(Diagram(:non_existent_diagram_type, ""), "svg"))
+      end
+
+      @testset "passes other errors as-is" begin
+        # Non-`StatusError`s (e.g. `IOError`s due to incorrect hostnames should
+        # be thrown/returned as-is
+        expected_service_host = "tcp://localhost"
         expected_diagram_type = :plantuml
         setEndpoint!(expected_service_host)
 
