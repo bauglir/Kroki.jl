@@ -18,6 +18,9 @@ include("./kroki/documentation.jl")
 using .Documentation
 @setupDocstringMarkup()
 
+include("./kroki/service.jl")
+using .Service: ENDPOINT
+
 """
 A representation of a diagram that can be rendered by a Kroki service.
 
@@ -134,11 +137,6 @@ RenderError(::Diagram, exception::Exception) = exception
 Renders a [`Diagram`](@ref) through a Kroki service to the specified output
 format.
 
-A `KROKI_ENDPOINT` environment variable can be set, specifying the URI of a
-specific instance of Kroki to use (e.g. when using a [privately hosted
-instance](https://docs.kroki.io/kroki/setup/install/)). By default the
-[publicly hosted service](https://kroki.io) is used.
-
 If the Kroki service responds with an error throws an
 [`InvalidDiagramSpecificationError`](@ref) or
 [`InvalidOutputFormatError`](@ref) if a know type of error occurs. Other errors
@@ -152,7 +150,7 @@ render(diagram::Diagram, output_format::AbstractString) =
         "GET",
         join(
           [
-            get(ENV, "KROKI_ENDPOINT", "https://kroki.io"),
+            ENDPOINT[],
             lowercase("$(diagram.type)"),
             output_format,
             UriSafeBase64Payload(diagram),

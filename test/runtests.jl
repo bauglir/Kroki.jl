@@ -9,6 +9,7 @@ using Kroki:
   InvalidDiagramSpecificationError,
   InvalidOutputFormatError,
   render
+using Kroki.Service: setEndpoint!
 
 testRenderError(
   title::AbstractString,
@@ -91,41 +92,45 @@ end
       @test endswith(rendered, r"</svg>\s?")
     end
 
-    @testset "errors" begin
-      testRenderError(
-        "invalid diagram specification",
-        :PlantUML,
-        # A missing `>` and message cause the specification to be invalid
-        "Julia - Kroki:",
-        "svg",
-        InvalidDiagramSpecificationError,
-      )
+    @testset "`RenderError`" begin
+      # `RenderError`s are thrown from the `render` function whenever an error
+      # occurs. Some of these benefit from rewrites into more descriptive
+      # errors
+      @testset "transforms rewritable `HTTP.ExceptionRequest.StatusError`s" begin
+        # Errors in the Kroki service are thrown as
+        # `HTTP.ExceptionRequest.StatusError` and should be rewritten in more
+        # descriptive errors
+        testRenderError(
+          "invalid diagram specification",
+          :PlantUML,
+          # A missing `>` and message cause the specification to be invalid
+          "Julia - Kroki:",
+          "svg",
+          InvalidDiagramSpecificationError,
+        )
 
-      testRenderError(
-        "invalid output format",
-        :Mermaid,
-        # The Mermaid renderer does not support PNG output
-        "graph TD; A --> B;",
-        "png",
-        InvalidOutputFormatError,
-      )
-    end
+        testRenderError(
+          "invalid output format",
+          :Mermaid,
+          # The Mermaid renderer does not support PNG output
+          "graph TD; A --> B;",
+          "png",
+          InvalidOutputFormatError,
+        )
+      end
 
-    @testset "`KROKI_ENDPOINT` environment variable" begin
-      # The instance of the Kroki service that is used for rendering can be
-      # controlled through the `KROKI_ENDPOINT` environment variable. The most
-      # straight-forward way for testing this is by pointing to an invalid
-      # endpoint and testing for a corresponding connection error
-      expected_diagram_type = :plantuml
-      expected_service_host = "https://localhost"
+      @testset "passes unknown `HTTP.ExceptionRequest.StatusError`s as-is" begin
+        # Any HTTP related errors that are not due to rendering errors in the
+        # Kroki service (e.g. connection errors), should be thrown (i.e.
+        # returned from `RenderError`) as-is
+        expected_service_host = "http://localhost:1"
+        expected_diagram_type = :plantuml
+        setEndpoint!(expected_service_host)
 
-      withenv("KROKI_ENDPOINT" => expected_service_host) do
         try
           render(Diagram(expected_diagram_type, "A -> B: C"), "svg")
         catch exception
-          buffer = IOBuffer()
-          showerror(buffer, exception)
-          rendered_buffer = String(take!(buffer))
+          rendered_buffer = sprint(showerror, exception)
 
           @test occursin("ECONNREFUSED", rendered_buffer)
           @test occursin(
@@ -133,6 +138,8 @@ end
             rendered_buffer,
           )
         end
+
+        setEndpoint!()
       end
     end
   end
@@ -187,6 +194,8 @@ end
       @test rendered_output == svgbob_diagram.specification
     end
   end
+
+  include("./kroki/service_test.jl")
 end
 
 end
