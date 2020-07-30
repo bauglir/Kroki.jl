@@ -123,7 +123,7 @@ end
       @testset "passes other errors as-is" begin
         # Non-`StatusError`s (e.g. `IOError`s due to incorrect hostnames should
         # be thrown/returned as-is
-        expected_service_host = "tcp://localhost"
+        expected_service_host = "http://localhost:1"
         expected_diagram_type = :plantuml
         setEndpoint!(expected_service_host)
 
