@@ -74,6 +74,20 @@ end
   end
 
   @testset "local instance management" begin
+    @static if Sys.which("docker-compose") !== nothing
+      @testset "wraps `docker-compose` with local service definitions" begin
+        status_report = executeDockerCompose("ps")
+
+        # Verify known pieces of `docker-compose ps` output are returned
+        @test occursin("Name", status_report)
+        @test occursin("Command", status_report)
+        @test occursin("State", status_report)
+        @test occursin("Ports", status_report)
+      end
+    else
+      @test_skip "Tests requiring `docker-compose` are skipped"
+    end
+
     @testset "`executeDockerCompose` throws descriptive errors indicating" begin
       @testset "dependencies are missing" begin
         try
