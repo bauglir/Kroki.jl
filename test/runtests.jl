@@ -108,7 +108,7 @@ end
           :Mermaid,
           # The Mermaid renderer does not support PNG output
           "graph TD; A --> B;",
-          "png",
+          "jpeg",
           InvalidOutputFormatError,
         )
       end
