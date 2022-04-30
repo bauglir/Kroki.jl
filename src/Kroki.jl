@@ -232,8 +232,42 @@ Base.show(io::IO, diagram::Diagram) =
     write(io, diagram.specification)
   end
 
+# Helper function implementing string interpolation to be used in conjunction
+# with macros defining diagram specification string literals, as they do not
+# support string interpolation by default.
+#
+# Returns an array of elements, e.g. `Expr`essions, `Symbol`s, `String`s that
+# can be incorporated in the `args` of another `Expr`essions
+function interpolate(specification::AbstractString)
+  # Based on the interpolation code from the Markdown stdlib and
+  # https://riptutorial.com/julia-lang/example/22952/implementing-interpolation-in-a-string-macro
+  components = Any[]
+
+  # Turn the string is into an `IOBuffer` to make it more straightforward to
+  # parse it in an incremental fashion
+  stream = IOBuffer(specification)
+
+  while !eof(stream)
+    # The `$` is omitted from the result by `readuntil` by default, no need for
+    # further processing
+    push!(components, readuntil(stream, '$'))
+
+    if !eof(stream)
+      # If an interpolation indicator was found, try to parse the smallest
+      # expression to interpolate and then keep parsing the stream for further
+      # interpolations
+      started_at = position(stream)
+      expr, parsed_count = Meta.parse(read(stream, String), 1; greedy = false)
+      seek(stream, started_at + parsed_count - 1)
+      push!(components, expr)
+    end
+  end
+
+  esc.(components)
+end
+
 for diagram_type in map(
-  # The union of the values of `LIMITED_DIAGRAM_SUPPORT` correspond to all
+  # The union of the values of `LIMITED_DIAGRAM_SUPPORT` corresponds to all
   # supported `Diagram` types. Converting the `Symbol`s to `String`s improves
   # readability of the `macro` bodies
   String,
@@ -248,7 +282,12 @@ for diagram_type in map(
     export $macro_signature
 
     @doc $docstring macro $macro_name(specification::AbstractString)
-      Diagram(Symbol($diagram_type), specification)
+      Expr(
+        :call,
+        :Diagram,
+        QuoteNode(Symbol($diagram_type)),
+        Expr(:call, string, interpolate(specification)...)
+      )
     end
   end
 end

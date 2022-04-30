@@ -149,7 +149,7 @@ end
     # specifying diagrams.
     #
     # This is not an exhaustive test as these are dynamically generated. The
-    # basic functionality is only verified for key diagram types.
+    # basic functionality is only verified for key diagram types
     shorthand_plantuml = plantuml"A -> B: C"
     longhand_plantuml = Diagram(:PlantUML, "A -> B: C")
     # The leading newlines make sure the alignment of the plain text
@@ -159,6 +159,14 @@ end
     shorthand_mermaid = mermaid"graph TD; A --> B"
     longhand_mermaid = Diagram(:mermaid, "graph TD; A --> B")
     @test shorthand_mermaid == longhand_mermaid
+
+    @testset "supports interpolation" begin
+      # String macros do no support string interpolation out-of-the-box, this
+      # needs to be manually implemented, so needs dedicated testing
+      message = "Z"
+      diagram = plantuml"X -> Y: $(message ^ 5)"
+      @test occursin(message ^ 5, diagram.specification)
+    end
   end
 
   @testset "`Base.show`" begin
