@@ -139,7 +139,7 @@ function status()
 
     service_symbols = Symbol.(split(services_with_state, '\n'; keepempty = false))
 
-    (; zip(service_symbols, Iterators.repeated(running))...)
+    (; [ service => running for service in service_symbols ]...)
   end
 
   merge(services_by_state...)
