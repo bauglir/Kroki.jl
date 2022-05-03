@@ -5,6 +5,7 @@ services:
     environment:
       - KROKI_BPMN_HOST=bpmn
       - KROKI_BLOCKDIAG_HOST=blockdiag
+      - KROKI_EXCALIDRAW_HOST=excalidraw
       - KROKI_MERMAID_HOST=mermaid
       # Enable inclusion of, for instance, external PlantUML descriptions and
       # Vega datasets
@@ -15,5 +16,7 @@ services:
     image: yuzutech/kroki-blockdiag
   bpmn:
     image: yuzutech/kroki-bpmn
+  excalidraw:
+    image: yuzutech/kroki-excalidraw
   mermaid:
     image: yuzutech/kroki-mermaid

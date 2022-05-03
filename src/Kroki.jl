@@ -206,6 +206,7 @@ const LIMITED_DIAGRAM_SUPPORT = Dict{AbstractString, Tuple{Symbol, Vararg{Symbol
   "image/svg+xml" => (
     :bpmn,
     :bytefield,
+    :excalidraw,
     :nomnoml,
     :pikchr,
     :svgbob,
