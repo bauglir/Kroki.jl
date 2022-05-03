@@ -3,8 +3,8 @@ services:
   core:
     image: yuzutech/kroki
     environment:
-      - KROKI_BPMN_HOST=bpmn
       - KROKI_BLOCKDIAG_HOST=blockdiag
+      - KROKI_BPMN_HOST=bpmn
       - KROKI_EXCALIDRAW_HOST=excalidraw
       - KROKI_MERMAID_HOST=mermaid
       # Enable inclusion of, for instance, external PlantUML descriptions and
