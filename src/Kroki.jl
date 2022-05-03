@@ -194,6 +194,7 @@ const LIMITED_DIAGRAM_SUPPORT = Dict{AbstractString, Tuple{Symbol, Vararg{Symbol
     :ditaa,
     :erd,
     :graphviz,
+    :mermaid,
     :plantuml,
     :umlet,
     :vega,
@@ -201,7 +202,7 @@ const LIMITED_DIAGRAM_SUPPORT = Dict{AbstractString, Tuple{Symbol, Vararg{Symbol
   ),
   # Although all diagram types support SVG, these _only_ support SVG so are
   # included separately
-  "image/svg+xml" => (:mermaid, :nomnoml, :svgbob, :wavedrom),
+  "image/svg+xml" => (:nomnoml, :svgbob, :wavedrom),
   "text/plain" => (:c4plantuml, :plantuml),
 )
 
