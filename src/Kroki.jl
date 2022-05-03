@@ -196,6 +196,7 @@ const LIMITED_DIAGRAM_SUPPORT = Dict{AbstractString, Tuple{Symbol, Vararg{Symbol
     :graphviz,
     :mermaid,
     :plantuml,
+    :structurizr,
     :umlet,
     :vega,
     :vegalite,
