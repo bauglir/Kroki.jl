@@ -202,7 +202,14 @@ const LIMITED_DIAGRAM_SUPPORT = Dict{AbstractString, Tuple{Symbol, Vararg{Symbol
   ),
   # Although all diagram types support SVG, these _only_ support SVG so are
   # included separately
-  "image/svg+xml" => (:bpmn, :bytefield, :nomnoml, :svgbob, :wavedrom),
+  "image/svg+xml" => (
+    :bpmn,
+    :bytefield,
+    :nomnoml,
+    :pikchr,
+    :svgbob,
+    :wavedrom
+  ),
   "text/plain" => (:c4plantuml, :plantuml),
 )
 
