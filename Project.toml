@@ -11,6 +11,9 @@ HTTP = "cd3eb016-35fb-5094-929b-558a96fad6f3"
 
 [compat]
 CodecZlib = "0.7"
-DocStringExtensions = "0.8"
+# `DocStringExtensions is a development dependency, so its compatibility range
+# is wider to not restrict dependents of this package in their dependency on
+# `DocStringExtensions`
+DocStringExtensions = "0.8, 0.9"
 HTTP = "0.8"
 julia = "1.3"
