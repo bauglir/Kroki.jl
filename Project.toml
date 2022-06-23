@@ -15,5 +15,7 @@ CodecZlib = "0.7"
 # is wider to not restrict dependents of this package in their dependency on
 # `DocStringExtensions`
 DocStringExtensions = "0.8, 0.9"
-HTTP = "0.8"
+# The wider compatibility range for `HTTP` ensures compatibility with
+# up-to-date versions of `Pluto`, etc.
+HTTP = "0.8, 0.9, 1"
 julia = "1.6"
