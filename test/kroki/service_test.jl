@@ -141,8 +141,8 @@ end
 
           # The following explicitly uses `match_mode=:any` to prevent having
           # to specify log messages caused by changes to `ENDPOINT`
-          returned = @test_logs (:info, "Starting Kroki service components.") match_mode =
-            :any start!()
+          returned =
+            @test_logs (:info, "Starting Kroki service components.") match_mode = :any start!()
 
           # Ensure nothing gets returned from a call to `start!` instead of
           # `Process`es from the `docker-compose` execution
@@ -211,8 +211,8 @@ end
 
         # The following explicitly uses `match_mode=:any` to prevent having to
         # specify log messages caused by changes to `ENDPOINT`
-        returned = @test_logs (:info, "Stopping Kroki service components.") match_mode =
-          :any stop!()
+        returned =
+          @test_logs (:info, "Stopping Kroki service components.") match_mode = :any stop!()
 
         # Ensure nothing gets returned from a call to `stop!` instead of
         # `Process`es from the `docker-compose` execution

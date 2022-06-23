@@ -60,14 +60,19 @@ function executeDockerCompose(cmd::Vector{String})
   captured_stdout = IOBuffer()
 
   try
-    run(pipeline(
-      `docker-compose --file $(SERVICE_DEFINITION_FILE) --project-name krokijl $cmd`;
-      stderr = captured_stderr,
-      stdout = captured_stdout,
-    ))
+    run(
+      pipeline(
+        `docker-compose --file $(SERVICE_DEFINITION_FILE) --project-name krokijl $cmd`;
+        stderr = captured_stderr,
+        stdout = captured_stdout,
+      ),
+    )
   catch exception
-    exception isa Base.IOError &&
-    throw(ErrorException("Missing dependencies! Docker and/or Docker Compose do not appear to be available"))
+    exception isa Base.IOError && throw(
+      ErrorException(
+        "Missing dependencies! Docker and/or Docker Compose do not appear to be available",
+      ),
+    )
 
     throw(DockerComposeExecutionError(String(take!(captured_stderr))))
   end
@@ -139,7 +144,7 @@ function status()
 
     service_symbols = Symbol.(split(services_with_state, '\n'; keepempty = false))
 
-    (; [ service => running for service in service_symbols ]...)
+    (; [service => running for service in service_symbols]...)
   end
 
   merge(services_by_state...)
