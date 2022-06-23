@@ -1,141 +1,143 @@
 # This file is machine-generated - editing it directly is not advised
 
-[[Base64]]
+julia_version = "1.7.3"
+manifest_format = "2.0"
+
+[[deps.ANSIColoredPrinters]]
+git-tree-sha1 = "574baf8110975760d391c710b6341da1afa48d8c"
+uuid = "a4c015fc-c6ff-483c-b24f-f7ea428134e9"
+version = "0.0.1"
+
+[[deps.Artifacts]]
+uuid = "56f22d72-fd6d-98f1-02f0-08ddc0907c33"
+
+[[deps.Base64]]
 uuid = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
 
-[[CodecZlib]]
+[[deps.CodecZlib]]
 deps = ["TranscodingStreams", "Zlib_jll"]
 git-tree-sha1 = "ded953804d019afa9a3f98981d99b33e3db7b6da"
 uuid = "944b1d66-785c-5afd-91f1-9de20f533193"
 version = "0.7.0"
 
-[[Dates]]
+[[deps.Dates]]
 deps = ["Printf"]
 uuid = "ade2ca70-3891-5945-98fb-dc099432e06a"
 
-[[Distributed]]
-deps = ["Random", "Serialization", "Sockets"]
-uuid = "8ba89e20-285c-5b6f-9357-94700520ee1b"
-
-[[DocStringExtensions]]
-deps = ["LibGit2", "Markdown", "Pkg", "Test"]
-git-tree-sha1 = "88bb0edb352b16608036faadcc071adda068582a"
+[[deps.DocStringExtensions]]
+deps = ["LibGit2"]
+git-tree-sha1 = "b19534d1895d702889b219c382a6e18010797f0b"
 uuid = "ffbed154-4ef7-542d-bbb7-c09d3a79fcae"
-version = "0.8.1"
+version = "0.8.6"
 
-[[Documenter]]
-deps = ["Base64", "Dates", "DocStringExtensions", "InteractiveUtils", "JSON", "LibGit2", "Logging", "Markdown", "REPL", "Test", "Unicode"]
-git-tree-sha1 = "646ebc3db49889ffeb4c36f89e5d82c6a26295ff"
+[[deps.Documenter]]
+deps = ["ANSIColoredPrinters", "Base64", "Dates", "DocStringExtensions", "IOCapture", "InteractiveUtils", "JSON", "LibGit2", "Logging", "Markdown", "REPL", "Test", "Unicode"]
+git-tree-sha1 = "f7809f532671564e48cd81627ddcfb1ba670f87d"
 uuid = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
-version = "0.24.7"
+version = "0.27.19"
 
-[[HTTP]]
+[[deps.HTTP]]
 deps = ["Base64", "Dates", "IniFile", "MbedTLS", "Sockets"]
-git-tree-sha1 = "cd60d9a575d3b70c026d7e714212fd4ecf86b4bb"
+git-tree-sha1 = "c7ec02c4c6a039a98a15f955462cd7aea5df4508"
 uuid = "cd3eb016-35fb-5094-929b-558a96fad6f3"
-version = "0.8.13"
+version = "0.8.19"
 
-[[IniFile]]
-deps = ["Test"]
-git-tree-sha1 = "098e4d2c533924c921f9f9847274f2ad89e018b8"
+[[deps.IOCapture]]
+deps = ["Logging", "Random"]
+git-tree-sha1 = "f7be53659ab06ddc986428d3a9dcc95f6fa6705a"
+uuid = "b5f81e59-6552-4d32-b1f0-c071b021bf89"
+version = "0.2.2"
+
+[[deps.IniFile]]
+git-tree-sha1 = "f550e6e32074c939295eb5ea6de31849ac2c9625"
 uuid = "83e8ac13-25f8-5344-8a64-a9f2b223428f"
-version = "0.5.0"
+version = "0.5.1"
 
-[[InteractiveUtils]]
+[[deps.InteractiveUtils]]
 deps = ["Markdown"]
 uuid = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
 
-[[JSON]]
+[[deps.JSON]]
 deps = ["Dates", "Mmap", "Parsers", "Unicode"]
-git-tree-sha1 = "b34d7cef7b337321e97d22242c3c2b91f476748e"
+git-tree-sha1 = "3c837543ddb02250ef42f4738347454f95079d4e"
 uuid = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
-version = "0.21.0"
+version = "0.21.3"
 
-[[Kroki]]
+[[deps.Kroki]]
 deps = ["Base64", "CodecZlib", "DocStringExtensions", "HTTP"]
 path = ".."
 uuid = "b3565e16-c1f2-4fe9-b4ab-221c88942068"
-version = "0.1.0"
 
-[[LibGit2]]
-deps = ["Printf"]
+[[deps.LibGit2]]
+deps = ["Base64", "NetworkOptions", "Printf", "SHA"]
 uuid = "76f85450-5226-5b5a-8eaa-529ad045b433"
 
-[[Libdl]]
+[[deps.Libdl]]
 uuid = "8f399da3-3557-5675-b5ff-fb832c97cbdb"
 
-[[Logging]]
+[[deps.Logging]]
 uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
 
-[[Markdown]]
+[[deps.Markdown]]
 deps = ["Base64"]
 uuid = "d6f4376e-aef5-505a-96c1-9c027394607a"
 
-[[MbedTLS]]
+[[deps.MbedTLS]]
 deps = ["Dates", "MbedTLS_jll", "Random", "Sockets"]
-git-tree-sha1 = "a9e2221f06b42f56052f43ad7edecb01d0ef5ab4"
+git-tree-sha1 = "1c38e51c3d08ef2278062ebceade0e46cefc96fe"
 uuid = "739be429-bea8-5141-9913-cc70e7f3736d"
-version = "1.0.1"
+version = "1.0.3"
 
-[[MbedTLS_jll]]
-deps = ["Libdl", "Pkg"]
-git-tree-sha1 = "066a4467008745eed36dad973ceb66405785a621"
+[[deps.MbedTLS_jll]]
+deps = ["Artifacts", "Libdl"]
 uuid = "c8ffd9c3-330d-5841-b78e-0817d7145fa1"
-version = "2.16.0+1"
 
-[[Mmap]]
+[[deps.Mmap]]
 uuid = "a63ad114-7e13-5084-954f-fe012c677804"
 
-[[Parsers]]
-deps = ["Dates", "Test"]
-git-tree-sha1 = "75d07cb840c300084634b4991761886d0d762724"
+[[deps.NetworkOptions]]
+uuid = "ca575930-c2e3-43a9-ace4-1e988b2c1908"
+
+[[deps.Parsers]]
+deps = ["Dates"]
+git-tree-sha1 = "0044b23da09b5608b4ecacb4e5e6c6332f833a7e"
 uuid = "69de0a69-1ddd-5017-9359-2bf0b02dc9f0"
-version = "1.0.1"
+version = "2.3.2"
 
-[[Pkg]]
-deps = ["Dates", "LibGit2", "Libdl", "Logging", "Markdown", "Printf", "REPL", "Random", "SHA", "UUIDs"]
-uuid = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
-
-[[Printf]]
+[[deps.Printf]]
 deps = ["Unicode"]
 uuid = "de0858da-6303-5e67-8744-51eddeeeb8d7"
 
-[[REPL]]
-deps = ["InteractiveUtils", "Markdown", "Sockets"]
+[[deps.REPL]]
+deps = ["InteractiveUtils", "Markdown", "Sockets", "Unicode"]
 uuid = "3fa0cd96-eef1-5676-8a61-b3b8758bbffb"
 
-[[Random]]
-deps = ["Serialization"]
+[[deps.Random]]
+deps = ["SHA", "Serialization"]
 uuid = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 
-[[SHA]]
+[[deps.SHA]]
 uuid = "ea8e919c-243c-51af-8825-aaa63cd721ce"
 
-[[Serialization]]
+[[deps.Serialization]]
 uuid = "9e88b42a-f829-5b0c-bbe9-9e923198166b"
 
-[[Sockets]]
+[[deps.Sockets]]
 uuid = "6462fe0b-24de-5631-8697-dd941f90decc"
 
-[[Test]]
-deps = ["Distributed", "InteractiveUtils", "Logging", "Random"]
+[[deps.Test]]
+deps = ["InteractiveUtils", "Logging", "Random", "Serialization"]
 uuid = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
-[[TranscodingStreams]]
+[[deps.TranscodingStreams]]
 deps = ["Random", "Test"]
-git-tree-sha1 = "7c53c35547de1c5b9d46a4797cf6d8253807108c"
+git-tree-sha1 = "216b95ea110b5972db65aa90f88d8d89dcb8851c"
 uuid = "3bb67fe8-82b1-5028-8e26-92a6c54297fa"
-version = "0.9.5"
+version = "0.9.6"
 
-[[UUIDs]]
-deps = ["Random", "SHA"]
-uuid = "cf7118a7-6976-5b1a-9a39-7adc72f591a4"
-
-[[Unicode]]
+[[deps.Unicode]]
 uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
 
-[[Zlib_jll]]
-deps = ["Libdl", "Pkg"]
-git-tree-sha1 = "2f6c3e15e20e036ee0a0965879b31442b7ec50fa"
+[[deps.Zlib_jll]]
+deps = ["Libdl"]
 uuid = "83775a58-1f1d-513f-b197-d71354ab007a"
-version = "1.2.11+9"
