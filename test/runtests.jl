@@ -165,7 +165,7 @@ end
       # needs to be manually implemented, so needs dedicated testing
       message = "Z"
       diagram = plantuml"X -> Y: $(message ^ 5)"
-      @test occursin(message ^ 5, diagram.specification)
+      @test occursin(message^5, diagram.specification)
     end
   end
 
