@@ -35,7 +35,8 @@ of the package for those interested in self-hosting the service.
 The aim of the package is to make it easy to integrate descriptive diagrams
 within code and docstrings (rendered as text), while upgrading the diagrams to
 good looking visuals whenever possible, e.g. in the context of
-[Documenter](https://juliadocs.github.io/Documenter.jl/stable/) or
+[Documenter](https://juliadocs.github.io/Documenter.jl/stable/),
+[Pluto](https://github.com/fonsp/Pluto.jl), or
 [Jupyter](https://jupyter.org)/[IJulia](https://github.com/JuliaLang/IJulia.jl),
 using SVG or other output formats.
 
