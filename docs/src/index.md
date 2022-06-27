@@ -1,9 +1,5 @@
 # Kroki.jl
 
-```@meta
-CurrentModule = Kroki
-```
-
 *Diagram from textual description generator for Julia*.
 
 A package integrating Julia with [Kroki](https://kroki.io), a service for
