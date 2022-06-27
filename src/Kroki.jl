@@ -281,7 +281,7 @@ for diagram_type in map(
   macro_name = Symbol("$(diagram_type)_str")
   macro_signature = Symbol("@$macro_name")
 
-  docstring = "Shorthand for instantiating $diagram_type [`Diagram`](@ref)s."
+  docstring = "String literal for instantiating `$diagram_type` [`Diagram`](@ref)s."
 
   @eval begin
     export $macro_signature
