@@ -41,7 +41,7 @@ julia> Kroki.Diagram(:PlantUML, "Kroki -> Julia: Hello Julia!")
 ```
 """
 struct Diagram
-  "The textual specification of the diagram"
+  "The textual specification of the diagram."
   specification::AbstractString
 
   """
