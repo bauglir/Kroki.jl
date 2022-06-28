@@ -9,8 +9,71 @@
 [![ColPrac: Contributor's Guide on Collaborative Practices for Community
 Packages](https://img.shields.io/badge/ColPrac-Contributor's%20Guide-blueviolet)](https://colprac.sciml.ai/)
 
-Integrations for [Kroki](https://kroki.io) supported diagrams and plots. See
-the [documentation](https://bauglir.github.io/Kroki.jl/stable) for more
-information.
+Enables a wide array of textual diagramming tools, such as
+[Graphviz](https://www.graphviz.org), [Mermaid](https://mermaidjs.github.io),
+[PlantUML](https://plantuml.com),
+[svgbob](https://ivanceras.github.io/content/Svgbob.html) and [many
+more](https://kroki.io/#support) within Julia through the
+[Kroki](https://kroki.io) service. It works in environments capable of
+rendering images:
 
-Please follow the [contribution guidelines](CONTRIBUTING.md) when contributing.
+![Kroki Pluto Demo](./docs/src/kroki-demo-pluto.gif)
+
+and even in the REPL for a subset of the supported diagrams:
+
+![Kroki REPL Demo](./docs/src/kroki-demo-repl.gif)
+
+See the [documentation](https://bauglir.github.io/Kroki.jl/stable) for more
+information and please follow the [contribution guidelines](CONTRIBUTING.md)
+when contributing.
+
+## Usage
+
+Install Kroki through Julia's package manager
+
+```
+(v1.7) pkg> add Kroki
+```
+
+Construct diagrams using the
+[`Diagram`](https://bauglir.github.io/Kroki.jl/stable/api/#Kroki.Diagram) type
+or any of the available [string
+literals](https://bauglir.github.io/Kroki.jl/stable/api/#String-Literals). Then
+either rely on the available `Base.show` overloads, or call the
+[`render`](https://bauglir.github.io/Kroki.jl/stable/api/#Kroki.render)
+function with a specific output format, to visualize them.
+
+```
+julia> using Kroki
+
+julia> plantuml"""
+       Kroki -> Julia: Hello!
+       Julia -> Kroki: Hi!
+       Kroki -> Julia: Can I draw some diagrams for you?
+       Julia -> Kroki: Sure!
+       """
+     ┌─────┐                            ┌─────┐
+     │Kroki│                            │Julia│
+     └──┬──┘                            └──┬──┘
+        │             Hello!               │
+        │─────────────────────────────────>│
+        │                                  │
+        │               Hi!                │
+        │<─────────────────────────────────│
+        │                                  │
+        │Can I draw some diagrams for you? │
+        │─────────────────────────────────>│
+        │                                  │
+        │              Sure!               │
+        │<─────────────────────────────────│
+     ┌──┴──┐                            ┌──┴──┐
+     │Kroki│                            │Julia│
+     └─────┘                            └─────┘
+```
+
+_Note:_ ASCII art diagrams, as shown above, are only supported for a subset of
+[PlantUML](https://plantuml.com) diagrams. All other diagram types are better
+supported in environments like
+[Documenter.jl](https://juliadocs.github.io/Documenter.jl/stable),
+[Pluto.jl](https://github.com/fonsp/Pluto.jl) or
+[Jupyter](https://jupyter.org).
