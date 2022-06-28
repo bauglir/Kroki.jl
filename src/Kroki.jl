@@ -139,11 +139,15 @@ RenderError(::Diagram, exception::Exception) = exception
 Renders a [`Diagram`](@ref) through a Kroki service to the specified output
 format.
 
-If the Kroki service responds with an error throws an
+If the Kroki service responds with an error, throws an
 [`InvalidDiagramSpecificationError`](@ref) or
 [`InvalidOutputFormatError`](@ref) if a know type of error occurs. Other errors
 (e.g. `HTTP.ExceptionRequest.StatusError` for connection errors) are propagated
 if they occur.
+
+_SVG output is supported for all [`Diagram`](@ref) types_. See [Kroki's
+website](https://kroki.io/#support) for an overview of other supported output
+formats per diagram type. Note that this list may not be entirely up-to-date.
 """
 render(diagram::Diagram, output_format::AbstractString) =
   try
