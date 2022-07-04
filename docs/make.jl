@@ -4,7 +4,7 @@ makedocs(
   authors = "Joris Kraak",
   modules = [Kroki],
   sitename = "Kroki.jl",
-  pages = ["Home" => "index.md", "API" => "api.md"],
+  pages = ["Home" => "index.md", "Examples" => "examples.md", "API" => "api.md"],
 )
 
 if get(ENV, "CI", nothing) == "true"

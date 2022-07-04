@@ -19,7 +19,7 @@ Order = [ :module, :type, :function ]
 Filter = name -> "$name" !== "executeDockerCompose"
 ```
 
-### String Literals
+### [String Literals](@id api-string-literals)
 ```@autodocs
 Modules = [ Kroki ]
 Order = [ :macro ]

@@ -53,6 +53,8 @@ Julia -> Kroki: Sure!
 """
 ```
 
+See the [examples section](@ref Examples) for more details and, well, examples.
+
 The package can be configured to use the publicly hosted server at
 [https://kroki.io](https://kroki.io) or a [self-hosted
 instance](https://docs.kroki.io/kroki/setup/install), see [`setEndpoint!`](@ref
