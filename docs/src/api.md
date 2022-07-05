@@ -9,6 +9,7 @@ CurrentModule = Kroki
 ```@docs
 Kroki
 Diagram
+render
 ```
 
 ### Service Management
@@ -33,7 +34,6 @@ InvalidDiagramSpecificationError
 InvalidOutputFormatError
 LIMITED_DIAGRAM_SUPPORT
 UriSafeBase64Payload
-render
 ```
 
 ### Documentation
