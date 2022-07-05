@@ -37,3 +37,40 @@ respect to their target branch just prior to merging. Feature branches do not
 tend to be squashed, but may be rebased to provide a clear narrative. When
 rebasing, keep in mind whether others may have the branch checked out (e.g.
 when collaborating on a feature).
+
+## Building the documentation
+
+Kroki's documentation is build using
+[`Documenter`](https://github.com/JuliaDocs/Documenter.jl). To build it run
+
+```sh
+julia --project=docs docs/make.jl
+```
+
+When working on the documentation, the
+[LiveServer](https://github.com/tlienart/LiveServer.jl) package may come in
+useful to automatically rebuild and reload documentation. To use it:
+
+* `julia --project=docs --eval 'using Pkg; Pkg.add("LiveServer")'`
+* `julia --project=docs --eval 'using LiveServer, Kroki; servedocs()'`
+
+When installing `LiveServer`, make sure _not_ to commit the respective changes
+to the `docs/Manifest.toml`.
+
+The most recent documentation for releases or the `development` branch is
+always build in CI.
+
+### Troubleshooting
+
+To be able to build Kroki's documentation for every version, and especially
+during development, the `docs` project needs to be aware of the package. To
+achieve this it is added as a regular dependency of the `docs` project using a
+relative path in the `docs/Manifest.toml`.
+
+In case errors occur while building the documentation, such as new modules or
+functions not being found, make sure this path has not accidentally been
+updated (e.g. to refer to a release of Kroki instead).
+
+Should such a situation occur make sure that Kroki's decleration in the
+`docs/Manifest.toml` includes a `path` set to `".."`, instead of a
+`git-tree-sha1` or a `version`.

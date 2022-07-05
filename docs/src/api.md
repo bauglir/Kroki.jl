@@ -9,6 +9,7 @@ CurrentModule = Kroki
 ```@docs
 Kroki
 Diagram
+render
 ```
 
 ### Service Management
@@ -19,8 +20,7 @@ Order = [ :module, :type, :function ]
 Filter = name -> "$name" !== "executeDockerCompose"
 ```
 
-### Shorthands
-
+### [String Literals](@id api-string-literals)
 ```@autodocs
 Modules = [ Kroki ]
 Order = [ :macro ]
@@ -34,7 +34,6 @@ InvalidDiagramSpecificationError
 InvalidOutputFormatError
 LIMITED_DIAGRAM_SUPPORT
 UriSafeBase64Payload
-render
 ```
 
 ### Documentation

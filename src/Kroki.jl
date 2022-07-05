@@ -5,7 +5,7 @@ with a Kroki service.
 Defines `Base.show` and corresponding `Base.showable` methods for different
 output formats and [`Diagram`](@ref Kroki.Diagram) types, so they render in
 their most optimal form in different environments (e.g. the documentation
-system, Documenter output, Jupyter, etc.).
+system, Documenter output, Pluto, Jupyter, etc.).
 """
 module Kroki
 
@@ -41,7 +41,7 @@ julia> Kroki.Diagram(:PlantUML, "Kroki -> Julia: Hello Julia!")
 ```
 """
 struct Diagram
-  "The textual specification of the diagram"
+  "The textual specification of the diagram."
   specification::AbstractString
 
   """
@@ -139,11 +139,15 @@ RenderError(::Diagram, exception::Exception) = exception
 Renders a [`Diagram`](@ref) through a Kroki service to the specified output
 format.
 
-If the Kroki service responds with an error throws an
+If the Kroki service responds with an error, throws an
 [`InvalidDiagramSpecificationError`](@ref) or
 [`InvalidOutputFormatError`](@ref) if a know type of error occurs. Other errors
 (e.g. `HTTP.ExceptionRequest.StatusError` for connection errors) are propagated
 if they occur.
+
+_SVG output is supported for all [`Diagram`](@ref) types_. See [Kroki's
+website](https://kroki.io/#support) for an overview of other supported output
+formats per diagram type. Note that this list may not be entirely up-to-date.
 """
 render(diagram::Diagram, output_format::AbstractString) =
   try
@@ -271,6 +275,34 @@ function interpolate(specification::AbstractString)
   esc.(components)
 end
 
+# Links to the main documentation for each diagram type for inclusion in the
+# string literal docstrings
+DIAGRAM_DOCUMENTATION_URLS = Dict{String, String}(
+  "actdiag" => "http://blockdiag.com/en/actdiag",
+  "blockdiag" => "http://blockdiag.com/en/blockdiag",
+  "bpmn" => "https://www.omg.org/spec/BPMN",
+  "bytefield" => "https://bytefield-svg.deepsymmetry.org",
+  "c4plantuml" => "https://github.com/plantuml-stdlib/C4-PlantUML",
+  "ditaa" => "http://ditaa.sourceforge.net",
+  "erd" => "https://github.com/BurntSushi/erd",
+  "excalidraw" => "https://excalidraw.com",
+  "graphviz" => "https://graphviz.org",
+  "mermaid" => "https://mermaid-js.github.io",
+  "nomnoml" => "https://www.nomnoml.com",
+  "nwdiag" => "http://blockdiag.com/en/nwdiag",
+  "packetdiag" => "http://blockdiag.com/en/nwdiag",
+  "pikchr" => "https://pikchr.org",
+  "plantuml" => "https://plantuml.com",
+  "rackdiag" => "http://blockdiag.com/en/nwdiag",
+  "seqdiag" => "http://blockdiag.com/en/seqdiag",
+  "structurizr" => "https://structurizr.com",
+  "svgbob" => "https://ivanceras.github.io/content/Svgbob.html",
+  "umlet" => "https://github.com/umlet/umlet",
+  "vega" => "https://vega.github.io/vega",
+  "vegalite" => "https://vega.github.io/vega-lite",
+  "wavedrom" => "https://wavedrom.com",
+)
+
 for diagram_type in map(
   # The union of the values of `LIMITED_DIAGRAM_SUPPORT` corresponds to all
   # supported `Diagram` types. Converting the `Symbol`s to `String`s improves
@@ -281,7 +313,9 @@ for diagram_type in map(
   macro_name = Symbol("$(diagram_type)_str")
   macro_signature = Symbol("@$macro_name")
 
-  docstring = "Shorthand for instantiating $diagram_type [`Diagram`](@ref)s."
+  diagram_url = get(DIAGRAM_DOCUMENTATION_URLS, diagram_type, "https://kroki.io/#support")
+
+  docstring = "String literal for instantiating [`$diagram_type`]($diagram_url) [`Diagram`](@ref)s."
 
   @eval begin
     export $macro_signature
