@@ -21,6 +21,8 @@ using .Documentation
 include("./kroki/service.jl")
 using .Service: ENDPOINT
 
+export Diagram, render
+
 """
 A representation of a diagram that can be rendered by a Kroki service.
 
