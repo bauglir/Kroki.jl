@@ -6,6 +6,7 @@ using Kroki:
   @mermaid_str,
   @plantuml_str,
   Diagram,
+  DiagramPathOrSpecificationError,
   InvalidDiagramSpecificationError,
   InvalidOutputFormatError,
   StatusError, # Imported from HTTP through Kroki
@@ -43,6 +44,52 @@ function testShowMethodRenders(
 end
 
 @testset "Kroki" begin
+  @testset "`Diagram` instantiation providing" begin
+    @testset "`path` loads the file as the `specification" begin
+      diagram_path = joinpath(@__DIR__, "assets", "plantuml-example.puml")
+      expected_specification = read(diagram_path, String)
+
+      diagram = Diagram(:plantml; path = diagram_path)
+
+      @test diagram.specification === expected_specification
+    end
+
+    @testset "`specification` stores it" begin
+      expected_specification = "A -> B: C"
+
+      diagram = Diagram(:plantuml; specification = expected_specification)
+
+      @test diagram.specification === expected_specification
+    end
+
+    @testset "invalid `path`/`specification` combinations errors" begin
+      @testset "specifying both" begin
+        @test_throws(
+          DiagramPathOrSpecificationError,
+          Diagram(:mermaid; path = tempname(), specification = "A -> B: C")
+        )
+      end
+
+      @testset "specifying neither" begin
+        @test_throws(DiagramPathOrSpecificationError, Diagram(:svgbob))
+      end
+
+      @testset "rendering" begin
+        expected_specification = "X -> Y: Z"
+
+        rendered_error =
+          sprint(showerror, DiagramPathOrSpecificationError(nothing, "X -> Y: Z"))
+
+        @test startswith(
+          rendered_error,
+          "Either `path` or `specification` should be specified:",
+        )
+        @test occursin("* `path`: '<not specified>'", rendered_error)
+        @test occursin("* `specification`: '$(expected_specification)'", rendered_error)
+      end
+    end
+  end
+
   @testset "`render`" begin
     # This is not an exhaustive list of supported diagram types or output
     # formats, but serves to verify generic rendering logic is available for at
