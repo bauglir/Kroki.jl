@@ -44,7 +44,7 @@ julia> Kroki.Diagram(:PlantUML, "Kroki -> Julia: Hello Julia!")
      └─────┘          └─────┘
 ```
 """
-struct Diagram
+Base.@kwdef struct Diagram
   "The textual specification of the diagram."
   specification::AbstractString
 

@@ -15,6 +15,16 @@ end
 
 @testset "Kroki" begin
   @testset "`Diagram` instantiation" begin
+    @testset "through keyword arguments" begin
+      expected_specification = "[...]--[...]"
+      expected_type = :svgbob
+
+      diagram = Diagram(specification = expected_specification, type = expected_type)
+
+      @test diagram.specification === expected_specification
+      @test diagram.type === expected_type
+    end
+
     @testset "through `type` and `specification` positional arguments" begin
       expected_specification = "A -> B: C"
       expected_type = :plantuml
