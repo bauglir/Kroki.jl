@@ -30,24 +30,6 @@ const Maybe{T} = Union{Nothing, T} where {T}
 """
 A representation of a diagram that can be rendered by a Kroki service.
 
-# Constructors
-
-```
-Diagram(type::Symbol, specification::AbstractString)
-```
-
-Constructs a `Diagram` from the `specification` for a specific `type` of
-diagram.
-
-```
-Diagram(type::Symbol; path::AbstractString, specification::AbstractString)
-```
-
-Constructs a `Diagram` from the `specification` for a specific `type` of
-diagram, or loads the `specification` from the provided `path`.
-
-Specifying both, or neither, keyword arguments is invalid.
-
 # Examples
 
 ```
