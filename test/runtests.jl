@@ -23,6 +23,20 @@ end
 
       @test diagram.specification === expected_specification
       @test diagram.type === expected_type
+
+      @testset "optionally accepts `options`" begin
+        expected_options = Dict("key" => "value")
+
+        diagram = Diagram(
+          options = expected_options,
+          specification = expected_specification,
+          type = expected_type,
+        )
+
+        @test diagram.options === expected_options
+        @test diagram.specification === expected_specification
+        @test diagram.type === expected_type
+      end
     end
 
     @testset "through `type` and `specification` positional arguments" begin
@@ -33,6 +47,16 @@ end
 
       @test diagram.specification === expected_specification
       @test diagram.type === expected_type
+
+      @testset "optionally accepts `options`" begin
+        expected_options = Dict("foo" => "bar")
+
+        diagram = Diagram(expected_type, expected_specification; options = expected_options)
+
+        @test diagram.options === expected_options
+        @test diagram.specification === expected_specification
+        @test diagram.type === expected_type
+      end
     end
 
     @testset "through `type` positional argument with keyword arguments" begin
@@ -43,6 +67,15 @@ end
         diagram = Diagram(:plantuml; path = diagram_path)
 
         @test diagram.specification === expected_specification
+      end
+
+      @testset "optionally accepts `options`" begin
+        expected_options = Dict("key" => "value")
+
+        diagram =
+          Diagram(:plantuml; options = expected_options, specification = "A -> B: C")
+
+        @test diagram.options === expected_options
       end
 
       @testset "providing the `specification` keyword argument stores it" begin

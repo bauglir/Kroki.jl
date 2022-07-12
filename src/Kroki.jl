@@ -45,6 +45,17 @@ julia> Kroki.Diagram(:PlantUML, "Kroki -> Julia: Hello Julia!")
 ```
 """
 Base.@kwdef struct Diagram
+  """
+  Options to modify the appearance of the `specification` when rendered.
+
+  Valid options depend on the `type` of diagram. See [Kroki's
+  website](https://docs.kroki.io/kroki/setup/diagram-options) for details.
+
+  The keys are case-insensitive. All specified options are passed through to
+  Kroki, which ignores unkown options.
+  """
+  options::Dict{String, String} = Dict{String, String}()
+
   "The textual specification of the diagram."
   specification::AbstractString
 
@@ -58,8 +69,12 @@ end
 """
 Constructs a [`Diagram`](@ref) from the `specification` for a specific `type`
 of diagram.
+
+Passes keyword arguments through to [`Diagram`](@ref) untouched.
 """
-Diagram(type::Symbol, specification::AbstractString) = Diagram(specification, type)
+function Diagram(type::Symbol, specification::AbstractString; kwargs...)
+  Diagram(; specification, type, kwargs...)
+end
 
 include("./kroki/exceptions.jl")
 using .Exceptions: DiagramPathOrSpecificationError, RenderError
@@ -69,11 +84,14 @@ Constructs a [`Diagram`](@ref) from the `specification` for a specific `type`
 of diagram, or loads the `specification` from the provided `path`.
 
 Specifying both keyword arguments, or neither, is invalid.
+
+Passes any further keyword arguments through to [`Diagram`](@ref) untouched.
 """
 function Diagram(
   type::Symbol;
   path::Maybe{AbstractString} = nothing,
   specification::Maybe{AbstractString} = nothing,
+  kwargs...,
 )
   path_provided = !isnothing(path)
   specification_provided = !isnothing(specification)
@@ -82,11 +100,13 @@ function Diagram(
     throw(DiagramPathOrSpecificationError(path, specification))
   elseif !path_provided && !specification_provided
     throw(DiagramPathOrSpecificationError(path, specification))
-  elseif path_provided
-    Diagram(type, read(path, String))
-  else
-    Diagram(type, specification)
   end
+
+  Diagram(;
+    specification = path_provided ? read(path, String) : specification,
+    type,
+    kwargs...,
+  )
 end
 
 """
