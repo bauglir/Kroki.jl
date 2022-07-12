@@ -15,21 +15,33 @@ end
 
 @testset "Kroki" begin
   @testset "`Diagram` instantiation" begin
-    @testset "providing `path` loads the file as the `specification" begin
-      diagram_path = joinpath(@__DIR__, "assets", "plantuml-example.puml")
-      expected_specification = read(diagram_path, String)
+    @testset "through `type` and `specification` positional arguments" begin
+      expected_specification = "A -> B: C"
+      expected_type = :plantuml
 
-      diagram = Diagram(:plantml; path = diagram_path)
+      diagram = Diagram(expected_type, expected_specification)
 
       @test diagram.specification === expected_specification
+      @test diagram.type === expected_type
     end
 
-    @testset "providing `specification` stores it" begin
-      expected_specification = "A -> B: C"
+    @testset "through `type` positional argument with keyword arguments" begin
+      @testset "providing the `path` keyword argument loads a file as the `specification" begin
+        diagram_path = joinpath(@__DIR__, "assets", "plantuml-example.puml")
+        expected_specification = read(diagram_path, String)
 
-      diagram = Diagram(:plantuml; specification = expected_specification)
+        diagram = Diagram(:plantuml; path = diagram_path)
 
-      @test diagram.specification === expected_specification
+        @test diagram.specification === expected_specification
+      end
+
+      @testset "providing the `specification` keyword argument stores it" begin
+        expected_specification = "A -> B: C"
+
+        diagram = Diagram(:plantuml; specification = expected_specification)
+
+        @test diagram.specification === expected_specification
+      end
     end
   end
 
