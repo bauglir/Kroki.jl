@@ -9,6 +9,8 @@ CurrentModule = Kroki
 ```@docs
 Kroki
 Diagram
+Diagram(::Symbol, ::AbstractString)
+Diagram(::Symbol; ::Union{Nothing,AbstractString}, ::Union{Nothing,AbstractString})
 render
 ```
 
