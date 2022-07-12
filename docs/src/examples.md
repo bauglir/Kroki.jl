@@ -147,6 +147,24 @@ svgbob"""
 """
 ```
 
+### Loading from a file
+
+Instead of directly specifying a diagram, [`Diagram`](@ref)s can also load the
+specifications from files. This is particularly useful when creating diagrams
+using other tooling, e.g. [Structurizr](https://structurizr.com) or
+[Excalidraw](https://excalidraw.com), or when sharing diagram definitions
+across documentation.
+
+To load a diagram from a file, specify the path of the file as the `path`
+keyword argument to [`Diagram`](@ref).
+
+```@example diagrams
+Diagram(
+  :structurizr;
+  path = joinpath(@__DIR__, "..", "architecture", "workspace.dsl"),
+)
+```
+
 ## Rendering to a specific format
 
 To render to a specific format, explicitly call the [`render`](@ref) function
