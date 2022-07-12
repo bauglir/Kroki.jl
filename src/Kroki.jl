@@ -71,13 +71,13 @@ struct Diagram
   value is case-insensitive.
   """
   type::Symbol
-
-  """
-  Constructs a [`Diagram`](@ref) from the `specification` for a specific `type`
-  of diagram.
-  """
-  Diagram(type::Symbol, specification::AbstractString) = new(specification, type)
 end
+
+"""
+Constructs a [`Diagram`](@ref) from the `specification` for a specific `type`
+of diagram.
+"""
+Diagram(type::Symbol, specification::AbstractString) = Diagram(specification, type)
 
 """
 Constructs a [`Diagram`](@ref) from the `specification` for a specific `type`
