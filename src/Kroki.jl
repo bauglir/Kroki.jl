@@ -23,8 +23,30 @@ using .Service: ENDPOINT
 
 export Diagram, render
 
+# Convenience short-hand to make further type definitions more straightforward
+# to write
+const Maybe{T} = Union{Nothing, T} where {T}
+
 """
 A representation of a diagram that can be rendered by a Kroki service.
+
+# Constructors
+
+```
+Diagram(type::Symbol, specification::AbstractString)
+```
+
+Constructs a `Diagram` from the `specification` for a specific `type` of
+diagram.
+
+```
+Diagram(type::Symbol; path::AbstractString, specification::AbstractString)
+```
+
+Constructs a `Diagram` from the `specification` for a specific `type` of
+diagram, or loads the `specification` from the provided `path`.
+
+Specifying both, or neither, keyword arguments is invalid.
 
 # Examples
 
@@ -50,7 +72,61 @@ struct Diagram
   """
   type::Symbol
 
+  """
+  Constructs a [`Diagram`](@ref) from the `specification` for a specific `type`
+  of diagram.
+  """
   Diagram(type::Symbol, specification::AbstractString) = new(specification, type)
+end
+
+"""
+Constructs a [`Diagram`](@ref) from the `specification` for a specific `type`
+of diagram, or loads the `specification` from the provided `path`.
+
+Specifying both, or neither, keyword arguments is invalid.
+"""
+function Diagram(
+  type::Symbol;
+  path::Maybe{AbstractString} = nothing,
+  specification::Maybe{AbstractString} = nothing,
+)
+  path_provided = !isnothing(path)
+  specification_provided = !isnothing(specification)
+
+  if path_provided && specification_provided
+    throw(DiagramPathOrSpecificationError(path, specification))
+  elseif !path_provided && !specification_provided
+    throw(DiagramPathOrSpecificationError(path, specification))
+  elseif path_provided
+    Diagram(type, read(path, String))
+  else
+    Diagram(type, specification)
+  end
+end
+
+"""
+An `Exception` to be thrown when the `path` and `specification` keyword
+arguments to [`Diagram`](@ref) are not specified mutually exclusive.
+"""
+struct DiagramPathOrSpecificationError <: Exception
+  path::Maybe{AbstractString}
+  specification::Maybe{AbstractString}
+end
+
+function Base.showerror(io::IO, error::DiagramPathOrSpecificationError)
+  not_specified = "<not specified>"
+
+  path_description = isnothing(error.path) ? not_specified : error.path
+  specification_description =
+    isnothing(error.specification) ? not_specified : error.specification
+
+  message = """
+            Either `path` or `specification` should be specified:
+              * `path`: '$(path_description)'
+              * `specification`: '$(specification_description)'
+            """
+
+  print(io, message)
 end
 
 """

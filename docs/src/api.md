@@ -30,6 +30,7 @@ Filter = m -> endswith("$m", "_str")
 ## Private
 
 ```@docs
+DiagramPathOrSpecificationError
 InvalidDiagramSpecificationError
 InvalidOutputFormatError
 LIMITED_DIAGRAM_SUPPORT
