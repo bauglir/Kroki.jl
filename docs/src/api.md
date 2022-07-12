@@ -34,9 +34,6 @@ Modules = [ Kroki.StringLiterals ]
 ## Private
 
 ```@docs
-DiagramPathOrSpecificationError
-InvalidDiagramSpecificationError
-InvalidOutputFormatError
 LIMITED_DIAGRAM_SUPPORT
 UriSafeBase64Payload
 ```
@@ -45,6 +42,12 @@ UriSafeBase64Payload
 
 ```@autodocs
 Modules = [ Kroki.Documentation ]
+```
+
+### Exceptions
+
+```@autodocs
+Modules = [ Kroki.Exceptions ]
 ```
 
 ### Service Management
