@@ -335,41 +335,43 @@ end
 
 # Links to the main documentation for each diagram type for inclusion in the
 # string literal docstrings
-DIAGRAM_DOCUMENTATION_URLS = Dict{String, String}(
-  "actdiag" => "http://blockdiag.com/en/actdiag",
-  "blockdiag" => "http://blockdiag.com/en/blockdiag",
-  "bpmn" => "https://www.omg.org/spec/BPMN",
-  "bytefield" => "https://bytefield-svg.deepsymmetry.org",
-  "c4plantuml" => "https://github.com/plantuml-stdlib/C4-PlantUML",
-  "ditaa" => "http://ditaa.sourceforge.net",
-  "erd" => "https://github.com/BurntSushi/erd",
-  "excalidraw" => "https://excalidraw.com",
-  "graphviz" => "https://graphviz.org",
-  "mermaid" => "https://mermaid-js.github.io",
-  "nomnoml" => "https://www.nomnoml.com",
-  "nwdiag" => "http://blockdiag.com/en/nwdiag",
-  "packetdiag" => "http://blockdiag.com/en/nwdiag",
-  "pikchr" => "https://pikchr.org",
-  "plantuml" => "https://plantuml.com",
-  "rackdiag" => "http://blockdiag.com/en/nwdiag",
-  "seqdiag" => "http://blockdiag.com/en/seqdiag",
-  "structurizr" => "https://structurizr.com",
-  "svgbob" => "https://ivanceras.github.io/content/Svgbob.html",
-  "umlet" => "https://github.com/umlet/umlet",
-  "vega" => "https://vega.github.io/vega",
-  "vegalite" => "https://vega.github.io/vega-lite",
-  "wavedrom" => "https://wavedrom.com",
+DIAGRAM_DOCUMENTATION_URLS = Dict{Symbol, String}(
+  :actdiag => "http://blockdiag.com/en/actdiag",
+  :blockdiag => "http://blockdiag.com/en/blockdiag",
+  :bpmn => "https://www.omg.org/spec/BPMN",
+  :bytefield => "https://bytefield-svg.deepsymmetry.org",
+  :c4plantuml => "https://github.com/plantuml-stdlib/C4-PlantUML",
+  :ditaa => "http://ditaa.sourceforge.net",
+  :erd => "https://github.com/BurntSushi/erd",
+  :excalidraw => "https://excalidraw.com",
+  :graphviz => "https://graphviz.org",
+  :mermaid => "https://mermaid-js.github.io",
+  :nomnoml => "https://www.nomnoml.com",
+  :nwdiag => "http://blockdiag.com/en/nwdiag",
+  :packetdiag => "http://blockdiag.com/en/nwdiag",
+  :pikchr => "https://pikchr.org",
+  :plantuml => "https://plantuml.com",
+  :rackdiag => "http://blockdiag.com/en/nwdiag",
+  :seqdiag => "http://blockdiag.com/en/seqdiag",
+  :structurizr => "https://structurizr.com",
+  :svgbob => "https://ivanceras.github.io/content/Svgbob.html",
+  :umlet => "https://github.com/umlet/umlet",
+  :vega => "https://vega.github.io/vega",
+  :vegalite => "https://vega.github.io/vega-lite",
+  :wavedrom => "https://wavedrom.com",
 )
 
-for diagram_type in map(
-  # The union of the values of `LIMITED_DIAGRAM_SUPPORT` corresponds to all
-  # supported `Diagram` types. Converting the `Symbol`s to `String`s improves
-  # readability of the `macro` bodies
-  String,
-  collect(Set(Iterators.flatten(values(LIMITED_DIAGRAM_SUPPORT)))),
-)
+# The union of the values of `LIMITED_DIAGRAM_SUPPORT` corresponds to all
+# supported `Diagram` types. The `values` call returns an array of arrays that
+# may contain duplicate diagram types due to some types supporting rendering to
+# multiple MIME types
+for diagram_type in unique(Iterators.flatten(values(LIMITED_DIAGRAM_SUPPORT)))
   macro_name = Symbol("$(diagram_type)_str")
   macro_signature = Symbol("@$macro_name")
+  # To be able to interpolate the `diagram_type` into the macro's body it needs
+  # to be quoted twice, so that it does not get interpreted as the name of a
+  # variable. First for `@eval`, then for the macro itself
+  macro_diagram_type = QuoteNode(QuoteNode(diagram_type))
 
   diagram_url = get(DIAGRAM_DOCUMENTATION_URLS, diagram_type, "https://kroki.io/#support")
 
@@ -382,7 +384,7 @@ for diagram_type in map(
       Expr(
         :call,
         :Diagram,
-        QuoteNode(Symbol($diagram_type)),
+        $macro_diagram_type,
         Expr(:call, string, interpolate(specification)...),
       )
     end
