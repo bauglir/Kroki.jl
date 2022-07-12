@@ -23,10 +23,12 @@ Filter = name -> "$name" !== "executeDockerCompose"
 ```
 
 ### [String Literals](@id api-string-literals)
+
+The following string literals are exported from the [`Kroki`](@ref) module to
+make it more straightforward to instantiate `Diagram`s.
+
 ```@autodocs
-Modules = [ Kroki ]
-Order = [ :macro ]
-Filter = m -> endswith("$m", "_str")
+Modules = [ Kroki.StringLiterals ]
 ```
 
 ## Private
