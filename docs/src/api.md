@@ -23,18 +23,17 @@ Filter = name -> "$name" !== "executeDockerCompose"
 ```
 
 ### [String Literals](@id api-string-literals)
+
+The following string literals are exported from the [`Kroki`](@ref) module to
+make it more straightforward to instantiate `Diagram`s.
+
 ```@autodocs
-Modules = [ Kroki ]
-Order = [ :macro ]
-Filter = m -> endswith("$m", "_str")
+Modules = [ Kroki.StringLiterals ]
 ```
 
 ## Private
 
 ```@docs
-DiagramPathOrSpecificationError
-InvalidDiagramSpecificationError
-InvalidOutputFormatError
 LIMITED_DIAGRAM_SUPPORT
 UriSafeBase64Payload
 ```
@@ -43,6 +42,12 @@ UriSafeBase64Payload
 
 ```@autodocs
 Modules = [ Kroki.Documentation ]
+```
+
+### Exceptions
+
+```@autodocs
+Modules = [ Kroki.Exceptions ]
 ```
 
 ### Service Management

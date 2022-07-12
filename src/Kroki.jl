@@ -12,7 +12,7 @@ module Kroki
 using Base64: base64encode
 using CodecZlib: ZlibCompressor, transcode
 using HTTP: request
-using HTTP.ExceptionRequest: StatusError
+using Reexport: @reexport
 
 include("./kroki/documentation.jl")
 using .Documentation
@@ -61,6 +61,9 @@ of diagram.
 """
 Diagram(type::Symbol, specification::AbstractString) = Diagram(specification, type)
 
+include("./kroki/exceptions.jl")
+using .Exceptions: DiagramPathOrSpecificationError, RenderError
+
 """
 Constructs a [`Diagram`](@ref) from the `specification` for a specific `type`
 of diagram, or loads the `specification` from the provided `path`.
@@ -87,80 +90,6 @@ function Diagram(
 end
 
 """
-An `Exception` to be thrown when the `path` and `specification` keyword
-arguments to [`Diagram`](@ref) are not specified mutually exclusive.
-"""
-struct DiagramPathOrSpecificationError <: Exception
-  path::Maybe{AbstractString}
-  specification::Maybe{AbstractString}
-end
-
-function Base.showerror(io::IO, error::DiagramPathOrSpecificationError)
-  not_specified = "<not specified>"
-
-  path_description = isnothing(error.path) ? not_specified : error.path
-  specification_description =
-    isnothing(error.specification) ? not_specified : error.specification
-
-  message = """
-            Either `path` or `specification` should be specified:
-              * `path`: '$(path_description)'
-              * `specification`: '$(specification_description)'
-            """
-
-  print(io, message)
-end
-
-"""
-An `Exception` to be thrown when a [`Diagram`](@ref) representing an invalid
-specification is passed to [`render`](@ref).
-"""
-struct InvalidDiagramSpecificationError <: Exception
-  error::String
-  cause::Diagram
-end
-
-Base.showerror(io::IO, error::InvalidDiagramSpecificationError) = print(
-  io,
-  """
-  $(RenderErrorHeader(error))
-
-  This is (likely) caused by an invalid diagram specification.
-  """,
-)
-
-"""
-An `Exception` to be thrown when a [`Diagram`](@ref) is [`render`](@ref)ed to
-an unsupported or invalid output format.
-"""
-struct InvalidOutputFormatError <: Exception
-  error::String
-  cause::Diagram
-end
-
-Base.showerror(io::IO, error::InvalidOutputFormatError) = print(
-  io,
-  """
-  $(RenderErrorHeader(error))
-
-  This is (likely) caused by an invalid or unknown output format.
-  """,
-)
-
-# Helper function to render common headers when showing render errors
-function RenderErrorHeader(
-  error::Union{InvalidDiagramSpecificationError, InvalidOutputFormatError},
-)
-  """
-  The Kroki service responded with:
-  $(error.error)
-
-  In response to a '$(error.cause.type)' diagram with the specification:
-  $(error.cause.specification)
-  """
-end
-
-"""
 Compresses a [`Diagram`](@ref)'s `specification` using
 [zlib](https://zlib.net), turning the resulting bytes into a URL-safe Base64
 encoded payload (i.e. replacing `+` by `-` and `/` by `_`) to be used in
@@ -175,33 +104,17 @@ UriSafeBase64Payload(diagram::Diagram) = foldl(
   init = base64encode(transcode(ZlibCompressor, diagram.specification)),
 )
 
-# Rewrites generic `HTTP.ExceptionRequest.StatusError`s into more specific
-# errors based on Kroki's response if possible
-function RenderError(diagram::Diagram, exception::StatusError)
-  # Both errors related to invalid diagram specifications and invalid or
-  # unsupported output formats are denoted by 400 responses, so further
-  # processing of the response is necessary
-  service_response = String(exception.response.body)
-
-  if occursin("Unsupported output format", service_response)
-    InvalidOutputFormatError(service_response, diagram)
-  elseif occursin("Syntax Error", service_response)
-    InvalidDiagramSpecificationError(service_response, diagram)
-  else
-    exception
-  end
-end
-RenderError(::Diagram, exception::Exception) = exception
-
 """
 Renders a [`Diagram`](@ref) through a Kroki service to the specified output
 format.
 
 If the Kroki service responds with an error, throws an
-[`InvalidDiagramSpecificationError`](@ref) or
-[`InvalidOutputFormatError`](@ref) if a know type of error occurs. Other errors
-(e.g. `HTTP.ExceptionRequest.StatusError` for connection errors) are propagated
-if they occur.
+[`InvalidDiagramSpecificationError`](@ref
+Kroki.Exceptions.InvalidDiagramSpecificationError) or
+[`InvalidOutputFormatError`](@ref Kroki.Exceptions.InvalidOutputFormatError) if
+a know type of error occurs. Other errors (e.g.
+`HTTP.ExceptionRequest.StatusError` for connection errors) are propagated if
+they occur.
 
 _SVG output is supported for all [`Diagram`](@ref) types_. See [Kroki's
 website](https://kroki.io/#support) for an overview of other supported output
@@ -299,94 +212,7 @@ Base.show(io::IO, diagram::Diagram) =
     write(io, diagram.specification)
   end
 
-# Helper function implementing string interpolation to be used in conjunction
-# with macros defining diagram specification string literals, as they do not
-# support string interpolation by default.
-#
-# Returns an array of elements, e.g. `Expr`essions, `Symbol`s, `String`s that
-# can be incorporated in the `args` of another `Expr`essions
-function interpolate(specification::AbstractString)
-  # Based on the interpolation code from the Markdown stdlib and
-  # https://riptutorial.com/julia-lang/example/22952/implementing-interpolation-in-a-string-macro
-  components = Any[]
-
-  # Turn the string is into an `IOBuffer` to make it more straightforward to
-  # parse it in an incremental fashion
-  stream = IOBuffer(specification)
-
-  while !eof(stream)
-    # The `$` is omitted from the result by `readuntil` by default, no need for
-    # further processing
-    push!(components, readuntil(stream, '$'))
-
-    if !eof(stream)
-      # If an interpolation indicator was found, try to parse the smallest
-      # expression to interpolate and then keep parsing the stream for further
-      # interpolations
-      started_at = position(stream)
-      expr, parsed_count = Meta.parse(read(stream, String), 1; greedy = false)
-      seek(stream, started_at + parsed_count - 1)
-      push!(components, expr)
-    end
-  end
-
-  esc.(components)
-end
-
-# Links to the main documentation for each diagram type for inclusion in the
-# string literal docstrings
-DIAGRAM_DOCUMENTATION_URLS = Dict{String, String}(
-  "actdiag" => "http://blockdiag.com/en/actdiag",
-  "blockdiag" => "http://blockdiag.com/en/blockdiag",
-  "bpmn" => "https://www.omg.org/spec/BPMN",
-  "bytefield" => "https://bytefield-svg.deepsymmetry.org",
-  "c4plantuml" => "https://github.com/plantuml-stdlib/C4-PlantUML",
-  "ditaa" => "http://ditaa.sourceforge.net",
-  "erd" => "https://github.com/BurntSushi/erd",
-  "excalidraw" => "https://excalidraw.com",
-  "graphviz" => "https://graphviz.org",
-  "mermaid" => "https://mermaid-js.github.io",
-  "nomnoml" => "https://www.nomnoml.com",
-  "nwdiag" => "http://blockdiag.com/en/nwdiag",
-  "packetdiag" => "http://blockdiag.com/en/nwdiag",
-  "pikchr" => "https://pikchr.org",
-  "plantuml" => "https://plantuml.com",
-  "rackdiag" => "http://blockdiag.com/en/nwdiag",
-  "seqdiag" => "http://blockdiag.com/en/seqdiag",
-  "structurizr" => "https://structurizr.com",
-  "svgbob" => "https://ivanceras.github.io/content/Svgbob.html",
-  "umlet" => "https://github.com/umlet/umlet",
-  "vega" => "https://vega.github.io/vega",
-  "vegalite" => "https://vega.github.io/vega-lite",
-  "wavedrom" => "https://wavedrom.com",
-)
-
-for diagram_type in map(
-  # The union of the values of `LIMITED_DIAGRAM_SUPPORT` corresponds to all
-  # supported `Diagram` types. Converting the `Symbol`s to `String`s improves
-  # readability of the `macro` bodies
-  String,
-  collect(Set(Iterators.flatten(values(LIMITED_DIAGRAM_SUPPORT)))),
-)
-  macro_name = Symbol("$(diagram_type)_str")
-  macro_signature = Symbol("@$macro_name")
-
-  diagram_url = get(DIAGRAM_DOCUMENTATION_URLS, diagram_type, "https://kroki.io/#support")
-
-  docstring = "String literal for instantiating [`$diagram_type`]($diagram_url) [`Diagram`](@ref)s."
-
-  @eval begin
-    export $macro_signature
-
-    @doc $docstring macro $macro_name(specification::AbstractString)
-      Expr(
-        :call,
-        :Diagram,
-        QuoteNode(Symbol($diagram_type)),
-        Expr(:call, string, interpolate(specification)...),
-      )
-    end
-  end
-end
+include("./string_literals.jl")
+@reexport using .StringLiterals
 
 end

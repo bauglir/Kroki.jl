@@ -14,6 +14,10 @@ workspace {
           description "Facilitates definition and rendering of different diagram types."
         }
 
+        component Exceptions {
+          description "Provides all exceptions functionality in the package can throw."
+        }
+
         service_management = component "Service Management" {
           description "Provides management over the 'Kroki Service' that is being used, including managing a local instance."
         }
