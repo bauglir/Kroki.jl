@@ -83,7 +83,7 @@ Diagram(type::Symbol, specification::AbstractString) = Diagram(specification, ty
 Constructs a [`Diagram`](@ref) from the `specification` for a specific `type`
 of diagram, or loads the `specification` from the provided `path`.
 
-Specifying both, or neither, keyword arguments is invalid.
+Specifying both keyword arguments, or neither, is invalid.
 """
 function Diagram(
   type::Symbol;
