@@ -15,21 +15,76 @@ end
 
 @testset "Kroki" begin
   @testset "`Diagram` instantiation" begin
-    @testset "providing `path` loads the file as the `specification" begin
-      diagram_path = joinpath(@__DIR__, "assets", "plantuml-example.puml")
-      expected_specification = read(diagram_path, String)
+    @testset "through keyword arguments" begin
+      expected_specification = "[...]--[...]"
+      expected_type = :svgbob
 
-      diagram = Diagram(:plantml; path = diagram_path)
+      diagram = Diagram(specification = expected_specification, type = expected_type)
 
       @test diagram.specification === expected_specification
+      @test diagram.type === expected_type
+
+      @testset "optionally accepts `options`" begin
+        expected_options = Dict("key" => "value")
+
+        diagram = Diagram(
+          options = expected_options,
+          specification = expected_specification,
+          type = expected_type,
+        )
+
+        @test diagram.options === expected_options
+        @test diagram.specification === expected_specification
+        @test diagram.type === expected_type
+      end
     end
 
-    @testset "providing `specification` stores it" begin
+    @testset "through `type` and `specification` positional arguments" begin
       expected_specification = "A -> B: C"
+      expected_type = :plantuml
 
-      diagram = Diagram(:plantuml; specification = expected_specification)
+      diagram = Diagram(expected_type, expected_specification)
 
       @test diagram.specification === expected_specification
+      @test diagram.type === expected_type
+
+      @testset "optionally accepts `options`" begin
+        expected_options = Dict("foo" => "bar")
+
+        diagram = Diagram(expected_type, expected_specification; options = expected_options)
+
+        @test diagram.options === expected_options
+        @test diagram.specification === expected_specification
+        @test diagram.type === expected_type
+      end
+    end
+
+    @testset "through `type` positional argument with keyword arguments" begin
+      @testset "providing the `path` keyword argument loads a file as the `specification" begin
+        diagram_path = joinpath(@__DIR__, "assets", "plantuml-example.puml")
+        expected_specification = read(diagram_path, String)
+
+        diagram = Diagram(:plantuml; path = diagram_path)
+
+        @test diagram.specification === expected_specification
+      end
+
+      @testset "optionally accepts `options`" begin
+        expected_options = Dict("key" => "value")
+
+        diagram =
+          Diagram(:plantuml; options = expected_options, specification = "A -> B: C")
+
+        @test diagram.options === expected_options
+      end
+
+      @testset "providing the `specification` keyword argument stores it" begin
+        expected_specification = "A -> B: C"
+
+        diagram = Diagram(:plantuml; specification = expected_specification)
+
+        @test diagram.specification === expected_specification
+      end
     end
   end
 
@@ -74,6 +129,27 @@ end
       # Some renderers (e.g. Graphviz) include additional whitespace/newlines
       # after the render, these should be ignored when matching
       @test endswith(rendered, r"</svg>\s?")
+    end
+
+    @testset "takes `options` into account" begin
+      expected_theme_name = "materia"
+      options = Dict{String, String}("theme" => expected_theme_name)
+      diagram = Diagram(:plantuml, "A -> B: C"; options)
+
+      @testset "defaults to `Diagram` options" begin
+        rendered = String(render(diagram, "svg"))
+
+        @test occursin("!theme $(expected_theme_name)", rendered)
+      end
+
+      @testset "allows definition at render-time" begin
+        expected_overridden_theme = "sketchy"
+        rendered = String(
+          render(diagram, "svg"; options = Dict("theme" => expected_overridden_theme)),
+        )
+
+        @test occursin("!theme $(expected_overridden_theme)", rendered)
+      end
     end
   end
 

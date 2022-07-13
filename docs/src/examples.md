@@ -165,6 +165,72 @@ Diagram(
 )
 ```
 
+### Diagram options
+
+Some diagram types support [diagram
+options](https://docs.kroki.io/kroki/setup/diagram-options) controlling their
+apearance. These options can be set when instantiating a [`Diagram`](@ref).
+
+For instance, the `workspace.dsl` file referenced in the previous section
+defines multiple diagrams. The diagram that is rendered in the previous section
+is picked randomly from this set every time the documentation is generated. The
+[Structurizr](https://docs.kroki.io/kroki/setup/diagram-options/#_structurizr)
+diagrams support a `view-key` option to indicate which diagram should be
+rendered from the set defined in the file.
+
+```@example diagrams
+structurizr_diagram = Diagram(
+  :structurizr;
+  path = joinpath(@__DIR__, "..", "architecture", "workspace.dsl"),
+  options = Dict("view-key" => "KrokiService-Container")
+)
+```
+
+Another use case is specifying [a theme for PlantUML
+diagrams](https://docs.kroki.io/kroki/setup/diagram-options/#_plantuml).
+
+```@example diagrams
+Diagram(:plantuml, "Kroki -> Julia: Hello"; options = Dict("theme" => "amiga"))
+```
+
+```@example diagrams
+Diagram(:plantuml, "Julia -> Kroki: Hello!"; options = Dict("theme" => "crt-amber"))
+```
+
+Instead of specifying diagram options at [`Diagram`](@ref) construction, they
+can also be passed directly to the [`render`](@ref) function. For instance, to
+select a different diagram from the set of Structurizr diagrams previously
+loaded from file.
+
+```@setup diagrams
+# A helper struct to show the result of `render` within `Documenter`
+struct DocumenterSvg
+  svg::Vector{UInt8}
+end
+function Base.show(io::IO, ::MIME"image/svg+xml", (; svg)::DocumenterSvg)
+  write(io, svg)
+end
+```
+
+```@example diagrams
+# A helper wrapper to ensure the output of `render` can be visualized directly
+# within `Documenter`
+DocumenterSvg(
+  render(
+    structurizr_diagram, "svg";
+    options = Dict("view-key" => "Krokijl-Krokijl-Component")
+  )
+)
+```
+
+!!! info "A note on `view-key`s"
+
+    The `view-key`s for Structurizr diagrams can either be dynamic and obtained
+    from the [Structurizr (Lite) software](https://structurizr.com/help/lite),
+    or they can be specified as [the second argument to 'view definitions'
+    using the Structurizr
+    DSL](https://github.com/structurizr/dsl/blob/master/docs/language-reference.md#views).
+
 ## Rendering to a specific format
 
 To render to a specific format, explicitly call the [`render`](@ref) function
