@@ -130,6 +130,27 @@ end
       # after the render, these should be ignored when matching
       @test endswith(rendered, r"</svg>\s?")
     end
+
+    @testset "takes `options` into account" begin
+      expected_theme_name = "materia"
+      options = Dict{String, String}("theme" => expected_theme_name)
+      diagram = Diagram(:plantuml, "A -> B: C"; options)
+
+      @testset "defaults to `Diagram` options" begin
+        rendered = String(render(diagram, "svg"))
+
+        @test occursin("!theme $(expected_theme_name)", rendered)
+      end
+
+      @testset "allows definition at render-time" begin
+        expected_overridden_theme = "sketchy"
+        rendered = String(
+          render(diagram, "svg"; options = Dict("theme" => expected_overridden_theme)),
+        )
+
+        @test occursin("!theme $(expected_overridden_theme)", rendered)
+      end
+    end
   end
 
   @testset "`Base.show`" begin

@@ -128,6 +128,11 @@ UriSafeBase64Payload(diagram::Diagram) = foldl(
 Renders a [`Diagram`](@ref) through a Kroki service to the specified output
 format.
 
+Allows the specification of [diagram
+options](https://docs.kroki.io/kroki/setup/diagram-options) through the
+`options` keyword. The `options` default to those specified on the
+[`Diagram`](@ref).
+
 If the Kroki service responds with an error, throws an
 [`InvalidDiagramSpecificationError`](@ref
 Kroki.Exceptions.InvalidDiagramSpecificationError) or
@@ -140,7 +145,11 @@ _SVG output is supported for all [`Diagram`](@ref) types_. See [Kroki's
 website](https://kroki.io/#support) for an overview of other supported output
 formats per diagram type. Note that this list may not be entirely up-to-date.
 """
-render(diagram::Diagram, output_format::AbstractString) =
+render(
+  diagram::Diagram,
+  output_format::AbstractString;
+  options::Dict{String, String} = diagram.options,
+) =
   try
     getfield(
       request(
@@ -154,6 +163,11 @@ render(diagram::Diagram, output_format::AbstractString) =
           ],
           '/',
         ),
+        # Pass all diagram options as headers to Kroki by prepending the
+        # necessary prefix to all provided `options`. This ensures this package
+        # does not have to be updated whenever new options are added to the
+        # service
+        "Kroki-Diagram-Options-" .* keys(options) .=> values(options),
       ),
       :body,
     )
