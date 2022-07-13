@@ -18,7 +18,7 @@ using Kroki: Diagram, @mermaid_str, @plantuml_str
 
   string_literal_mermaid = mermaid"graph TD; A --> B"
   diagram_type_mermaid = Diagram(:mermaid, "graph TD; A --> B")
-  @test string_literal_mermaid == diagram_type_mermaid
+  @test "$string_literal_mermaid" == "$diagram_type_mermaid"
 
   @testset "support interpolation" begin
     # String macros do no support string interpolation out-of-the-box, this
