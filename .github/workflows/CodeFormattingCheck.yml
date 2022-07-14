@@ -7,7 +7,7 @@ on:
       - development
 
 jobs:
-  build:
+  code-format-check:
     runs-on: ubuntu-latest
     steps:
       - uses: julia-actions/setup-julia@v1
