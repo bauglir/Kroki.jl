@@ -23,6 +23,6 @@ jobs:
             @semantic-release/git
             @google/semantic-release-replace-plugin
       - name: Notify JuliaRegistrator of new release
-        uses: peter-evans/commit-comment@v1
+        uses: peter-evans/commit-comment@v2
         with:
           body: '@JuliaRegistrator register branch=main'
