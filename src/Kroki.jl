@@ -246,7 +246,7 @@ Base.show(io::IO, diagram::Diagram) =
     write(io, diagram.specification)
   end
 
-include("./string_literals.jl")
+include("./kroki/string_literals.jl")
 @reexport using .StringLiterals
 
 end
