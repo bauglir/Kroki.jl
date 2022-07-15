@@ -10,6 +10,7 @@ services:
     environment:
       - KROKI_BLOCKDIAG_HOST=blockdiag
       - KROKI_BPMN_HOST=bpmn
+      - KROKI_DIAGRAMSNET_HOST=diagramsnet
       - KROKI_EXCALIDRAW_HOST=excalidraw
       - KROKI_MERMAID_HOST=mermaid
       # Enable inclusion of, for instance, external PlantUML descriptions and
@@ -21,6 +22,8 @@ services:
     image: yuzutech/kroki-blockdiag
   bpmn:
     image: yuzutech/kroki-bpmn
+  diagramsnet:
+    image: yuzutech/kroki-diagramsnet
   excalidraw:
     image: yuzutech/kroki-excalidraw
   mermaid:

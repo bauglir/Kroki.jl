@@ -199,6 +199,7 @@ const LIMITED_DIAGRAM_SUPPORT = Dict{AbstractString, Tuple{Symbol, Vararg{Symbol
     :seqdiag,
     :actdiag,
     :nwdiag,
+    :diagramsnet,
     :packetdiag,
     :rackdiag,
     :c4plantuml,
