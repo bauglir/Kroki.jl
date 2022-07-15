@@ -44,6 +44,7 @@ DIAGRAM_DOCUMENTATION_URLS = Dict{Symbol, String}(
   :bpmn => "https://www.omg.org/spec/BPMN",
   :bytefield => "https://bytefield-svg.deepsymmetry.org",
   :c4plantuml => "https://github.com/plantuml-stdlib/C4-PlantUML",
+  :diagramsnet => "https://diagrams.net",
   :ditaa => "http://ditaa.sourceforge.net",
   :erd => "https://github.com/BurntSushi/erd",
   :excalidraw => "https://excalidraw.com",
