@@ -52,6 +52,13 @@ workspace {
         kroki_core -> this "Defers `bpmn` diagrams to"
       }
 
+      container "Diagrams.net/Draw.io Service" {
+        description "Renders 'Diagrams.net/Draw.io' diagrams."
+        url https://diagrams.net
+
+        kroki_core -> this "Defers `diagramsnet` diagrams to"
+      }
+
       container "Excalidraw Service" {
         description "Renders 'Excalidraw' diagrams."
         url https://excalidraw.com
