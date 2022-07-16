@@ -7,7 +7,7 @@ using Kroki.Exceptions: InvalidOutputFormatError
 
 function testShowMethodRenders(
   diagram::Diagram,
-  mime_type::AbstractString,
+  mime_type::MIME,
   render_output_format::AbstractString,
 )
   @test sprint(show, mime_type, diagram) == String(render(diagram, render_output_format))
@@ -158,25 +158,25 @@ end
     # `InvalidOutputFormatError`s when called directly.
     #
     # To prevent compatible `AbstractDisplay`s from trying to render
-    # incompatible diagram types in certain formats resulting in errors,
-    # `Base.showable` should be overridden to indicate the diagram cannot be
-    # rendered in the specified MIME type
+    # incompatible diagram types to unsuppored output formats, `Base.showable`
+    # should be overridden to indicate the diagram cannot be rendered in the
+    # specified MIME type
     svgbob_diagram = Diagram(:svgbob, "-->[_...__... ]")
-    @test_throws(InvalidOutputFormatError, sprint(show, "image/png", svgbob_diagram))
-    @test !showable("image/png", svgbob_diagram)
-    testShowMethodRenders(svgbob_diagram, "image/svg+xml", "svg")
+    @test_throws(InvalidOutputFormatError, sprint(show, MIME"image/png"(), svgbob_diagram))
+    @test !showable(MIME"image/png"(), svgbob_diagram)
+    testShowMethodRenders(svgbob_diagram, MIME"image/svg+xml"(), "svg")
 
     plantuml_diagram = Diagram(:PlantUML, "A -> B: C")
-    testShowMethodRenders(plantuml_diagram, "image/png", "png")
-    testShowMethodRenders(plantuml_diagram, "image/svg+xml", "svg")
+    testShowMethodRenders(plantuml_diagram, MIME"image/png"(), "png")
+    testShowMethodRenders(plantuml_diagram, MIME"image/svg+xml"(), "svg")
 
     @testset "`text/plain`" begin
       # PlantUML diagrams can be rendered nicely in text/plain based
       # environments
-      testShowMethodRenders(plantuml_diagram, "text/plain", "utxt")
+      testShowMethodRenders(plantuml_diagram, MIME"text/plain"(), "utxt")
 
       # Other diagram types should simply display their `specification`
-      @test sprint(show, "text/plain", svgbob_diagram) == svgbob_diagram.specification
+      @test sprint(show, MIME"text/plain"(), svgbob_diagram) == svgbob_diagram.specification
     end
   end
 

@@ -180,8 +180,8 @@ Some MIME types are not supported by all diagram types, this constant contains
 all these limitations. The union of all values corresponds to all supported
 [`Diagram`](@ref) `type`s.
 """
-const LIMITED_DIAGRAM_SUPPORT = Dict{AbstractString, Tuple{Symbol, Vararg{Symbol}}}(
-  "application/pdf" => (
+const LIMITED_DIAGRAM_SUPPORT = Dict{MIME, Tuple{Symbol, Vararg{Symbol}}}(
+  MIME"application/pdf"() => (
     :blockdiag,
     :seqdiag,
     :actdiag,
@@ -193,8 +193,8 @@ const LIMITED_DIAGRAM_SUPPORT = Dict{AbstractString, Tuple{Symbol, Vararg{Symbol
     :vega,
     :vegalite,
   ),
-  "image/jpeg" => (:c4plantuml, :erd, :graphviz, :plantuml, :umlet),
-  "image/png" => (
+  MIME"image/jpeg"() => (:c4plantuml, :erd, :graphviz, :plantuml, :umlet),
+  MIME"image/png"() => (
     :blockdiag,
     :seqdiag,
     :actdiag,
@@ -215,9 +215,9 @@ const LIMITED_DIAGRAM_SUPPORT = Dict{AbstractString, Tuple{Symbol, Vararg{Symbol
   ),
   # Although all diagram types support SVG, these _only_ support SVG so are
   # included separately
-  "image/svg+xml" =>
+  MIME"image/svg+xml"() =>
     (:bpmn, :bytefield, :excalidraw, :nomnoml, :pikchr, :svgbob, :wavedrom),
-  "text/plain" => (:c4plantuml, :plantuml),
+  MIME"text/plain"() => (:c4plantuml, :plantuml),
 )
 
 # `Base.show` methods should only be defined for diagram types that actually
@@ -227,10 +227,10 @@ const LIMITED_DIAGRAM_SUPPORT = Dict{AbstractString, Tuple{Symbol, Vararg{Symbol
 # available within [`Diagram`](@ref) instances, the `show` method is defined
 # generically, but then restricted using `Base.showable` to only those types
 # that actually support the format
-Base.show(io::IO, ::MIME{Symbol("image/png")}, diagram::Diagram) =
+Base.show(io::IO, ::MIME"image/png", diagram::Diagram) =
   write(io, render(diagram, "png"))
-Base.showable(::MIME{Symbol("image/png")}, diagram::Diagram) =
-  diagram.type ∈ LIMITED_DIAGRAM_SUPPORT["image/png"]
+Base.showable(::MIME"image/png", diagram::Diagram) =
+  diagram.type ∈ LIMITED_DIAGRAM_SUPPORT[MIME"image/png"()]
 
 # SVG output is supported by _all_ diagram types, so there's no additional
 # checking for support. This makes sure SVG output also works for new diagram
