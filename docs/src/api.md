@@ -35,6 +35,7 @@ Modules = [ Kroki.StringLiterals ]
 
 ```@docs
 LIMITED_DIAGRAM_SUPPORT
+MIME_TO_RENDER_ARGUMENT_MAP
 UriSafeBase64Payload
 ```
 

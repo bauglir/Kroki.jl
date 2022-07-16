@@ -220,6 +220,18 @@ const LIMITED_DIAGRAM_SUPPORT = Dict{MIME, Tuple{Symbol, Vararg{Symbol}}}(
   MIME"text/plain"() => (:c4plantuml, :plantuml, :structurizr),
 )
 
+"""
+Maps MIME types to the arguments that have to be passed to the [`render`](@ref)
+function, which are in turned passed to the Kroki service.
+"""
+const MIME_TO_RENDER_ARGUMENT_MAP = Dict{MIME, String}(
+  MIME"application/pdf"() => "pdf",
+  MIME"image/jpeg"() => "jpeg",
+  MIME"image/png"() => "png",
+  MIME"image/svg+xml"() => "svg",
+  MIME"text/plain"() => "txt",
+)
+
 # `Base.show` methods should only be defined for diagram types that actually
 # support the desired output format. This would make sure incompatible formats
 # are not accidentally rendered on compatible `AbstractDisplay`s causing
@@ -227,19 +239,20 @@ const LIMITED_DIAGRAM_SUPPORT = Dict{MIME, Tuple{Symbol, Vararg{Symbol}}}(
 # available within [`Diagram`](@ref) instances, the `show` method is defined
 # generically, but then restricted using `Base.showable` to only those types
 # that actually support the format
-Base.show(io::IO, ::MIME"application/pdf", diagram::Diagram) =
-  write(io, render(diagram, "pdf"))
-Base.show(io::IO, ::MIME"image/jpeg", diagram::Diagram) =
-  write(io, render(diagram, "jpeg"))
-Base.show(io::IO, ::MIME"image/png", diagram::Diagram) =
-  write(io, render(diagram, "png"))
+Base.show(io::IO, ::T, diagram::Diagram) where {T <: MIME} =
+  write(io, render(diagram, MIME_TO_RENDER_ARGUMENT_MAP[T()]))
 
-# SVG output is supported by _all_ diagram types, so there's no additional
-# checking for support. This makes sure SVG output also works for new diagram
-# types if they get added to the Kroki service, but not yet to this package
-Base.show(io::IO, ::MIME"image/svg+xml", diagram::Diagram) =
-  write(io, render(diagram, "svg"))
+# The `text/plain` MIME type needs to be explicitly defined to remove method
+# ambiguities. As the two argument `Base.show` method is the one that is meant
+# to render this MIME type, it is simply forwarded to that method
+Base.show(io::IO, ::MIME"text/plain", diagram::Diagram) = show(io, diagram)
 
+# SVG output is supported by _all_ diagram types. An additional `showable`
+# method is necessary as `LIMITED_DIAGRAM_SUPPORT` documents only those diagram
+# types that _only_ support SVG. This makes sure SVG output also works for new
+# diagram types if they get added to the Kroki service, but not yet to this
+# package
+Base.showable(::MIME"image/svg+xml", ::Diagram) = true
 Base.showable(::T, diagram::Diagram) where {T <: MIME} =
   Symbol(lowercase(String(diagram.type))) ∈ get(LIMITED_DIAGRAM_SUPPORT, T(), Tuple([]))
 
@@ -258,8 +271,9 @@ Base.showable(::MIME"image/jpeg", ::Diagram) = false
 # Structurizr, should render those. All others should render their
 # `specification`.
 function Base.show(io::IO, diagram::Diagram)
-  if showable(MIME"text/plain"(), diagram)
-    write(io, render(diagram, "utxt"))
+  plain_text_mime_type = MIME"text/plain"()
+  if showable(plain_text_mime_type, diagram)
+    write(io, render(diagram, MIME_TO_RENDER_ARGUMENT_MAP[plain_text_mime_type]))
   else
     write(io, diagram.specification)
   end
