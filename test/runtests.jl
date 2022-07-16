@@ -2,8 +2,8 @@ module KrokiTest
 
 using Test: @testset, @test, @test_nowarn, @test_throws
 
-using Kroki: Diagram, render
-using Kroki.Exceptions: InvalidOutputFormatError
+using Kroki: Diagram, Kroki, render
+using Kroki.Exceptions: InvalidOutputFormatError, UnsupportedMIMETypeError
 
 function testShowMethodRenders(
   diagram::Diagram,
@@ -213,12 +213,37 @@ end
     testShowMethodRenders(plantuml_diagram, MIME"image/svg+xml"(), "svg")
 
     @testset "`text/plain`" begin
-      # PlantUML diagrams can be rendered nicely in text/plain based
-      # environments
-      testShowMethodRenders(plantuml_diagram, MIME"text/plain"(), "utxt")
+      @testset "without ASCII/Unicode rendering support" begin
+        # These diagram types should simply display their `specification`
+        @test sprint(show, MIME"text/plain"(), svgbob_diagram) ==
+              svgbob_diagram.specification
+      end
 
-      # Other diagram types should simply display their `specification`
-      @test sprint(show, MIME"text/plain"(), svgbob_diagram) == svgbob_diagram.specification
+      @testset "with ASCII/Unicode rendering support" begin
+        # PlantUML and Structurizr diagrams can be rendered nicely in
+        # text/plain based environments. Their exact appearance can be
+        # controlled using the `TEXT_PLAIN_SHOW_MIME_TYPE` variable by
+        # indicating adding a `charset` to the MIME type indicating Unicode
+        # support
+        original_text_plain_mimetype = Kroki.TEXT_PLAIN_SHOW_MIME_TYPE[]
+
+        Kroki.TEXT_PLAIN_SHOW_MIME_TYPE[] = MIME"text/plain; charset=utf-8"()
+        testShowMethodRenders(plantuml_diagram, MIME"text/plain"(), "utxt")
+
+        Kroki.TEXT_PLAIN_SHOW_MIME_TYPE[] = MIME"text/plain"()
+        testShowMethodRenders(plantuml_diagram, MIME"text/plain"(), "txt")
+
+        @testset "generates an error if an invalid `text/plain` MIME type is configured" begin
+          Kroki.TEXT_PLAIN_SHOW_MIME_TYPE[] = MIME"image/png"()
+
+          @test_throws(
+            UnsupportedMIMETypeError,
+            show(IOBuffer(), MIME"text/plain"(), plantuml_diagram)
+          )
+        end
+
+        Kroki.TEXT_PLAIN_SHOW_MIME_TYPE[] = original_text_plain_mimetype
+      end
     end
   end
 

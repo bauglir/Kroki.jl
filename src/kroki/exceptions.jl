@@ -96,4 +96,27 @@ function RenderError(diagram::Diagram, exception::StatusError)
 end
 RenderError(::Diagram, exception::Exception) = exception
 
+"""
+An `Exception` to be thrown when the `selected_mime_type` is not an element of
+the set of `supported_mime_types`.
+"""
+struct UnsupportedMIMETypeError <: Exception
+  "The selected `MIME` type that is not supported."
+  selected_mime_type::MIME
+
+  "The set of supported `MIME` types."
+  supported_mime_types::Set{MIME}
+end
+
+Base.showerror(io::IO, error::UnsupportedMIMETypeError) = join(
+  io,
+  [
+    "The selected `MIME` type must be one of `",
+    join(error.supported_mime_types, "`, `", "` or `"),
+    "`. Got `",
+    error.selected_mime_type,
+    "`.",
+  ],
+)
+
 end
