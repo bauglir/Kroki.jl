@@ -92,12 +92,12 @@ $alice -> $bob: Rendering diagrams!
 ## [The `Diagram` type](@id examples-diagram-type)
 
 String literals are effectively short-hands for instantiating a
-[`Diagram`](@ref Kroki.Diagram) for a specific type of diagram. In certain
-cases, it may be more straightforward, or even necessary, to directly
-instantiate a [`Diagram`](@ref Kroki.Diagram). For instance, when a type of
-diagram is supported by the Kroki service but support for it has not been added
-to this package. In those cases, basic functionality like rendering to an SVG
-should typically still work in line with the following examples.
+[`Diagram`](@ref) for a specific type of diagram. In certain cases, it may be
+more straightforward, or even necessary, to directly instantiate a
+[`Diagram`](@ref). For instance, when a type of diagram is supported by the
+Kroki service but support for it has not been added to this package. In those
+cases, basic functionality like rendering to an SVG should typically still work
+in line with the following examples.
 
 ```@example diagrams
 Diagram(:mermaid, """
@@ -114,7 +114,7 @@ graph TD
 
     When the diagram description contains special characters, e.g. `\`s, keep
     in mind that these need to be escaped for proper handling when
-    instantiating a [`Diagram`](@ref Kroki.Diagram).
+    instantiating a [`Diagram`](@ref).
 
     Escaping is not typically necessary when using [string literals](@ref
     api-string-literals).
