@@ -193,7 +193,7 @@ const LIMITED_DIAGRAM_SUPPORT = Dict{MIME, Tuple{Symbol, Vararg{Symbol}}}(
     :vega,
     :vegalite,
   ),
-  MIME"image/jpeg"() => (:c4plantuml, :erd, :graphviz, :plantuml, :umlet),
+  MIME"image/jpeg"() => (:c4plantuml, :erd, :graphviz, :plantuml, :structurizr, :umlet),
   MIME"image/png"() => (
     :blockdiag,
     :seqdiag,
@@ -217,7 +217,7 @@ const LIMITED_DIAGRAM_SUPPORT = Dict{MIME, Tuple{Symbol, Vararg{Symbol}}}(
   # included separately
   MIME"image/svg+xml"() =>
     (:bpmn, :bytefield, :excalidraw, :nomnoml, :pikchr, :svgbob, :wavedrom),
-  MIME"text/plain"() => (:c4plantuml, :plantuml),
+  MIME"text/plain"() => (:c4plantuml, :plantuml, :structurizr),
 )
 
 # `Base.show` methods should only be defined for diagram types that actually
@@ -238,14 +238,17 @@ Base.showable(::MIME"image/png", diagram::Diagram) =
 Base.show(io::IO, ::MIME"image/svg+xml", diagram::Diagram) =
   write(io, render(diagram, "svg"))
 
-# PlantUML is capable of rendering textual representations, all other diagram
-# types are not
-Base.show(io::IO, diagram::Diagram) =
-  if endswith(lowercase("$(diagram.type)"), "plantuml")
+# The two-argument `Base.show` version is used to render the "text/plain" MIME
+# type. Those `Diagram` types that can render text versions, e.g. PlantUML,
+# Structurizr, should render those. All others should render their
+# `specification`.
+function Base.show(io::IO, diagram::Diagram)
+  if Symbol(lowercase(string(diagram.type))) ∈ LIMITED_DIAGRAM_SUPPORT[MIME"text/plain"()]
     write(io, render(diagram, "utxt"))
   else
     write(io, diagram.specification)
   end
+end
 
 include("./kroki/string_literals.jl")
 @reexport using .StringLiterals
