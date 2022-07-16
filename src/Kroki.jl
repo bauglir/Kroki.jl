@@ -227,6 +227,8 @@ const LIMITED_DIAGRAM_SUPPORT = Dict{MIME, Tuple{Symbol, Vararg{Symbol}}}(
 # available within [`Diagram`](@ref) instances, the `show` method is defined
 # generically, but then restricted using `Base.showable` to only those types
 # that actually support the format
+Base.show(io::IO, ::MIME"application/pdf", diagram::Diagram) =
+  write(io, render(diagram, "pdf"))
 Base.show(io::IO, ::MIME"image/png", diagram::Diagram) =
   write(io, render(diagram, "png"))
 

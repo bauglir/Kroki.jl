@@ -131,6 +131,37 @@ end
       @test endswith(rendered, r"</svg>\s?")
     end
 
+    # Vega (and Vega Lite) are some of the diagram types with working PDF
+    # support. They don't match the generic SVG expectations exactly, so they
+    # are not included in the overall test set of diagrams for SVG and PNG
+    # above
+    @testset "Vega Lite to PDF" begin
+      # The PDF specification defines the structure of PDF files (see
+      # https://opensource.adobe.com/dc-acrobat-sdk-docs/pdfstandards/PDF32000_2008.pdf).
+      # The most straight-forward ways to test for a rendered PDF are verifying
+      # the 'file header' (defined in section 7.5.2) and the 'file trailer' EOF
+      # marker (defined in section 7.5.5). In plain text these are respectively
+      # `%PDF-x.y.%` and `%%EOF.`.
+      #
+      # Due to the variability of the version numbers in the file header the
+      # following only checks for `%PDF-` in the rendered result
+      PDF_HEADER = [0x25, 0x50, 0x44, 0x46, 0x2d]
+      PDF_EOF = [0x25, 0x25, 0x45, 0x4f, 0x46, 0x0a]
+
+      vegalite_specification = """
+      {
+        "data": { "values": [ {"a": 28}, {"a": 55}, {"a": 23 } ] },
+        "mark": "circle",
+        "encoding": { "y": { "field": "a", "type": "nominal" }  }
+      }
+      """
+
+      rendered = render(Diagram(:vegalite, vegalite_specification), "pdf")
+
+      @test rendered[1:length(PDF_HEADER)] == PDF_HEADER
+      @test rendered[(end - length(PDF_EOF) + 1):end] == PDF_EOF
+    end
+
     @testset "takes `options` into account" begin
       expected_theme_name = "materia"
       options = Dict{String, String}("theme" => expected_theme_name)
@@ -162,6 +193,11 @@ end
     # should be overridden to indicate the diagram cannot be rendered in the
     # specified MIME type
     svgbob_diagram = Diagram(:svgbob, "-->[_...__... ]")
+    @test_throws(
+      InvalidOutputFormatError,
+      show(IOBuffer(), MIME"application/pdf"(), svgbob_diagram)
+    )
+    @test !showable("application/pdf", svgbob_diagram)
     @test_throws(InvalidOutputFormatError, sprint(show, MIME"image/png"(), svgbob_diagram))
     @test !showable(MIME"image/png"(), svgbob_diagram)
     testShowMethodRenders(svgbob_diagram, MIME"image/svg+xml"(), "svg")
