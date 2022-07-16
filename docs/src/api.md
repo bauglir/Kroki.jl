@@ -11,6 +11,8 @@ Kroki
 Diagram
 Diagram(::Symbol, ::AbstractString)
 Diagram(::Symbol; ::Union{Nothing,AbstractString}, ::Union{Nothing,AbstractString})
+SUPPORTED_TEXT_PLAIN_SHOW_MIME_TYPES
+TEXT_PLAIN_SHOW_MIME_TYPE
 render
 ```
 
@@ -35,6 +37,7 @@ Modules = [ Kroki.StringLiterals ]
 
 ```@docs
 LIMITED_DIAGRAM_SUPPORT
+MIME_TO_RENDER_ARGUMENT_MAP
 UriSafeBase64Payload
 ```
 

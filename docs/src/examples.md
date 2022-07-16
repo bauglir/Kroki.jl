@@ -92,12 +92,12 @@ $alice -> $bob: Rendering diagrams!
 ## [The `Diagram` type](@id examples-diagram-type)
 
 String literals are effectively short-hands for instantiating a
-[`Diagram`](@ref Kroki.Diagram) for a specific type of diagram. In certain
-cases, it may be more straightforward, or even necessary, to directly
-instantiate a [`Diagram`](@ref Kroki.Diagram). For instance, when a type of
-diagram is supported by the Kroki service but support for it has not been added
-to this package. In those cases, basic functionality like rendering to an SVG
-should typically still work in line with the following examples.
+[`Diagram`](@ref) for a specific type of diagram. In certain cases, it may be
+more straightforward, or even necessary, to directly instantiate a
+[`Diagram`](@ref). For instance, when a type of diagram is supported by the
+Kroki service but support for it has not been added to this package. In those
+cases, basic functionality like rendering to an SVG should typically still work
+in line with the following examples.
 
 ```@example diagrams
 Diagram(:mermaid, """
@@ -114,7 +114,7 @@ graph TD
 
     When the diagram description contains special characters, e.g. `\`s, keep
     in mind that these need to be escaped for proper handling when
-    instantiating a [`Diagram`](@ref Kroki.Diagram).
+    instantiating a [`Diagram`](@ref).
 
     Escaping is not typically necessary when using [string literals](@ref
     api-string-literals).
@@ -278,3 +278,51 @@ write("mermaid_diagram.svg", render(mermaid_diagram, "svg"))
 ```
 
 ![Mermaid diagram as SVG example](mermaid_diagram.svg)
+
+## Controlling text rendering
+
+Some diagrams support rendering to text, e.g. PlantUML and Structurizr. This
+can be based on ASCII or Unicode character sets. Which character set is used,
+is controlled using the [`Kroki.TEXT_PLAIN_SHOW_MIME_TYPE`](@ref) variable.
+
+Setting a `text/plain` MIME type results in the use of the limited ASCII
+character set.
+
+```@setup diagrams
+text_plain_show_mime_type_backup = Kroki.TEXT_PLAIN_SHOW_MIME_TYPE[]
+```
+
+```@example diagrams
+plantuml_diagram = plantuml"""
+Kroki -> Documenter: I can render this as text in two ways!
+Kroki <- Documenter: Nice!
+"""
+
+Kroki.TEXT_PLAIN_SHOW_MIME_TYPE[] = MIME"text/plain"()
+println(sprint(show, MIME"text/plain"(), plantuml_diagram))
+```
+
+Setting a `text/plain; charset=utf-8` MIME type, which is the default, results
+in nicer looking diagrams due to the use of Unicode characters.
+
+```@example diagrams
+Kroki.TEXT_PLAIN_SHOW_MIME_TYPE[] = MIME"text/plain; charset=utf-8"()
+println(sprint(show, MIME"text/plain"(), plantuml_diagram))
+```
+
+Configuring an invalid MIME type results in an error upon rendering to a
+`text/plain` target.
+
+```@example diagrams
+Kroki.TEXT_PLAIN_SHOW_MIME_TYPE[] = MIME"not-a-known/mime-type"()
+
+try
+  sprint(show, MIME"text/plain"(), plantuml_diagram)
+catch exception
+  println(sprint(showerror, exception))
+end
+```
+
+```@setup diagrams
+Kroki.TEXT_PLAIN_SHOW_MIME_TYPE[] = text_plain_show_mime_type_backup
+```

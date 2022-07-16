@@ -77,7 +77,7 @@ function Diagram(type::Symbol, specification::AbstractString; kwargs...)
 end
 
 include("./kroki/exceptions.jl")
-using .Exceptions: DiagramPathOrSpecificationError, RenderError
+using .Exceptions: DiagramPathOrSpecificationError, RenderError, UnsupportedMIMETypeError
 
 """
 Constructs a [`Diagram`](@ref) from the `specification` for a specific `type`
@@ -180,8 +180,8 @@ Some MIME types are not supported by all diagram types, this constant contains
 all these limitations. The union of all values corresponds to all supported
 [`Diagram`](@ref) `type`s.
 """
-const LIMITED_DIAGRAM_SUPPORT = Dict{AbstractString, Tuple{Symbol, Vararg{Symbol}}}(
-  "application/pdf" => (
+const LIMITED_DIAGRAM_SUPPORT = Dict{MIME, Tuple{Symbol, Vararg{Symbol}}}(
+  MIME"application/pdf"() => (
     :blockdiag,
     :seqdiag,
     :actdiag,
@@ -193,8 +193,8 @@ const LIMITED_DIAGRAM_SUPPORT = Dict{AbstractString, Tuple{Symbol, Vararg{Symbol
     :vega,
     :vegalite,
   ),
-  "image/jpeg" => (:c4plantuml, :erd, :graphviz, :plantuml, :umlet),
-  "image/png" => (
+  MIME"image/jpeg"() => (:c4plantuml, :erd, :graphviz, :plantuml, :structurizr, :umlet),
+  MIME"image/png"() => (
     :blockdiag,
     :seqdiag,
     :actdiag,
@@ -215,9 +215,25 @@ const LIMITED_DIAGRAM_SUPPORT = Dict{AbstractString, Tuple{Symbol, Vararg{Symbol
   ),
   # Although all diagram types support SVG, these _only_ support SVG so are
   # included separately
-  "image/svg+xml" =>
+  MIME"image/svg+xml"() =>
     (:bpmn, :bytefield, :excalidraw, :nomnoml, :pikchr, :svgbob, :wavedrom),
-  "text/plain" => (:c4plantuml, :plantuml),
+  # Diagrams that can be rendered to plain text support both ASCII and Unicode
+  # rendering
+  MIME"text/plain"() => (:c4plantuml, :plantuml, :structurizr),
+  MIME"text/plain; charset=utf-8"() => (:c4plantuml, :plantuml, :structurizr),
+)
+
+"""
+Maps MIME types to the arguments that have to be passed to the [`render`](@ref)
+function, which are in turned passed to the Kroki service.
+"""
+const MIME_TO_RENDER_ARGUMENT_MAP = Dict{MIME, String}(
+  MIME"application/pdf"() => "pdf",
+  MIME"image/jpeg"() => "jpeg",
+  MIME"image/png"() => "png",
+  MIME"image/svg+xml"() => "svg",
+  MIME"text/plain"() => "txt",
+  MIME"text/plain; charset=utf-8"() => "utxt",
 )
 
 # `Base.show` methods should only be defined for diagram types that actually
@@ -227,25 +243,75 @@ const LIMITED_DIAGRAM_SUPPORT = Dict{AbstractString, Tuple{Symbol, Vararg{Symbol
 # available within [`Diagram`](@ref) instances, the `show` method is defined
 # generically, but then restricted using `Base.showable` to only those types
 # that actually support the format
-Base.show(io::IO, ::MIME{Symbol("image/png")}, diagram::Diagram) =
-  write(io, render(diagram, "png"))
-Base.showable(::MIME{Symbol("image/png")}, diagram::Diagram) =
-  diagram.type ∈ LIMITED_DIAGRAM_SUPPORT["image/png"]
+Base.show(io::IO, ::T, diagram::Diagram) where {T <: MIME} =
+  write(io, render(diagram, MIME_TO_RENDER_ARGUMENT_MAP[T()]))
 
-# SVG output is supported by _all_ diagram types, so there's no additional
-# checking for support. This makes sure SVG output also works for new diagram
-# types if they get added to Kroki, but not yet to this package
-Base.show(io::IO, ::MIME"image/svg+xml", diagram::Diagram) =
-  write(io, render(diagram, "svg"))
+# The `text/plain` MIME type needs to be explicitly defined to remove method
+# ambiguities. As the two argument `Base.show` method is the one that is meant
+# to render this MIME type, it is simply forwarded to that method
+Base.show(io::IO, ::MIME"text/plain", diagram::Diagram) = show(io, diagram)
 
-# PlantUML is capable of rendering textual representations, all other diagram
-# types are not
-Base.show(io::IO, diagram::Diagram) =
-  if endswith(lowercase("$(diagram.type)"), "plantuml")
-    write(io, render(diagram, "utxt"))
+# SVG output is supported by _all_ diagram types. An additional `showable`
+# method is necessary as `LIMITED_DIAGRAM_SUPPORT` documents only those diagram
+# types that _only_ support SVG. This makes sure SVG output also works for new
+# diagram types if they get added to the Kroki service, but not yet to this
+# package
+Base.showable(::MIME"image/svg+xml", ::Diagram) = true
+Base.showable(::T, diagram::Diagram) where {T <: MIME} =
+  Symbol(lowercase(String(diagram.type))) ∈ get(LIMITED_DIAGRAM_SUPPORT, T(), Tuple([]))
+
+# Calling `Base.show` for JPEGs is explicitly disabled, for the time being.
+# JPEG rendering is broken for all, supposedly supported, diagram types in the
+# Kroki service. Should the support be fixed in the service, this method can be
+# easily redefined by consuming software to support JPEG in case Kroki.jl has
+# not been updated and released.
+#
+# Note that this only affects automatic rendering of `Diagram`s to JPEGs in
+# supported environments. It is still possible to use `render` to render JPEGs
+Base.showable(::MIME"image/jpeg", ::Diagram) = false
+
+"""
+Defines the MIME type to be used when `show` gets called on a [`Diagram`](@ref)
+for the `text/plain` MIME type.
+
+Should be set to a variation of the `text/plain` MIME type. For instance,
+`text/plain; charset=utf-8` to enable Unicode rendering for certain diagrams,
+e.g. PlantUML and Structurizr. Only a select number of variations are
+supported, see [`LIMITED_DIAGRAM_SUPPORT`](@ref) for details.
+
+Defaults to `text/plain; charset=utf-8`.
+"""
+const TEXT_PLAIN_SHOW_MIME_TYPE = Ref{MIME}(MIME"text/plain; charset=utf-8"())
+
+"All values that can be used to configure [`TEXT_PLAIN_SHOW_MIME_TYPE`](@ref)."
+const SUPPORTED_TEXT_PLAIN_SHOW_MIME_TYPES =
+  filter(mime -> startswith(string(mime), "text/plain"), keys(LIMITED_DIAGRAM_SUPPORT))
+
+# The two-argument `Base.show` version is used to render the "text/plain" MIME
+# type. Those `Diagram` types that support text-based rendering, e.g. PlantUML,
+# Structurizr, should render those. All others should render their
+# `specification`.
+#
+# Whether `text/plain` rendering uses ASCII or Unicode characters is controlled
+# using the `Kroki.TEXT_PLAIN_SHOW_MIME_TYPE` variable
+function Base.show(io::IO, diagram::Diagram)
+  text_plain_show_mimetype = TEXT_PLAIN_SHOW_MIME_TYPE[]
+
+  if text_plain_show_mimetype ∉ SUPPORTED_TEXT_PLAIN_SHOW_MIME_TYPES
+    throw(
+      UnsupportedMIMETypeError(
+        text_plain_show_mimetype,
+        SUPPORTED_TEXT_PLAIN_SHOW_MIME_TYPES,
+      ),
+    )
+  end
+
+  if showable(text_plain_show_mimetype, diagram)
+    write(io, render(diagram, MIME_TO_RENDER_ARGUMENT_MAP[text_plain_show_mimetype]))
   else
     write(io, diagram.specification)
   end
+end
 
 include("./kroki/string_literals.jl")
 @reexport using .StringLiterals

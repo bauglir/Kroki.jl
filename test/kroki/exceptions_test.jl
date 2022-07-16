@@ -7,7 +7,8 @@ using Kroki.Exceptions:
   DiagramPathOrSpecificationError,
   InvalidDiagramSpecificationError,
   InvalidOutputFormatError,
-  StatusError # Imported from HTTP through Kroki
+  StatusError, # Imported from HTTP through Kroki
+  UnsupportedMIMETypeError
 using Kroki.Service: setEndpoint!
 
 testRenderError(
@@ -113,6 +114,22 @@ end
       end
 
       setEndpoint!()
+    end
+  end
+
+  @testset "`UnsupportedMIMETypeError`" begin
+    @testset "rendering" begin
+      selected_mime_type = MIME"text/plain"()
+      supported_mime_types = Set([MIME"application/pdf"(), MIME"image/png"()])
+
+      rendered_error = sprint(
+        showerror,
+        UnsupportedMIMETypeError(selected_mime_type, supported_mime_types),
+      )
+
+      @test startswith(rendered_error, "The selected `MIME` type")
+      @test occursin(join(supported_mime_types, "`, `", "` or `"), rendered_error)
+      @test occursin("Got `$(selected_mime_type)`", rendered_error)
     end
   end
 end
