@@ -200,6 +200,11 @@ end
     @test !showable("application/pdf", svgbob_diagram)
     @test_throws(InvalidOutputFormatError, sprint(show, MIME"image/png"(), svgbob_diagram))
     @test !showable(MIME"image/png"(), svgbob_diagram)
+    @test_throws(
+      InvalidOutputFormatError,
+      show(IOBuffer(), MIME"image/jpeg"(), svgbob_diagram)
+    )
+    @test !showable("image/jpeg", svgbob_diagram)
     testShowMethodRenders(svgbob_diagram, MIME"image/svg+xml"(), "svg")
     @test !showable("non-existent/mime-type", svgbob_diagram)
 
