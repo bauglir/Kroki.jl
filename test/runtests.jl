@@ -165,6 +165,7 @@ end
     @test_throws(InvalidOutputFormatError, sprint(show, MIME"image/png"(), svgbob_diagram))
     @test !showable(MIME"image/png"(), svgbob_diagram)
     testShowMethodRenders(svgbob_diagram, MIME"image/svg+xml"(), "svg")
+    @test !showable("non-existent/mime-type", svgbob_diagram)
 
     plantuml_diagram = Diagram(:PlantUML, "A -> B: C")
     testShowMethodRenders(plantuml_diagram, MIME"image/png"(), "png")
