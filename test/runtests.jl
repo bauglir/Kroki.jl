@@ -118,7 +118,7 @@ end
       rendered = render(Diagram(diagram_format, specification), "png")
 
       @test rendered[1:length(PNG_HEADER)] == PNG_HEADER
-      @test rendered[(end - 8):end] == PNG_EOF
+      @test rendered[(end - length(PNG_EOF) + 1):end] == PNG_EOF
     end
 
     @testset "$(diagram_format) to SVG" for (diagram_format, specification) in
