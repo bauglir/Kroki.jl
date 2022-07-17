@@ -137,7 +137,7 @@ If the Kroki service responds with an error, throws an
 [`InvalidDiagramSpecificationError`](@ref
 Kroki.Exceptions.InvalidDiagramSpecificationError) or
 [`InvalidOutputFormatError`](@ref Kroki.Exceptions.InvalidOutputFormatError) if
-a know type of error occurs. Other errors (e.g.
+a known type of error occurs. Other errors (e.g.
 `HTTP.ExceptionRequest.StatusError` for connection errors) are propagated if
 they occur.
 
