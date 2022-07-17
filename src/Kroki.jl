@@ -137,7 +137,7 @@ If the Kroki service responds with an error, throws an
 [`InvalidDiagramSpecificationError`](@ref
 Kroki.Exceptions.InvalidDiagramSpecificationError) or
 [`InvalidOutputFormatError`](@ref Kroki.Exceptions.InvalidOutputFormatError) if
-a know type of error occurs. Other errors (e.g.
+a known type of error occurs. Other errors (e.g.
 `HTTP.ExceptionRequest.StatusError` for connection errors) are propagated if
 they occur.
 
@@ -279,7 +279,7 @@ Should be set to a variation of the `text/plain` MIME type. For instance,
 e.g. PlantUML and Structurizr. Only a select number of variations are
 supported, see [`LIMITED_DIAGRAM_SUPPORT`](@ref) for details.
 
-Defaults to `text/plain; charset=utf-8`.
+Defaults to `$(TEXT_PLAIN_SHOW_MIME_TYPE[])`.
 """
 const TEXT_PLAIN_SHOW_MIME_TYPE = Ref{MIME}(MIME"text/plain; charset=utf-8"())
 
