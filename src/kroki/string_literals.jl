@@ -18,22 +18,54 @@ function interpolate(specification::AbstractString)
   stream = IOBuffer(specification)
 
   while !eof(stream)
-    # The `$` is omitted from the result by `readuntil` by default, no need for
-    # further processing
+    # The `$` is omitted from the result by `readuntil` by default, it should
+    # be reinstated later in case it turns out it was escaped
     push!(components, readuntil(stream, '$'))
 
     if !eof(stream)
-      # If an interpolation indicator was found, try to parse the smallest
-      # expression to interpolate and then keep parsing the stream for further
-      # interpolations
-      started_at = position(stream)
-      expr, parsed_count = Meta.parse(read(stream, String), 1; greedy = false)
-      seek(stream, started_at + parsed_count - 1)
-      push!(components, expr)
+      # The read above only checks for an interpolation sign in the stream. It
+      # doesn't check whether that interpolation sign should actually trigger
+      # interpolation, e.g. in case it was escaped
+      if shouldInterpolate(stream)
+        # If an interpolation indicator was found, try to parse the smallest
+        # expression to interpolate
+        started_at = position(stream)
+        expr, parsed_count = Meta.parse(read(stream, String), 1; greedy = false)
+        seek(stream, started_at + parsed_count - 1)
+        push!(components, expr)
+      else
+        # In case the interpolation character was escaped, include it back in
+        # the parsed result while removing its escape character
+        components[end] = "$(components[end][1:end-1])\$"
+      end
     end
   end
 
   esc.(components)
+end
+
+# When called at the start of an expression to interpolate, checks whether the
+# interpolation sign that triggered interpolation was escaped or not. This
+# takes into account multiple escaped escape characters in front of an
+# interpolation sign
+function shouldInterpolate(stream::IO)
+  interpolation_start = position(stream)
+
+  # Move back to the first potential escape character, the `stream` should be
+  # just after the `$`, and keep moving backwards in the stream counting the
+  # number of escape characters. Interpolation should only happen if there's an
+  # even number of escape characters
+  skip(stream, -2)
+
+  n_escape_characters = 0
+  while peek(stream, Char) === '\\'
+    n_escape_characters += 1
+    skip(stream, -1)
+  end
+
+  seek(stream, interpolation_start)
+
+  return iseven(n_escape_characters)
 end
 
 # Links to the main documentation for each diagram type for inclusion in the

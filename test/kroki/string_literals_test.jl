@@ -38,6 +38,32 @@ using Kroki: Diagram, @mermaid_str, @plantuml_str
     message = "Z"
     diagram = plantuml"X -> Y: $(message ^ 5)"
     @test occursin(message^5, diagram.specification)
+
+    # Note that escape sequences work differently when passed to string
+    # literals as they would when passed to `Diagram` constructors. Within a
+    # string literal the escape sequences can be written as they would be
+    # interpreted by Kroki, i.e. `\\` means rendering a single backslash _to
+    # Kroki_. When using the `Diagram` constructors it is necessary to add
+    # additional escape sequences to accommodate for Julia's escape sequences,
+    # i.e. to pass `\\` to Kroki it needs to be specified as `\\\\` to a
+    # `Diagram` constructor
+    @testset "escaping `\$` disables interpolation" begin
+      diagram = plantuml"X -> Y: Z\$(not_interpolated_message)Z"
+      @test diagram.specification === "X -> Y: Z\$(not_interpolated_message)Z"
+
+      # Except if the escape character is itself escaped
+      interpolated_message = "interpolated"
+      diagram = plantuml"X -> Y: Z\\$(interpolated_message)Z"
+      @test diagram.specification === "X -> Y: Z\\\\$(interpolated_message)Z"
+
+      # This should extend to adding more escaped escape characters in front of
+      # the interpolation
+      diagram = plantuml"X -> Y: Z\\\$(not_interpolated_message)Z"
+      @test diagram.specification === "X -> Y: Z\\\\\$(not_interpolated_message)Z"
+
+      diagram = plantuml"X -> Y: Z\\\\$(interpolated_message)Z"
+      @test diagram.specification === "X -> Y: Z\\\\\\\\$(interpolated_message)Z"
+    end
   end
 end
 
