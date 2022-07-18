@@ -210,6 +210,14 @@ end
 
     plantuml_diagram = Diagram(:PlantUML, "A -> B: C")
     testShowMethodRenders(plantuml_diagram, MIME"image/png"(), "png")
+    # PlantUML diagrams support SVG, but are not part of the
+    # `LIMITED_DIAGRAM_SUPPORT` as they support more output formats.
+    #
+    # Given that `show` is tested directly, through `testShowMethodRenders`, it
+    # is necessary to make sure a `showable` method is available to indicate
+    # SVG is always supported to those enviroments that need to query that
+    # information
+    @test showable(MIME"image/svg+xml"(), plantuml_diagram)
     testShowMethodRenders(plantuml_diagram, MIME"image/svg+xml"(), "svg")
 
     @testset "`text/plain`" begin
