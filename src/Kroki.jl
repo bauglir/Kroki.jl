@@ -251,14 +251,15 @@ Base.show(io::IO, ::T, diagram::Diagram) where {T <: MIME} =
 # to render this MIME type, it is simply forwarded to that method
 Base.show(io::IO, ::MIME"text/plain", diagram::Diagram) = show(io, diagram)
 
+Base.showable(::T, diagram::Diagram) where {T <: MIME} =
+  Symbol(lowercase(String(diagram.type))) ∈ get(LIMITED_DIAGRAM_SUPPORT, T(), Tuple([]))
+
 # SVG output is supported by _all_ diagram types. An additional `showable`
 # method is necessary as `LIMITED_DIAGRAM_SUPPORT` documents only those diagram
 # types that _only_ support SVG. This makes sure SVG output also works for new
 # diagram types if they get added to the Kroki service, but not yet to this
 # package
 Base.showable(::MIME"image/svg+xml", ::Diagram) = true
-Base.showable(::T, diagram::Diagram) where {T <: MIME} =
-  Symbol(lowercase(String(diagram.type))) ∈ get(LIMITED_DIAGRAM_SUPPORT, T(), Tuple([]))
 
 # Calling `Base.show` for JPEGs is explicitly disabled, for the time being.
 # JPEG rendering is broken for all, supposedly supported, diagram types in the
