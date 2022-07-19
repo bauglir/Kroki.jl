@@ -179,6 +179,9 @@ render(
 Some MIME types are not supported by all diagram types, this constant contains
 all these limitations. The union of all values corresponds to all supported
 [`Diagram`](@ref) `type`s.
+
+Note that SVG output is supported by all diagram types. Those specifically
+included here are those that _only_ support SVG output.
 """
 const LIMITED_DIAGRAM_SUPPORT = Dict{MIME, Tuple{Symbol, Vararg{Symbol}}}(
   MIME"application/pdf"() => (
@@ -213,8 +216,6 @@ const LIMITED_DIAGRAM_SUPPORT = Dict{MIME, Tuple{Symbol, Vararg{Symbol}}}(
     :vega,
     :vegalite,
   ),
-  # Although all diagram types support SVG, these _only_ support SVG so are
-  # included separately
   MIME"image/svg+xml"() =>
     (:bpmn, :bytefield, :excalidraw, :nomnoml, :pikchr, :svgbob, :wavedrom),
   # Diagrams that can be rendered to plain text support both ASCII and Unicode
