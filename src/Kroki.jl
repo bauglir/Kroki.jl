@@ -175,20 +175,57 @@ render(
     throw(RenderError(diagram, exception))
   end
 
+# Helper constant to type a map from MIME to `Diagram` types  more easily
+const MIMEToDiagramTypeMap = Dict{MIME, Tuple{Symbol, Vararg{Symbol}}}
+
+# Helper function to render a support matrix for inclusion in Markdown
+# documentation, e.g. `LIMITED_DIAGRAM_SUPPORT`'s docstring
+function renderDiagramSupportAsMarkdown(support::MIMEToDiagramTypeMap)
+  # SVG support should always be included for all diagram types, even if it is
+  # not in the support map
+  mime_types = MIME.(sort(unique([string.(keys(support))..., "image/svg+xml"])))
+
+  header = """
+  | | `$(join(mime_types, "` | `"))` |
+  | --: $(repeat("| :-: ", length(mime_types)))|
+  """
+
+  diagram_types = sort(unique(Iterators.flatten(values(support))))
+  diagram_types_with_support = map(diagram_types) do diagram_type
+    [
+      diagram_type,
+      map(
+        mime -> mime === MIME"image/svg+xml"() || diagram_type ∈ support[mime] ? "✅" : "",
+        mime_types,
+      )...,
+    ]
+  end
+
+  diagram_support_markdown_rows =
+    string.("| ", join.(diagram_types_with_support, " | "), " |")
+
+  return header * join(diagram_support_markdown_rows, '\n')
+end
+
 """
 Some MIME types are not supported by all diagram types, this constant contains
 all these limitations. The union of all values corresponds to all supported
 [`Diagram`](@ref) `type`s.
 
-Note that SVG output is supported by all diagram types. Those specifically
-included here are those that _only_ support SVG output.
+Note that SVG output is supported by all diagram types, as is reflected in the
+support matrix below. Only those diagram types that explicitly _only_ support
+SVG output are included in this constant.
 
 Those diagram types that support plain text output, i.e. not just rendering
 their `specification`, support both ASCII and Unicode character sets for
 rendering. This is expressed using two different `text/plain` MIME types. See
 also [`SUPPORTED_TEXT_PLAIN_SHOW_MIME_TYPES`](@ref).
+
+# Support Matrix
+
+$(renderDiagramSupportAsMarkdown(LIMITED_DIAGRAM_SUPPORT))
 """
-const LIMITED_DIAGRAM_SUPPORT = Dict{MIME, Tuple{Symbol, Vararg{Symbol}}}(
+const LIMITED_DIAGRAM_SUPPORT = MIMEToDiagramTypeMap(
   MIME"application/pdf"() => (
     :blockdiag,
     :seqdiag,
