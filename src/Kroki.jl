@@ -327,7 +327,10 @@ Defaults to `$(TEXT_PLAIN_SHOW_MIME_TYPE[])`.
 """
 const TEXT_PLAIN_SHOW_MIME_TYPE = Ref{MIME}(MIME"text/plain; charset=utf-8"())
 
-"All values that can be used to configure [`TEXT_PLAIN_SHOW_MIME_TYPE`](@ref)."
+"""
+The values that can be used to configure [`TEXT_PLAIN_SHOW_MIME_TYPE`](@ref):
+$(join(string.("  * `", SUPPORTED_TEXT_PLAIN_SHOW_MIME_TYPES), "`\n"))`
+"""
 const SUPPORTED_TEXT_PLAIN_SHOW_MIME_TYPES = Set([
   mime for
   mime in keys(Kroki.LIMITED_DIAGRAM_SUPPORT) if startswith(string(mime), "text/plain")
