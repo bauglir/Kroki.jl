@@ -317,8 +317,11 @@ for the `text/plain` MIME type.
 
 Should be set to a variation of the `text/plain` MIME type. For instance,
 `text/plain; charset=utf-8` to enable Unicode rendering for certain diagrams,
-e.g. PlantUML and Structurizr. Only a select number of variations are
-supported, see [`LIMITED_DIAGRAM_SUPPORT`](@ref) for details.
+e.g. PlantUML and Structurizr.
+
+Only a select number of variations are supported, see
+[`LIMITED_DIAGRAM_SUPPORT`](@ref) and
+[`SUPPORTED_TEXT_PLAIN_SHOW_MIME_TYPES`](@ref) for details.
 
 Defaults to `$(TEXT_PLAIN_SHOW_MIME_TYPE[])`.
 """
