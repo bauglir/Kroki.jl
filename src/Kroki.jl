@@ -182,6 +182,11 @@ all these limitations. The union of all values corresponds to all supported
 
 Note that SVG output is supported by all diagram types. Those specifically
 included here are those that _only_ support SVG output.
+
+Those diagram types that support plain text output, i.e. not just rendering
+their `specification`, support both ASCII and Unicode character sets for
+rendering. This is expressed using two different `text/plain` MIME types. See
+also [`SUPPORTED_TEXT_PLAIN_SHOW_MIME_TYPES`](@ref).
 """
 const LIMITED_DIAGRAM_SUPPORT = Dict{MIME, Tuple{Symbol, Vararg{Symbol}}}(
   MIME"application/pdf"() => (
@@ -218,8 +223,6 @@ const LIMITED_DIAGRAM_SUPPORT = Dict{MIME, Tuple{Symbol, Vararg{Symbol}}}(
   ),
   MIME"image/svg+xml"() =>
     (:bpmn, :bytefield, :excalidraw, :nomnoml, :pikchr, :svgbob, :wavedrom),
-  # Diagrams that can be rendered to plain text support both ASCII and Unicode
-  # rendering
   MIME"text/plain"() => (:c4plantuml, :plantuml, :structurizr),
   MIME"text/plain; charset=utf-8"() => (:c4plantuml, :plantuml, :structurizr),
 )
