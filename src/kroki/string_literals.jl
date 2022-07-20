@@ -68,33 +68,47 @@ function shouldInterpolate(stream::IO)
   return iseven(n_escape_characters)
 end
 
+"A container to associate metadata with diagram type, e.g. for documentation."
+struct DiagramTypeMetadata
+  "A more readable name for the diagram type, if applicable."
+  name::String
+
+  "The URL to the website/documentation of the diagram type."
+  url::String
+end
+
 # Links to the main documentation for each diagram type for inclusion in the
 # string literal docstrings
-DIAGRAM_DOCUMENTATION_URLS = Dict{Symbol, String}(
-  :actdiag => "http://blockdiag.com/en/actdiag",
-  :blockdiag => "http://blockdiag.com/en/blockdiag",
-  :bpmn => "https://www.omg.org/spec/BPMN",
-  :bytefield => "https://bytefield-svg.deepsymmetry.org",
-  :c4plantuml => "https://github.com/plantuml-stdlib/C4-PlantUML",
-  :diagramsnet => "https://diagrams.net",
-  :ditaa => "http://ditaa.sourceforge.net",
-  :erd => "https://github.com/BurntSushi/erd",
-  :excalidraw => "https://excalidraw.com",
-  :graphviz => "https://graphviz.org",
-  :mermaid => "https://mermaid-js.github.io",
-  :nomnoml => "https://www.nomnoml.com",
-  :nwdiag => "http://blockdiag.com/en/nwdiag",
-  :packetdiag => "http://blockdiag.com/en/nwdiag",
-  :pikchr => "https://pikchr.org",
-  :plantuml => "https://plantuml.com",
-  :rackdiag => "http://blockdiag.com/en/nwdiag",
-  :seqdiag => "http://blockdiag.com/en/seqdiag",
-  :structurizr => "https://structurizr.com",
-  :svgbob => "https://ivanceras.github.io/content/Svgbob.html",
-  :umlet => "https://github.com/umlet/umlet",
-  :vega => "https://vega.github.io/vega",
-  :vegalite => "https://vega.github.io/vega-lite",
-  :wavedrom => "https://wavedrom.com",
+DIAGRAM_TYPE_METADATA = Dict{Symbol, DiagramTypeMetadata}(
+  :actdiag => DiagramTypeMetadata("actdiag", "http://blockdiag.com/en/actdiag"),
+  :blockdiag => DiagramTypeMetadata("blockdiag", "http://blockdiag.com/en/blockdiag"),
+  :bpmn => DiagramTypeMetadata("BPMN", "https://www.omg.org/spec/BPMN"),
+  :bytefield =>
+    DiagramTypeMetadata("Byte Field", "https://bytefield-svg.deepsymmetry.org"),
+  :c4plantuml => DiagramTypeMetadata(
+    "C4 with PlantUML",
+    "https://github.com/plantuml-stdlib/C4-PlantUML",
+  ),
+  :diagramsnet => DiagramTypeMetadata("diagrams.net", "https://diagrams.net"),
+  :ditaa => DiagramTypeMetadata("ditaa", "http://ditaa.sourceforge.net"),
+  :erd => DiagramTypeMetadata("erd", "https://github.com/BurntSushi/erd"),
+  :excalidraw => DiagramTypeMetadata("Excalidraw", "https://excalidraw.com"),
+  :graphviz => DiagramTypeMetadata("Graphviz", "https://graphviz.org"),
+  :mermaid => DiagramTypeMetadata("Mermaid", "https://mermaid-js.github.io"),
+  :nomnoml => DiagramTypeMetadata("nomnoml", "https://www.nomnoml.com"),
+  :nwdiag => DiagramTypeMetadata("nwdiag", "http://blockdiag.com/en/nwdiag"),
+  :packetdiag => DiagramTypeMetadata("packetdiag", "http://blockdiag.com/en/nwdiag"),
+  :pikchr => DiagramTypeMetadata("Pikchr", "https://pikchr.org"),
+  :plantuml => DiagramTypeMetadata("PlantUML", "https://plantuml.com"),
+  :rackdiag => DiagramTypeMetadata("rackdiag", "http://blockdiag.com/en/nwdiag"),
+  :seqdiag => DiagramTypeMetadata("seqdiag", "http://blockdiag.com/en/seqdiag"),
+  :structurizr => DiagramTypeMetadata("Structurizr", "https://structurizr.com"),
+  :svgbob =>
+    DiagramTypeMetadata("Svgbob", "https://ivanceras.github.io/content/Svgbob.html"),
+  :umlet => DiagramTypeMetadata("UMLet", "https://github.com/umlet/umlet"),
+  :vega => DiagramTypeMetadata("Vega", "https://vega.github.io/vega"),
+  :vegalite => DiagramTypeMetadata("Vega-Lite", "https://vega.github.io/vega-lite"),
+  :wavedrom => DiagramTypeMetadata("WaveDrom", "https://wavedrom.com"),
 )
 
 # The union of the values of `LIMITED_DIAGRAM_SUPPORT` corresponds to all
@@ -109,9 +123,13 @@ for diagram_type in unique(Iterators.flatten(values(LIMITED_DIAGRAM_SUPPORT)))
   # variable. First for `@eval`, then for the macro itself
   macro_diagram_type = QuoteNode(QuoteNode(diagram_type))
 
-  diagram_url = get(DIAGRAM_DOCUMENTATION_URLS, diagram_type, "https://kroki.io/#support")
+  diagram_type_metadata = get(
+    DIAGRAM_TYPE_METADATA,
+    diagram_type,
+    DiagramTypeMetadata("$(diagram_type)", "https://kroki.io/#support"),
+  )
 
-  docstring = "String literal for instantiating [`$diagram_type`]($diagram_url) [`Diagram`](@ref)s."
+  docstring = "String literal for instantiating [`$(diagram_type_metadata.name)`]($(diagram_type_metadata.url)) [`Diagram`](@ref)s."
 
   @eval begin
     export $macro_signature
