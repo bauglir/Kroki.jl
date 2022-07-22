@@ -63,6 +63,26 @@ Kroki.Service.start!), [`status`](@ref Kroki.Service.status), [`stop!`](@ref
 Kroki.Service.stop!), etc. are included to help with the self-hosting scenario,
 provided [Docker Compose](https://docs.docker.com/compose) is available.
 
+## [Supported Diagram Types](@id diagram-support)
+
+The table below provides an overview of the different diagram types this
+package supports, with links to their documentation, and the output formats
+they can be rendered to.
+
+```@eval
+using Kroki, Markdown
+Markdown.parse(Kroki.renderDiagramSupportAsMarkdown(Kroki.LIMITED_DIAGRAM_SUPPORT))
+```
+
+The information in this table should correspond to the one on [Kroki's
+website](https://kroki.io/#support), but is directly derived from the support
+as it is encoded in [this
+package](https://bauglir.github.io/Kroki.jl/stable/api/#Kroki.LIMITED_DIAGRAM_SUPPORT).
+Given that this information is a mirror of the information available on
+[Kroki's website](https://kroki.io/#support), it may not be entirely accurate
+with regards to supported output formats. Support for output formats needs to
+be addressed within the Kroki service.
+
 ## Contents
 
 ```@contents
