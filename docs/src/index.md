@@ -3,9 +3,8 @@
 Enables a wide array of textual diagramming tools, such as
 [Graphviz](https://www.graphviz.org), [Mermaid](https://mermaidjs.github.io),
 [PlantUML](https://plantuml.com),
-[svgbob](https://ivanceras.github.io/content/Svgbob.html) and [many
-more](https://kroki.io/#support) within Julia through the
-[Kroki](https://kroki.io) service.
+[svgbob](https://ivanceras.github.io/content/Svgbob.html) and [many more](@ref
+diagram-support) within Julia through the [Kroki](https://kroki.io) service.
 
 ![Kroki REPL Demo](./kroki-demo-repl.gif)
 
@@ -80,8 +79,8 @@ as it is encoded in [this
 package](https://bauglir.github.io/Kroki.jl/stable/api/#Kroki.LIMITED_DIAGRAM_SUPPORT).
 Given that this information is a mirror of the information available on
 [Kroki's website](https://kroki.io/#support), it may not be entirely accurate
-with regards to supported output formats. Support for output formats needs to
-be addressed within the Kroki service.
+with regards to actually supported output formats. Support for output formats
+needs to be addressed within the Kroki service.
 
 ## Contents
 

@@ -141,9 +141,9 @@ a known type of error occurs. Other errors (e.g.
 `HTTP.ExceptionRequest.StatusError` for connection errors) are propagated if
 they occur.
 
-_SVG output is supported for all [`Diagram`](@ref) types_. See [Kroki's
-website](https://kroki.io/#support) for an overview of other supported output
-formats per diagram type. Note that this list may not be entirely up-to-date.
+_SVG output is supported for all [`Diagram`](@ref) types_. See the [support
+table](@ref diagram-support) for an overview of other supported output formats
+per diagram type.
 """
 render(
   diagram::Diagram,
@@ -265,7 +265,10 @@ Retrieves the metadata for a given `diagram_type` from
 getDiagramTypeMetadata(diagram_type::Symbol)::DiagramTypeMetadata = get(
   DIAGRAM_TYPE_METADATA,
   diagram_type,
-  DiagramTypeMetadata("$(diagram_type)", "https://kroki.io/#support"),
+  DiagramTypeMetadata(
+    "$(diagram_type)",
+    "https://bauglir.github.io/Kroki.jl/stable/#diagram-support",
+  ),
 )
 
 """

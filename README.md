@@ -13,9 +13,9 @@ Enables a wide array of textual diagramming tools, such as
 [Graphviz](https://www.graphviz.org), [Mermaid](https://mermaidjs.github.io),
 [PlantUML](https://plantuml.com),
 [svgbob](https://ivanceras.github.io/content/Svgbob.html) and [many
-more](https://kroki.io/#support) within Julia through the
-[Kroki](https://kroki.io) service. It works in environments capable of
-rendering images:
+more](https://bauglir.github.io/Kroki.jl/stable/#diagram-support) within Julia
+through the [Kroki](https://kroki.io) service. It works in environments capable
+of rendering images:
 
 ![Kroki Pluto Demo](./docs/src/kroki-demo-pluto.gif)
 
