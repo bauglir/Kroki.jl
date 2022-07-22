@@ -192,8 +192,10 @@ function renderDiagramSupportAsMarkdown(support::MIMEToDiagramTypeMap)
 
   diagram_types = sort(unique(Iterators.flatten(values(support))))
   diagram_types_with_support = map(diagram_types) do diagram_type
-    [
-      diagram_type,
+    diagram_type_metadata = getDiagramTypeMetadata(diagram_type)
+
+    return [
+      "[$(diagram_type_metadata.name)]($(diagram_type_metadata.url))",
       map(
         mime -> mime === MIME"image/svg+xml"() || diagram_type ∈ support[mime] ? "✅" : "",
         mime_types,
