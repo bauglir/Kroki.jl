@@ -1,6 +1,6 @@
 module StringLiterals
 
-using ..Kroki: Diagram, LIMITED_DIAGRAM_SUPPORT
+using ..Kroki: Diagram, LIMITED_DIAGRAM_SUPPORT, getDiagramTypeMetadata
 
 # Helper function implementing string interpolation to be used in conjunction
 # with macros defining diagram specification string literals, as they do not
@@ -68,35 +68,6 @@ function shouldInterpolate(stream::IO)
   return iseven(n_escape_characters)
 end
 
-# Links to the main documentation for each diagram type for inclusion in the
-# string literal docstrings
-DIAGRAM_DOCUMENTATION_URLS = Dict{Symbol, String}(
-  :actdiag => "http://blockdiag.com/en/actdiag",
-  :blockdiag => "http://blockdiag.com/en/blockdiag",
-  :bpmn => "https://www.omg.org/spec/BPMN",
-  :bytefield => "https://bytefield-svg.deepsymmetry.org",
-  :c4plantuml => "https://github.com/plantuml-stdlib/C4-PlantUML",
-  :diagramsnet => "https://diagrams.net",
-  :ditaa => "http://ditaa.sourceforge.net",
-  :erd => "https://github.com/BurntSushi/erd",
-  :excalidraw => "https://excalidraw.com",
-  :graphviz => "https://graphviz.org",
-  :mermaid => "https://mermaid-js.github.io",
-  :nomnoml => "https://www.nomnoml.com",
-  :nwdiag => "http://blockdiag.com/en/nwdiag",
-  :packetdiag => "http://blockdiag.com/en/nwdiag",
-  :pikchr => "https://pikchr.org",
-  :plantuml => "https://plantuml.com",
-  :rackdiag => "http://blockdiag.com/en/nwdiag",
-  :seqdiag => "http://blockdiag.com/en/seqdiag",
-  :structurizr => "https://structurizr.com",
-  :svgbob => "https://ivanceras.github.io/content/Svgbob.html",
-  :umlet => "https://github.com/umlet/umlet",
-  :vega => "https://vega.github.io/vega",
-  :vegalite => "https://vega.github.io/vega-lite",
-  :wavedrom => "https://wavedrom.com",
-)
-
 # The union of the values of `LIMITED_DIAGRAM_SUPPORT` corresponds to all
 # supported `Diagram` types. The `values` call returns an array of arrays that
 # may contain duplicate diagram types due to some types supporting rendering to
@@ -109,9 +80,9 @@ for diagram_type in unique(Iterators.flatten(values(LIMITED_DIAGRAM_SUPPORT)))
   # variable. First for `@eval`, then for the macro itself
   macro_diagram_type = QuoteNode(QuoteNode(diagram_type))
 
-  diagram_url = get(DIAGRAM_DOCUMENTATION_URLS, diagram_type, "https://kroki.io/#support")
+  diagram_type_metadata = getDiagramTypeMetadata(diagram_type)
 
-  docstring = "String literal for instantiating [`$diagram_type`]($diagram_url) [`Diagram`](@ref)s."
+  docstring = "String literal for instantiating [`$(diagram_type_metadata.name)`]($(diagram_type_metadata.url)) [`Diagram`](@ref)s."
 
   @eval begin
     export $macro_signature

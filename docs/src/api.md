@@ -36,9 +36,12 @@ Modules = [ Kroki.StringLiterals ]
 ## Private
 
 ```@docs
+DiagramTypeMetadata
+DIAGRAM_TYPE_METADATA
 LIMITED_DIAGRAM_SUPPORT
 MIME_TO_RENDER_ARGUMENT_MAP
 UriSafeBase64Payload
+getDiagramTypeMetadata
 ```
 
 ### Documentation

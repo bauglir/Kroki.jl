@@ -239,8 +239,8 @@ on a [`Diagram`](@ref), specifying the desired output format.
 !!! warning "Output format support"
 
     All diagram types support SVG output, other supported output formats vary
-    per diagram type. See [Kroki's website](https://kroki.io/#support) for a,
-    not entirely accurate, overview.
+    per diagram type. See [the support table](@ref diagram-support) for an
+    overview.
 
 ```@example diagrams
 mermaid_diagram = mermaid"""
