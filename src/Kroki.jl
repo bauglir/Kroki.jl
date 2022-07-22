@@ -208,6 +208,65 @@ function renderDiagramSupportAsMarkdown(support::MIMEToDiagramTypeMap)
 end
 
 """
+A container to associate metadata with a specific diagram type, e.g. for
+documentation purposes.
+"""
+struct DiagramTypeMetadata
+  "A more readable name for the diagram type, if applicable."
+  name::String
+
+  "The URL to the website/documentation of the diagram type."
+  url::String
+end
+
+"""
+An overview of metadata for the different [`Diagram`](@ref) `type`s that can be
+rendered, e.g. links to the main documentation, friendly names, etc.
+"""
+DIAGRAM_TYPE_METADATA = Dict{Symbol, DiagramTypeMetadata}(
+  :actdiag => DiagramTypeMetadata("actdiag", "http://blockdiag.com/en/actdiag"),
+  :blockdiag => DiagramTypeMetadata("blockdiag", "http://blockdiag.com/en/blockdiag"),
+  :bpmn => DiagramTypeMetadata("BPMN", "https://www.omg.org/spec/BPMN"),
+  :bytefield =>
+    DiagramTypeMetadata("Byte Field", "https://bytefield-svg.deepsymmetry.org"),
+  :c4plantuml => DiagramTypeMetadata(
+    "C4 with PlantUML",
+    "https://github.com/plantuml-stdlib/C4-PlantUML",
+  ),
+  :diagramsnet => DiagramTypeMetadata("diagrams.net", "https://diagrams.net"),
+  :ditaa => DiagramTypeMetadata("ditaa", "http://ditaa.sourceforge.net"),
+  :erd => DiagramTypeMetadata("erd", "https://github.com/BurntSushi/erd"),
+  :excalidraw => DiagramTypeMetadata("Excalidraw", "https://excalidraw.com"),
+  :graphviz => DiagramTypeMetadata("Graphviz", "https://graphviz.org"),
+  :mermaid => DiagramTypeMetadata("Mermaid", "https://mermaid-js.github.io"),
+  :nomnoml => DiagramTypeMetadata("nomnoml", "https://www.nomnoml.com"),
+  :nwdiag => DiagramTypeMetadata("nwdiag", "http://blockdiag.com/en/nwdiag"),
+  :packetdiag => DiagramTypeMetadata("packetdiag", "http://blockdiag.com/en/nwdiag"),
+  :pikchr => DiagramTypeMetadata("Pikchr", "https://pikchr.org"),
+  :plantuml => DiagramTypeMetadata("PlantUML", "https://plantuml.com"),
+  :rackdiag => DiagramTypeMetadata("rackdiag", "http://blockdiag.com/en/nwdiag"),
+  :seqdiag => DiagramTypeMetadata("seqdiag", "http://blockdiag.com/en/seqdiag"),
+  :structurizr => DiagramTypeMetadata("Structurizr", "https://structurizr.com"),
+  :svgbob =>
+    DiagramTypeMetadata("Svgbob", "https://ivanceras.github.io/content/Svgbob.html"),
+  :umlet => DiagramTypeMetadata("UMLet", "https://github.com/umlet/umlet"),
+  :vega => DiagramTypeMetadata("Vega", "https://vega.github.io/vega"),
+  :vegalite => DiagramTypeMetadata("Vega-Lite", "https://vega.github.io/vega-lite"),
+  :wavedrom => DiagramTypeMetadata("WaveDrom", "https://wavedrom.com"),
+)
+
+"""
+Retrieves the metadata for a given `diagram_type` from
+[`DIAGRAM_TYPE_METADATA`](@ref), with a fallback to a generic
+[`DiagramTypeMetadata`](@ref).
+"""
+getDiagramTypeMetadata(diagram_type::Symbol)::DiagramTypeMetadata = get(
+  DIAGRAM_TYPE_METADATA,
+  diagram_type,
+  DiagramTypeMetadata("$(diagram_type)", "https://kroki.io/#support"),
+)
+
+"""
 Some MIME types are not supported by all diagram types, this constant contains
 all these limitations. The union of all values corresponds to all supported
 [`Diagram`](@ref) `type`s.

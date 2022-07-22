@@ -1,6 +1,6 @@
 module StringLiterals
 
-using ..Kroki: Diagram, LIMITED_DIAGRAM_SUPPORT
+using ..Kroki: Diagram, LIMITED_DIAGRAM_SUPPORT, getDiagramTypeMetadata
 
 # Helper function implementing string interpolation to be used in conjunction
 # with macros defining diagram specification string literals, as they do not
@@ -68,49 +68,6 @@ function shouldInterpolate(stream::IO)
   return iseven(n_escape_characters)
 end
 
-"A container to associate metadata with diagram type, e.g. for documentation."
-struct DiagramTypeMetadata
-  "A more readable name for the diagram type, if applicable."
-  name::String
-
-  "The URL to the website/documentation of the diagram type."
-  url::String
-end
-
-# Links to the main documentation for each diagram type for inclusion in the
-# string literal docstrings
-DIAGRAM_TYPE_METADATA = Dict{Symbol, DiagramTypeMetadata}(
-  :actdiag => DiagramTypeMetadata("actdiag", "http://blockdiag.com/en/actdiag"),
-  :blockdiag => DiagramTypeMetadata("blockdiag", "http://blockdiag.com/en/blockdiag"),
-  :bpmn => DiagramTypeMetadata("BPMN", "https://www.omg.org/spec/BPMN"),
-  :bytefield =>
-    DiagramTypeMetadata("Byte Field", "https://bytefield-svg.deepsymmetry.org"),
-  :c4plantuml => DiagramTypeMetadata(
-    "C4 with PlantUML",
-    "https://github.com/plantuml-stdlib/C4-PlantUML",
-  ),
-  :diagramsnet => DiagramTypeMetadata("diagrams.net", "https://diagrams.net"),
-  :ditaa => DiagramTypeMetadata("ditaa", "http://ditaa.sourceforge.net"),
-  :erd => DiagramTypeMetadata("erd", "https://github.com/BurntSushi/erd"),
-  :excalidraw => DiagramTypeMetadata("Excalidraw", "https://excalidraw.com"),
-  :graphviz => DiagramTypeMetadata("Graphviz", "https://graphviz.org"),
-  :mermaid => DiagramTypeMetadata("Mermaid", "https://mermaid-js.github.io"),
-  :nomnoml => DiagramTypeMetadata("nomnoml", "https://www.nomnoml.com"),
-  :nwdiag => DiagramTypeMetadata("nwdiag", "http://blockdiag.com/en/nwdiag"),
-  :packetdiag => DiagramTypeMetadata("packetdiag", "http://blockdiag.com/en/nwdiag"),
-  :pikchr => DiagramTypeMetadata("Pikchr", "https://pikchr.org"),
-  :plantuml => DiagramTypeMetadata("PlantUML", "https://plantuml.com"),
-  :rackdiag => DiagramTypeMetadata("rackdiag", "http://blockdiag.com/en/nwdiag"),
-  :seqdiag => DiagramTypeMetadata("seqdiag", "http://blockdiag.com/en/seqdiag"),
-  :structurizr => DiagramTypeMetadata("Structurizr", "https://structurizr.com"),
-  :svgbob =>
-    DiagramTypeMetadata("Svgbob", "https://ivanceras.github.io/content/Svgbob.html"),
-  :umlet => DiagramTypeMetadata("UMLet", "https://github.com/umlet/umlet"),
-  :vega => DiagramTypeMetadata("Vega", "https://vega.github.io/vega"),
-  :vegalite => DiagramTypeMetadata("Vega-Lite", "https://vega.github.io/vega-lite"),
-  :wavedrom => DiagramTypeMetadata("WaveDrom", "https://wavedrom.com"),
-)
-
 # The union of the values of `LIMITED_DIAGRAM_SUPPORT` corresponds to all
 # supported `Diagram` types. The `values` call returns an array of arrays that
 # may contain duplicate diagram types due to some types supporting rendering to
@@ -123,11 +80,7 @@ for diagram_type in unique(Iterators.flatten(values(LIMITED_DIAGRAM_SUPPORT)))
   # variable. First for `@eval`, then for the macro itself
   macro_diagram_type = QuoteNode(QuoteNode(diagram_type))
 
-  diagram_type_metadata = get(
-    DIAGRAM_TYPE_METADATA,
-    diagram_type,
-    DiagramTypeMetadata("$(diagram_type)", "https://kroki.io/#support"),
-  )
+  diagram_type_metadata = getDiagramTypeMetadata(diagram_type)
 
   docstring = "String literal for instantiating [`$(diagram_type_metadata.name)`]($(diagram_type_metadata.url)) [`Diagram`](@ref)s."
 
