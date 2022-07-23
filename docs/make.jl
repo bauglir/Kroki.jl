@@ -5,7 +5,7 @@ makedocs(
   modules = [Kroki],
   sitename = "Kroki.jl",
   pages = ["Home" => "index.md", "Examples" => "examples.md", "API" => "api.md"],
-  strict = true,
+  strict = haskey(ENV, "CI"),
 )
 
 if get(ENV, "CI", nothing) == "true"
