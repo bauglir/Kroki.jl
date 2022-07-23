@@ -31,6 +31,7 @@ make it more straightforward to instantiate `Diagram`s.
 
 ```@autodocs
 Modules = [ Kroki.StringLiterals ]
+Order = [ :module, :macro ]
 ```
 
 ## Private
@@ -65,4 +66,11 @@ Order = [ :constant ]
 
 ```@docs
 Kroki.Service.executeDockerCompose
+```
+
+### String Literals
+
+```@autodocs
+Modules = [ Kroki.StringLiterals ]
+Order = [ :function ]
 ```

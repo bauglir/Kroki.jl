@@ -1,13 +1,22 @@
+"""
+Defines string literals for all supported [`Diagram`](@ref) `type`s, making it
+more straightforward to write diagrams inline.
+"""
 module StringLiterals
 
 using ..Kroki: Diagram, LIMITED_DIAGRAM_SUPPORT, getDiagramTypeMetadata
 
-# Helper function implementing string interpolation to be used in conjunction
-# with macros defining diagram specification string literals, as they do not
-# support string interpolation by default.
-#
-# Returns an array of elements, e.g. `Expr`essions, `Symbol`s, `String`s that
-# can be incorporated in the `args` of another `Expr`essions
+using ..Documentation
+@setupDocstringMarkup()
+
+"""
+Helper function implementing string interpolation to be used in conjunction
+with macros defining diagram specification string literals, as they do not
+support string interpolation by default.
+
+Returns an array of elements, e.g. `Expr`essions, `Symbol`s, `String`s that can
+be incorporated in the `args` of another `Expr`ession.
+"""
 function interpolate(specification::AbstractString)
   # Based on the interpolation code from the Markdown stdlib and
   # https://riptutorial.com/julia-lang/example/22952/implementing-interpolation-in-a-string-macro
@@ -44,10 +53,12 @@ function interpolate(specification::AbstractString)
   esc.(components)
 end
 
-# When called at the start of an expression to interpolate, checks whether the
-# interpolation sign that triggered interpolation was escaped or not. This
-# takes into account multiple escaped escape characters in front of an
-# interpolation sign
+"""
+When called at the start of an expression to interpolate, checks whether the
+interpolation sign that triggered interpolation was escaped or not. This takes
+into account multiple escaped escape characters in front of an interpolation
+sign.
+"""
 function shouldInterpolate(stream::IO)
   interpolation_start = position(stream)
 
