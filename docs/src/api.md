@@ -31,7 +31,7 @@ make it more straightforward to instantiate `Diagram`s.
 
 ```@autodocs
 Modules = [ Kroki.StringLiterals ]
-Order = [ :macro ]
+Order = [ :module, :macro ]
 ```
 
 ## Private

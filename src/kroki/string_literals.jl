@@ -1,3 +1,7 @@
+"""
+Defines string literals for all supported [`Diagram`](@ref) `type`s, making it
+more straightforward to write diagrams inline.
+"""
 module StringLiterals
 
 using ..Kroki: Diagram, LIMITED_DIAGRAM_SUPPORT, getDiagramTypeMetadata
