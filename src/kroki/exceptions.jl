@@ -9,7 +9,10 @@ An `Exception` to be thrown when the `path` and `specification` keyword
 arguments to [`Diagram`](@ref) are not specified mutually exclusive.
 """
 struct DiagramPathOrSpecificationError <: Exception
+  "The `path` keyword argument passed to the [`Diagram`](@ref)."
   path::Maybe{AbstractString}
+
+  "The `specification` keyword argument passed to the [`Diagram`](@ref)."
   specification::Maybe{AbstractString}
 end
 
@@ -34,7 +37,13 @@ An `Exception` to be thrown when a [`Diagram`](@ref) representing an invalid
 specification is passed to [`render`](@ref Kroki.render).
 """
 struct InvalidDiagramSpecificationError <: Exception
+  """
+  The error message returned by the Kroki service causing the exception to be
+  thrown.
+  """
   error::String
+
+  "The [`Diagram`](@ref) that caused the error."
   cause::Diagram
 end
 
@@ -52,7 +61,13 @@ An `Exception` to be thrown when a [`Diagram`](@ref) is [`render`](@ref
 Kroki.render)ed to an unsupported or invalid output format.
 """
 struct InvalidOutputFormatError <: Exception
+  """
+  The error message returned by the Kroki service causing the exception to be
+  thrown.
+  """
   error::String
+
+  "The [`Diagram`](@ref) that caused the error."
   cause::Diagram
 end
 
