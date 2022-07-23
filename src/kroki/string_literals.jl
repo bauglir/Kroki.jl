@@ -6,6 +6,9 @@ module StringLiterals
 
 using ..Kroki: Diagram, LIMITED_DIAGRAM_SUPPORT, getDiagramTypeMetadata
 
+using ..Documentation
+@setupDocstringMarkup()
+
 """
 Helper function implementing string interpolation to be used in conjunction
 with macros defining diagram specification string literals, as they do not
