@@ -4,6 +4,9 @@ using HTTP.ExceptionRequest: StatusError
 
 using ..Kroki: Diagram, Kroki, Maybe
 
+using ..Documentation
+@setupDocstringMarkup()
+
 """
 An `Exception` to be thrown when the `path` and `specification` keyword
 arguments to [`Diagram`](@ref) are not specified mutually exclusive.
