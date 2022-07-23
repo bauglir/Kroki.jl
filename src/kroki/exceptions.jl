@@ -1,3 +1,7 @@
+"""
+Defines all custom `Exceptions` that can be thrown by different parts of the
+package along with their corresponding `Base.showerror` overloads.
+"""
 module Exceptions
 
 using HTTP.ExceptionRequest: StatusError
