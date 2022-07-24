@@ -192,10 +192,8 @@ function renderDiagramSupportAsMarkdown(support::MIMEToDiagramTypeMap)
 
   diagram_types = sort(unique(Iterators.flatten(values(support))))
   diagram_types_with_support = map(diagram_types) do diagram_type
-    diagram_type_metadata = getDiagramTypeMetadata(diagram_type)
-
     return [
-      "[$(diagram_type_metadata.name)]($(diagram_type_metadata.url))",
+      toMarkdownLink(diagram_type),
       map(
         mime -> mime === MIME"image/svg+xml"() || diagram_type ∈ support[mime] ? "✅" : "",
         mime_types,
@@ -220,6 +218,11 @@ struct DiagramTypeMetadata
   "The URL to the website/documentation of the diagram type."
   url::String
 end
+
+# This is a common transformation across different documentation sections,
+# hence convenient to be available as helper functions
+toMarkdownLink(dtm::DiagramTypeMetadata) = "[$(dtm.name)]($(dtm.url))"
+toMarkdownLink(diagram_type::Symbol) = toMarkdownLink(getDiagramTypeMetadata(diagram_type))
 
 """
 An overview of metadata for the different [`Diagram`](@ref) `type`s that can be
