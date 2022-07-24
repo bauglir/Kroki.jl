@@ -8,6 +8,13 @@ Compose](https://docs.docker.com/compose/) are available on the system.
 """
 module Service
 
+using HTTP: get as httpget
+using JSON: parse as parseJSON
+using Markdown: parse as parseMarkdown
+
+using ..Exceptions: InfoRetrievalError
+using ..Kroki: toMarkdownLink
+
 using ..Documentation
 @setupDocstringMarkup()
 
@@ -83,6 +90,62 @@ executeDockerCompose(cmd::String) = executeDockerCompose([cmd])
 # The function should be called through indirection in cases where it needs to
 # be mocked out in tests
 const EXECUTE_DOCKER_COMPOSE = Ref{Any}(executeDockerCompose)
+
+function infoVersionOverview(
+  kroki_service_version::Dict{String, Any},
+  diagram_type_versions::Vector{String},
+)
+  return parseMarkdown(
+    """
+    The active Kroki service ($(ENDPOINT[])) runs
+    v$(VersionNumber(kroki_service_version["number"]))
+    ($(kroki_service_version["build_hash"])), which is configured with the
+    following diagram type versions.
+
+    | Diagram Type | Version |
+    | :-- | :-- |
+    $(join(diagram_type_versions, '\n'))
+
+    !!! info "Diagram type availability"
+        The presence of a diagram type in this list does not mean it is actually
+        supported by the service at $(ENDPOINT[]). This is due to some diagram
+        types requiring additional services that may not be available, as they need
+        to be managed separately. See [the architecture section on Kroki's
+        website](https://docs.kroki.io/kroki/architecture) for more information.
+    """,
+  )
+end
+
+"""
+Provides an overview of the (versions of) tools supporting the different
+diagram types based on information provided by the service as configured
+through [`setEndpoint!`](@ref).
+
+# Example
+
+`julia> Kroki.Service.info()`
+
+$(info())
+"""
+function info()
+  try
+    response = httpget("$(ENDPOINT[])/health")
+
+    versions = get(parseJSON(String(response.body)), "version", nothing)
+
+    kroki_service_version = get(versions, "kroki", nothing)
+    delete!(versions, "kroki")
+
+    diagram_type_versions = sort([
+      "| $(toMarkdownLink(Symbol(diagram_type))) | $(version) |" for
+      (diagram_type, version) in versions
+    ])
+
+    return infoVersionOverview(kroki_service_version, diagram_type_versions)
+  catch
+    throw(InfoRetrievalError(ENDPOINT[]))
+  end
+end
 
 """
 Sets the [`ENDPOINT`](@ref) using a fallback mechanism if no `endpoint` is

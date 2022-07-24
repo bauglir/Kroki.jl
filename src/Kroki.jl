@@ -18,9 +18,6 @@ include("./kroki/documentation.jl")
 using .Documentation
 @setupDocstringMarkup()
 
-include("./kroki/service.jl")
-using .Service: ENDPOINT
-
 export Diagram, render
 
 # Convenience short-hand to make further type definitions more straightforward
@@ -428,6 +425,9 @@ function Base.show(io::IO, diagram::Diagram)
     write(io, diagram.specification)
   end
 end
+
+include("./kroki/service.jl")
+using .Service: ENDPOINT
 
 include("./kroki/string_literals.jl")
 @reexport using .StringLiterals

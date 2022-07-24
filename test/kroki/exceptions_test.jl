@@ -5,6 +5,7 @@ using Test: @test, @test_throws, @testset
 using Kroki: Diagram, render
 using Kroki.Exceptions:
   DiagramPathOrSpecificationError,
+  InfoRetrievalError,
   InvalidDiagramSpecificationError,
   InvalidOutputFormatError,
   StatusError, # Imported from HTTP through Kroki
@@ -61,6 +62,19 @@ end
         @test occursin("* `specification`: '$(expected_specification)'", rendered_error)
       end
     end
+  end
+
+  @testset "`InfoRetrievalError`" begin
+    expected_endpoint = "http://test.endpoint"
+
+    rendered_error = sprint(showerror, InfoRetrievalError(expected_endpoint))
+
+    # Should state the cause of the error in a readable fashion
+    @test occursin("queried for information", rendered_error)
+
+    # Should contain the configured `ENDPOINT` and suggest to update it
+    @test occursin(expected_endpoint, rendered_error)
+    @test occursin("setEndpoint!", rendered_error)
   end
 
   @testset "`RenderError`" begin

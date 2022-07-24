@@ -40,6 +40,26 @@ function Base.showerror(io::IO, error::DiagramPathOrSpecificationError)
 end
 
 """
+An `Exception` to be thrown when [`Kroki.Service.info`](@ref) cannot retrieve
+its information from the Kroki service configured through
+[`Kroki.Service.setEndpoint!`](@ref).
+"""
+struct InfoRetrievalError <: Exception
+  "The endpoint that was queried for information about a Kroki service."
+  endpoint::String
+end
+
+Base.showerror(io::IO, error::InfoRetrievalError) = print(
+  io,
+  """
+  The Kroki service at $(error.endpoint) could not be queried for information.
+
+  Please verify a Kroki service is active at this address, or reconfigure using
+  `Kroki.Service.setEndpoint!`.
+  """,
+)
+
+"""
 An `Exception` to be thrown when a [`Diagram`](@ref) representing an invalid
 specification is passed to [`render`](@ref Kroki.render).
 """
