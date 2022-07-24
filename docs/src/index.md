@@ -73,14 +73,17 @@ using Kroki, Markdown
 Markdown.parse(Kroki.renderDiagramSupportAsMarkdown(Kroki.LIMITED_DIAGRAM_SUPPORT))
 ```
 
-The information in this table should correspond to the one on [Kroki's
-website](https://kroki.io/#support), but is directly derived from the support
-as it is encoded in [this
-package](https://bauglir.github.io/Kroki.jl/stable/api/#Kroki.LIMITED_DIAGRAM_SUPPORT).
-Given that this information is a mirror of the information available on
-[Kroki's website](https://kroki.io/#support), it may not be entirely accurate
-with regards to actually supported output formats. Support for output formats
-needs to be addressed within the Kroki service.
+!!! note "Addressing errors in diagram type support"
+    The information in this table should correspond to the one on [Kroki's
+    website](https://kroki.io/#support), but is directly derived from the
+    support as it is encoded in [this
+    package](https://bauglir.github.io/Kroki.jl/stable/api/#Kroki.LIMITED_DIAGRAM_SUPPORT).
+
+    Given that this information is a mirror of the information available on
+    [Kroki's website](https://kroki.io/#support), it may not be entirely
+    accurate with regards to actually supported output formats. Support for
+    output formats needs to be addressed within the Kroki service and then
+    mirrored into this package.
 
 ## Contents
 
