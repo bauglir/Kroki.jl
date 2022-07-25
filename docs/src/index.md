@@ -85,6 +85,10 @@ Markdown.parse(Kroki.renderDiagramSupportAsMarkdown(Kroki.LIMITED_DIAGRAM_SUPPOR
     output formats needs to be addressed within the Kroki service and then
     mirrored into this package.
 
+The [`Kroki.Service.info`](@ref) function can be used to obtain more detailed
+information about the versions of the tools used to support the different
+diagram types.
+
 ## Contents
 
 ```@contents
