@@ -1,18 +1,21 @@
 module ServiceTest
 
+using Kroki.Exceptions: InfoRetrievalError
 using Kroki.Service:
   DEFAULT_ENDPOINT,
   DockerComposeExecutionError,
   ENDPOINT,
   EXECUTE_DOCKER_COMPOSE,
   executeDockerCompose,
+  info,
   setEndpoint!,
   start!,
   status,
   stop!,
   update!
+using Markdown
 using SimpleMock
-using Test: @testset, @test, @test_logs, @test_skip
+using Test: @test, @test_logs, @test_skip, @test_throws, @testset
 
 # Helper function to temporarily replace `EXECUTE_DOCKER_COMPOSE` with a
 # `Mock`. Used to gain control over `docker-compose` behavior for local service
@@ -71,6 +74,50 @@ end
 
     # Restore the original endpoint
     ENDPOINT[] = original_endpoint
+  end
+
+  @testset "`info`" begin
+    # These are mostly a collection of spot checks, to make sure the report
+    # contains at least some useful information
+    @testset "with a valid Kroki service" begin
+      info_report = info()
+
+      # For the best visualization in different contexts, the report should be
+      # created as Markdown
+      @test info_report isa Markdown.MD
+
+      # All other tests are more easily performed against the rendered Markdown
+      rendered_info_report = "$(info_report)"
+
+      # The report should include the address of the active Kroki service
+      @test occursin("active Kroki service ($(ENDPOINT[]))", rendered_info_report)
+
+      # The report should contain an overview of diagram types with versions,
+      # with proper headers
+      @test occursin(r"| Diagram Type\s+| Version\s+|", rendered_info_report)
+
+      # The report should include the friendly names of diagram types and links
+      # to their websites
+      @test occursin("[PlantUML](https://plantuml.com)", rendered_info_report)
+      @test occursin("[Structurizr](https://structurizr.com)", rendered_info_report)
+
+      # Kroki itself should not show up within the diagram types table
+      @test !occursin("[kroki]", rendered_info_report)
+
+      # It should include a note no
+      @test occursin("!!! info \"Diagram type availability\"", rendered_info_report)
+    end
+
+    @testset "without a valid Kroki service" begin
+      original_endpoint = ENDPOINT[]
+      setEndpoint!("http://does.not.exist")
+
+      try
+        @test_throws(InfoRetrievalError, info())
+      finally
+        setEndpoint!(original_endpoint)
+      end
+    end
   end
 
   @testset "local instance management" begin

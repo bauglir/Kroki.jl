@@ -64,7 +64,7 @@ uuid = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
 version = "0.21.3"
 
 [[deps.Kroki]]
-deps = ["Base64", "CodecZlib", "DocStringExtensions", "HTTP", "Reexport"]
+deps = ["Base64", "CodecZlib", "DocStringExtensions", "HTTP", "JSON", "Markdown", "Reexport"]
 path = ".."
 uuid = "b3565e16-c1f2-4fe9-b4ab-221c88942068"
 
