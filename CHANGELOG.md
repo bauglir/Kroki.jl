@@ -1,4 +1,4 @@
-Changelog
+# Changelog
 
 # [0.2.0](https://github.com/bauglir/Kroki.jl/compare/v0.1.0...v0.2.0) (2022-07-26)
 
