@@ -8,7 +8,7 @@
         "replacements": [
           {
             "files": ["Project.toml"],
-            "from": "version = \"${lastRelease.version}\"",
+            "from": 'version = "\d+(\.\d+){2}"',
             "to": "version = \"${nextRelease.version}\"",
             "results": [
               {
