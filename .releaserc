@@ -6,18 +6,20 @@
     [
       "@google/semantic-release-replace-plugin", {
         "replacements": [
-          "files": ["Project.toml"],
-          "from": "version = \"${lastRelease.version}\"",
-          "to": "version = \"${nextRelease.version}\"",
-          "results": [
-            {
-              "file": "Project.toml",
-              "hasChanged": true,
-              "numMatches": 1,
-              "numReplacements": 1
-            }
-          ],
-          "countMatches": true
+          {
+            "files": ["Project.toml"],
+            "from": "version = \"${lastRelease.version}\"",
+            "to": "version = \"${nextRelease.version}\"",
+            "results": [
+              {
+                "file": "Project.toml",
+                "hasChanged": true,
+                "numMatches": 1,
+                "numReplacements": 1
+              }
+            ],
+            "countMatches": true
+          }
         ]
       }
     ],
