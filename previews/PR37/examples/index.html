@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Examples · Kroki.jl</title><script data-outdated-warner src="../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.044/juliamono.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.11/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../assets/documenter.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../">Kroki.jl</a></span></div><form class="docs-search" action="../search/"><input class="docs-search-query" id="documenter-search-query" name="q" type="text" placeholder="Search docs"/></form><ul class="docs-menu"><li><a class="tocitem" href="../">Home</a></li><li class="is-active"><a class="tocitem" href>Examples</a><ul class="internal"><li><a class="tocitem" href="#String-literals"><span>String literals</span></a></li><li><a class="tocitem" href="#examples-diagram-type"><span>The <code>Diagram</code> type</span></a></li><li><a class="tocitem" href="#Rendering-to-a-specific-format"><span>Rendering to a specific format</span></a></li><li><a class="tocitem" href="#Controlling-text-rendering"><span>Controlling text rendering</span></a></li></ul></li><li><a class="tocitem" href="../api/">API</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href>Examples</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Examples</a></li></ul></nav><div class="docs-right"><a class="docs-edit-link" href="https://github.com/bauglir/Kroki.jl/blob/development/docs/src/examples.md" title="Edit on GitHub"><span class="docs-icon fab"></span><span class="docs-label is-hidden-touch">Edit on GitHub</span></a><a class="docs-settings-button fas fa-cog" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-sidebar-button fa fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a></div></header><article class="content" id="documenter-page"><h1 id="Examples"><a class="docs-heading-anchor" href="#Examples">Examples</a><a id="Examples-1"></a><a class="docs-heading-anchor-permalink" href="#Examples" title="Permalink"></a></h1><p>This page shows the different ways diagrams can be rendered. Most content for the examples is taken from <a href="https://kroki.io">Kroki&#39;s website</a>, or the individual diagramming tools websites as linked from the docstring of various <a href="../api/#api-string-literals">string literals</a>.</p><h2 id="String-literals"><a class="docs-heading-anchor" href="#String-literals">String literals</a><a id="String-literals-1"></a><a class="docs-heading-anchor-permalink" href="#String-literals" title="Permalink"></a></h2><p>The most straightforward way to create diagrams is to rely on the <a href="../api/#api-string-literals">string literals</a> for each of the available diagram types. The package needs to be updated to add string literals whenever the <a href="https://kroki.io">Kroki service</a> adds a new diagramming tool. In case a string literal is not available, it will be necessary to resort to using <a href="#examples-diagram-type">the <code>Diagram</code> type</a> directly.</p><pre><code class="language-julia hljs">ditaa&quot;&quot;&quot;
+      +--------+
+      |        |
+      | Julia  |
+      |        |
+      +--------+
+          ^
+  request |
+          v
+  +-------------+
+  |             |
+  |    Kroki    |
+  |             |---+
+  +-------------+   |
+       ^  ^         | inflate
+       |  |         |
+       v  +---------+
+  +-------------+
+  |             |
+  |    Ditaa    |
+  |             |----+
+  +-------------+    |
+             ^       | process
+             |       |
+             +-------+
+&quot;&quot;&quot;</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" width="340" height="392" version="1.0" shape-rendering="geometricPrecision"><defs><style type="text/css">@font-face {
+  font-family: sans-serif;
+}</style><filter id="shadowBlur" x="0" y="0" width="200%25" height="200%25"><feOffset in="SourceGraphic" dx="3.0003002" dy="3.0003002" result="offOut"></feOffset><feGaussianBlur in="offOut" stdDeviation="3"></feGaussianBlur></filter></defs><g stroke-width="1" stroke-linecap="square" stroke-linejoin="round"><rect x="0" y="0" width="340" height="392" style="fill: %23ffffff"></rect><path stroke="%23969696" fill="%23969696" filter="url(%23shadowBlur)" d="M45.0 147.0 L185.0 147.0 L185.0 203.0 L45.0 203.0 z"></path><path stroke="%23969696" fill="%23969696" filter="url(%23shadowBlur)" d="M45.0 259.0 L185.0 259.0 L185.0 315.0 L45.0 315.0 z"></path><path stroke="%23969696" fill="%23969696" filter="url(%23shadowBlur)" d="M85.0 35.0 L175.0 35.0 L175.0 91.0 L85.0 91.0 z"></path><path stroke="%23000000" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" fill="white" d="M45.0 147.0 L185.0 147.0 L185.0 203.0 L45.0 203.0 z"></path><path stroke="%23000000" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" fill="white" d="M45.0 259.0 L185.0 259.0 L185.0 315.0 L45.0 315.0 z"></path><path stroke="%23000000" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" fill="white" d="M85.0 35.0 L175.0 35.0 L175.0 91.0 L85.0 91.0 z"></path><path stroke="%23000000" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" fill="none" d="M195.0 189.0 L225.0 189.0 L225.0 245.0 L125.0 245.0 L125.0 217.0 "></path><path stroke="%23000000" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" fill="none" d="M195.0 301.0 L235.0 301.0 L235.0 357.0 L155.0 357.0 L155.0 329.0 "></path><path stroke="none" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" fill="%23000000" d="M125.0 98.0 L120.0 112.0 L130.0 112.0 z"></path><path stroke="none" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" fill="%23000000" d="M120.0 126.0 L125.0 140.0 L130.0 126.0 z"></path><path stroke="none" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" fill="%23000000" d="M95.0 210.0 L90.0 224.0 L100.0 224.0 z"></path><path stroke="none" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" fill="%23000000" d="M125.0 210.0 L120.0 224.0 L130.0 224.0 z"></path><path stroke="none" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" fill="%23000000" d="M90.0 238.0 L95.0 252.0 L100.0 238.0 z"></path><path stroke="none" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" fill="%23000000" d="M155.0 322.0 L150.0 336.0 L160.0 336.0 z"></path><path stroke="%23000000" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" fill="none" d="M125.0 105.0 L125.0 133.0 "></path><path stroke="%23000000" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" fill="none" d="M95.0 217.0 L95.0 245.0 "></path><text x="107" y="69" font-family="sans-serif" font-size="16" stroke="none" fill="%23000000"><![CDATA[Julia]]></text><text x="46" y="125" font-family="sans-serif" font-size="16" stroke="none" fill="%23000000"><![CDATA[request]]></text><text x="95" y="181" font-family="sans-serif" font-size="16" stroke="none" fill="%23000000"><![CDATA[Kroki]]></text><text x="252" y="223" font-family="sans-serif" font-size="16" stroke="none" fill="%23000000"><![CDATA[inflate]]></text><text x="96" y="293" font-family="sans-serif" font-size="16" stroke="none" fill="%23000000"><![CDATA[Ditaa]]></text><text x="254" y="335" font-family="sans-serif" font-size="16" stroke="none" fill="%23000000"><![CDATA[process]]></text></g></svg>'/><pre><code class="language-julia hljs">blockdiag&quot;&quot;&quot;
+blockdiag {
+  Kroki -&gt; generates -&gt; &quot;Block diagrams&quot;;
+  Kroki -&gt; is -&gt; &quot;very easy!&quot;;
+
+  Kroki [color = &quot;greenyellow&quot;];
+  &quot;Block diagrams&quot; [color = &quot;pink&quot;];
+  &quot;very easy!&quot; [color = &quot;orange&quot;];
+}
+&quot;&quot;&quot;</code></pre><img src='data:image/svg+xml;utf-8,<?xml version=%271.0%27 encoding=%27UTF-8%27?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg viewBox="0 0 640 200" xmlns="http://www.w3.org/2000/svg" xmlns:inkspace="http://www.inkscape.org/namespaces/inkscape" xmlns:xlink="http://www.w3.org/1999/xlink" width="640px" height="200px">
+  <defs id="defs_block">
+    <filter height="1.504" id="filter_blur" inkspace:collect="always" width="1.1575" x="-0.07875" y="-0.252">
+      <feGaussianBlur id="feGaussianBlur3780" inkspace:collect="always" stdDeviation="4.2" />
+    </filter>
+  </defs>
+  <title>blockdiag</title>
+  <desc>blockdiag {
+  Kroki -&gt; generates -&gt; "Block diagrams";
+  Kroki -&gt; is -&gt; "very easy!";
+
+  Kroki [color = "greenyellow"];
+  "Block diagrams" [color = "pink"];
+  "very easy!" [color = "orange"];
+}</desc>
+  <rect fill="rgb(0,0,0)" height="40" stroke="rgb(0,0,0)" style="filter:url(%23filter_blur);opacity:0.7;fill-opacity:1" width="128" x="67" y="46" />
+  <rect fill="rgb(0,0,0)" height="40" stroke="rgb(0,0,0)" style="filter:url(%23filter_blur);opacity:0.7;fill-opacity:1" width="128" x="259" y="46" />
+  <rect fill="rgb(0,0,0)" height="40" stroke="rgb(0,0,0)" style="filter:url(%23filter_blur);opacity:0.7;fill-opacity:1" width="128" x="259" y="126" />
+  <rect fill="rgb(0,0,0)" height="40" stroke="rgb(0,0,0)" style="filter:url(%23filter_blur);opacity:0.7;fill-opacity:1" width="128" x="451" y="46" />
+  <rect fill="rgb(0,0,0)" height="40" stroke="rgb(0,0,0)" style="filter:url(%23filter_blur);opacity:0.7;fill-opacity:1" width="128" x="451" y="126" />
+  <rect fill="rgb(173,255,47)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="40" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="31" x="128.5" y="66">Kroki</text>
+  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="40" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="55" x="320.5" y="66">generates</text>
+  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="120" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="13" x="320.5" y="146">is</text>
+  <rect fill="rgb(255,192,203)" height="40" stroke="rgb(0,0,0)" width="128" x="448" y="40" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="85" x="512.5" y="66">Block diagrams</text>
+  <rect fill="rgb(255,165,0)" height="40" stroke="rgb(0,0,0)" width="128" x="448" y="120" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="61" x="512.5" y="146">very easy!</text>
+  <path d="M 192 60 L 248 60" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="255,60 248,56 248,64 255,60" stroke="rgb(0,0,0)" />
+  <path d="M 192 60 L 224 60" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 224 60 L 224 140" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 224 140 L 248 140" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="255,140 248,136 248,144 255,140" stroke="rgb(0,0,0)" />
+  <path d="M 384 60 L 440 60" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="447,60 440,56 440,64 447,60" stroke="rgb(0,0,0)" />
+  <path d="M 384 140 L 440 140" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="447,140 440,136 440,144 447,140" stroke="rgb(0,0,0)" />
+</svg>'/><pre><code class="language-julia hljs">svgbob&quot;&quot;&quot;
+        ▲
+    Uin ┊   .------------------------
+        ┊   |
+        ┊   |
+        *---&#39;┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄▶
+&quot;&quot;&quot;</code></pre><img src='data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="312" height="96">
+    <style>
+        line, path, circle,rect,polygon{stroke:black;stroke-width:2;stroke-opacity:1;fill-opacity:1;stroke-linecap:round;stroke-linejoin:miter;}text{font-family:monospace;font-size:14px;}rect.backdrop{stroke:none;fill:white;}.broken{stroke-dasharray:8;}.filled{fill:black;}.bg_filled{fill:white;}.nofill{fill:white;}.end_marked_arrow{marker-end:url(%23arrow);}.start_marked_arrow{marker-start:url(%23arrow);}.end_marked_diamond{marker-end:url(%23diamond);}.start_marked_diamond{marker-start:url(%23diamond);}.end_marked_circle{marker-end:url(%23circle);}.start_marked_circle{marker-start:url(%23circle);}.end_marked_open_circle{marker-end:url(%23open_circle);}.start_marked_open_circle{marker-start:url(%23open_circle);}.end_marked_big_open_circle{marker-end:url(%23big_open_circle);}.start_marked_big_open_circle{marker-start:url(%23big_open_circle);}
+        
+    </style>
+    <defs>
+        <marker id="arrow" viewBox="-2 -2 8 8" refX="4" refY="2" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <polygon points="0,0 0,4 4,2 0,0"></polygon>
+        </marker>
+        <marker id="diamond" viewBox="-2 -2 8 8" refX="4" refY="2" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <polygon points="0,2 2,0 4,2 2,4 0,2"></polygon>
+        </marker>
+        <marker id="circle" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <circle cx="4" cy="4" r="2" class="filled"></circle>
+        </marker>
+        <marker id="open_circle" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <circle cx="4" cy="4" r="2" class="bg_filled"></circle>
+        </marker>
+        <marker id="big_open_circle" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <circle cx="4" cy="4" r="3" class="bg_filled"></circle>
+        </marker>
+    </defs>
+    <rect class="backdrop" x="0" y="0" width="312" height="96"></rect>
+    <circle cx="68" cy="72" r="3" class="filled"></circle>
+    <text x="34" y="28" >Uin</text>
+    <g>
+        <polygon points="64,12 68,0 72,12" class="filled"></polygon>
+        <line x1="68" y1="12" x2="68" y2="68" class="broken"></line>
+    </g>
+    <g>
+        <path d="M 104,24 A 4,4 0,0,0 100,28" class="nofill"></path>
+        <line x1="100" y1="28" x2="100" y2="68" class="solid"></line>
+        <line x1="104" y1="24" x2="296" y2="24" class="solid"></line>
+        <line x1="72" y1="72" x2="96" y2="72" class="solid"></line>
+        <path d="M 100,68 A 4,4 0,0,1 96,72" class="nofill"></path>
+        <path d="M 100,68 A 4,4 0,0,0 104,72" class="nofill"></path>
+        <line x1="104" y1="72" x2="296" y2="72" class="broken"></line>
+        <polygon points="296,68 304,72 296,76" class="filled"></polygon>
+    </g>
+</svg>
+'/><div class="admonition is-info"><header class="admonition-header">String Interpolation</header><div class="admonition-body"><p>String interpolation for string literals is not readily supported by Julia, requiring custom logic by the package providing them. Kroki.jl&#39;s string literals support string interpolation. Please <a href="https://github.com/bauglir/Kroki.jl/issues/new">file an issue</a> when encountering unexpected behavior.</p></div></div><pre><code class="language-julia hljs">alice = &quot;Kroki&quot;
+bob = &quot;Julia&quot;
+
+plantuml&quot;&quot;&quot;
+$alice -&gt; $bob: I&#39;m here to help.
+$bob -&gt; $alice: With what?
+$alice -&gt; $bob: Rendering diagrams!
+&quot;&quot;&quot;</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="181px" preserveAspectRatio="none" style="width:196px;height:181px;background:%23FFFFFF;" version="1.1" viewBox="0 0 196 181" width="196px" zoomAndPan="magnify"><defs/><g><line style="stroke:%23181818;stroke-width:0.5;stroke-dasharray:5.0,5.0;" x1="27" x2="27" y1="36.7999" y2="145.6"/><line style="stroke:%23181818;stroke-width:0.5;stroke-dasharray:5.0,5.0;" x1="168" x2="168" y1="36.7999" y2="145.6"/><rect fill="%23E2E2F0" height="30.7999" rx="2.5" ry="2.5" style="stroke:%23181818;stroke-width:0.5;" width="45" x="5" y="5"/><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="31" x="12" y="25.9999">Kroki</text><rect fill="%23E2E2F0" height="30.7999" rx="2.5" ry="2.5" style="stroke:%23181818;stroke-width:0.5;" width="45" x="5" y="144.6"/><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="31" x="12" y="165.5999">Kroki</text><rect fill="%23E2E2F0" height="30.7999" rx="2.5" ry="2.5" style="stroke:%23181818;stroke-width:0.5;" width="43" x="147" y="5"/><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="29" x="154" y="25.9999">Julia</text><rect fill="%23E2E2F0" height="30.7999" rx="2.5" ry="2.5" style="stroke:%23181818;stroke-width:0.5;" width="43" x="147" y="144.6"/><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="29" x="154" y="165.5999">Julia</text><polygon fill="%23181818" points="156.5,64.3999,166.5,68.3999,156.5,72.3999,160.5,68.3999" style="stroke:%23181818;stroke-width:1.0;"/><line style="stroke:%23181818;stroke-width:1.0;" x1="27.5" x2="162.5" y1="68.3999" y2="68.3999"/><text fill="%23000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="90" x="34.5" y="63.7999">I%27m here to help.</text><polygon fill="%23181818" points="38.5,94,28.5,98,38.5,102,34.5,98" style="stroke:%23181818;stroke-width:1.0;"/><line style="stroke:%23181818;stroke-width:1.0;" x1="32.5" x2="167.5" y1="98" y2="98"/><text fill="%23000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="63" x="44.5" y="93.4">With what?</text><polygon fill="%23181818" points="156.5,123.6,166.5,127.6,156.5,131.6,160.5,127.6" style="stroke:%23181818;stroke-width:1.0;"/><line style="stroke:%23181818;stroke-width:1.0;" x1="27.5" x2="162.5" y1="127.6" y2="127.6"/><text fill="%23000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="117" x="34.5" y="123">Rendering diagrams!</text><!--MD5=[88f517d08e4a196adef1bd8770884fca]
+@startuml
+Kroki -> Julia: I%27m here to help.
+Julia -> Kroki: With what?
+Kroki -> Julia: Rendering diagrams!
+@enduml
+
+PlantUML version 1.2022.5(Sat Apr 30 10:55:52 GMT 2022)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>'/><h2 id="examples-diagram-type"><a class="docs-heading-anchor" href="#examples-diagram-type">The <code>Diagram</code> type</a><a id="examples-diagram-type-1"></a><a class="docs-heading-anchor-permalink" href="#examples-diagram-type" title="Permalink"></a></h2><p>String literals are effectively short-hands for instantiating a <a href="../api/#Kroki.Diagram"><code>Diagram</code></a> for a specific type of diagram. In certain cases, it may be more straightforward, or even necessary, to directly instantiate a <a href="../api/#Kroki.Diagram"><code>Diagram</code></a>. For instance, when a type of diagram is supported by the Kroki service but support for it has not been added to this package. In those cases, basic functionality like rendering to an SVG should typically still work in line with the following examples.</p><pre><code class="language-julia hljs">Diagram(:mermaid, &quot;&quot;&quot;
+graph TD
+  A[ Anyone ] --&gt; | Can help | B( Go to github.com/yuzutech/kroki )
+  B --&gt; C{ How to contribute? }
+  C --&gt; D[ Reporting bugs ]
+  C --&gt; E[ Sharing ideas ]
+  C --&gt; F[ Advocating ]
+&quot;&quot;&quot;)</code></pre><img src='data:image/svg+xml;utf-8,<svg viewBox="0 0 472.046875 509.2140808105469" height="509.2140808105469" aria-labelledby="chart-title-mermaid-1658821723866 chart-desc-mermaid-1658821723866" role="img" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" width="472.046875" id="mermaid-1658821723866"><title id="chart-title-mermaid-1658821723866"/><desc id="chart-desc-mermaid-1658821723866"/><style>%23mermaid-1658821723866 {font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:%23333;}%23mermaid-1658821723866 .error-icon{fill:%23552222;}%23mermaid-1658821723866 .error-text{fill:%23552222;stroke:%23552222;}%23mermaid-1658821723866 .edge-thickness-normal{stroke-width:2px;}%23mermaid-1658821723866 .edge-thickness-thick{stroke-width:3.5px;}%23mermaid-1658821723866 .edge-pattern-solid{stroke-dasharray:0;}%23mermaid-1658821723866 .edge-pattern-dashed{stroke-dasharray:3;}%23mermaid-1658821723866 .edge-pattern-dotted{stroke-dasharray:2;}%23mermaid-1658821723866 .marker{fill:%23333333;stroke:%23333333;}%23mermaid-1658821723866 .marker.cross{stroke:%23333333;}%23mermaid-1658821723866 svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;}%23mermaid-1658821723866 .label{font-family:"trebuchet ms",verdana,arial,sans-serif;color:%23333;}%23mermaid-1658821723866 .cluster-label text{fill:%23333;}%23mermaid-1658821723866 .cluster-label span{color:%23333;}%23mermaid-1658821723866 .label text,%23mermaid-1658821723866 span{fill:%23333;color:%23333;}%23mermaid-1658821723866 .node rect,%23mermaid-1658821723866 .node circle,%23mermaid-1658821723866 .node ellipse,%23mermaid-1658821723866 .node polygon,%23mermaid-1658821723866 .node path{fill:%23ECECFF;stroke:%239370DB;stroke-width:1px;}%23mermaid-1658821723866 .node .label{text-align:center;}%23mermaid-1658821723866 .node.clickable{cursor:pointer;}%23mermaid-1658821723866 .arrowheadPath{fill:%23333333;}%23mermaid-1658821723866 .edgePath .path{stroke:%23333333;stroke-width:2.0px;}%23mermaid-1658821723866 .flowchart-link{stroke:%23333333;fill:none;}%23mermaid-1658821723866 .edgeLabel{background-color:%23e8e8e8;text-align:center;}%23mermaid-1658821723866 .edgeLabel rect{opacity:0.5;background-color:%23e8e8e8;fill:%23e8e8e8;}%23mermaid-1658821723866 .cluster rect{fill:%23ffffde;stroke:%23aaaa33;stroke-width:1px;}%23mermaid-1658821723866 .cluster text{fill:%23333;}%23mermaid-1658821723866 .cluster span{color:%23333;}%23mermaid-1658821723866 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:12px;background:hsl(80, 100%25, 96.2745098039%25);border:1px solid %23aaaa33;border-radius:2px;pointer-events:none;z-index:100;}%23mermaid-1658821723866 :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}</style><g><g class="output"><g class="clusters"/><g class="edgePaths"><g style="opacity: 1;" id="L-A-B" class="edgePath LS-A LE-B"><path style="fill:none" marker-end="url(%23arrowhead20)" d="M252.0234375,52L252.0234375,58.166666666666664C252.0234375,64.33333333333333,252.0234375,76.66666666666667,252.0234375,89C252.0234375,101.33333333333333,252.0234375,113.66666666666667,252.0234375,119.83333333333333L252.0234375,126" class="path"/><defs><marker orient="auto" markerHeight="6" markerWidth="8" markerUnits="strokeWidth" refY="5" refX="9" viewBox="0 0 10 10" id="arrowhead20"><path style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowheadPath" d="M 0 0 L 10 5 L 0 10 z"/></marker></defs></g><g style="opacity: 1;" id="L-B-C" class="edgePath LS-B LE-C"><path style="fill:none" marker-end="url(%23arrowhead21)" d="M252.0234375,170L252.0234375,174.16666666666666C252.0234375,178.33333333333334,252.0234375,186.66666666666666,252.10677083333334,195.08333358764648C252.19010416666666,203.5000005086263,252.35677083333334,212.00000101725263,252.44010416666666,216.25000127156576L252.52343750000003,220.50000152587893" class="path"/><defs><marker orient="auto" markerHeight="6" markerWidth="8" markerUnits="strokeWidth" refY="5" refX="9" viewBox="0 0 10 10" id="arrowhead21"><path style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowheadPath" d="M 0 0 L 10 5 L 0 10 z"/></marker></defs></g><g style="opacity: 1;" id="L-C-D" class="edgePath LS-C LE-D"><path style="fill:none" marker-end="url(%23arrowhead22)" d="M196.34595497958566,351.53658150546454L175.95626456632138,364.9828288465134C155.5665741530571,378.42907618756226,114.78719332652855,405.32157086966004,94.39750291326429,422.9344848773756C74.0078125,440.5473988850911,74.0078125,448.8807322184245,74.0078125,453.0473988850911L74.0078125,457.2140655517578" class="path"/><defs><marker orient="auto" markerHeight="6" markerWidth="8" markerUnits="strokeWidth" refY="5" refX="9" viewBox="0 0 10 10" id="arrowhead22"><path style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowheadPath" d="M 0 0 L 10 5 L 0 10 z"/></marker></defs></g><g style="opacity: 1;" id="L-C-E" class="edgePath LS-C LE-E"><path style="fill:none" marker-end="url(%23arrowhead23)" d="M252.52343750000003,407.71406097412097L252.4401041666667,411.79739507039375C252.35677083333334,415.8807291666665,252.19010416666666,424.0473973592122,252.10677083333334,432.29739812215166C252.0234375,440.5473988850911,252.0234375,448.8807322184245,252.0234375,453.0473988850911L252.0234375,457.2140655517578" class="path"/><defs><marker orient="auto" markerHeight="6" markerWidth="8" markerUnits="strokeWidth" refY="5" refX="9" viewBox="0 0 10 10" id="arrowhead23"><path style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowheadPath" d="M 0 0 L 10 5 L 0 10 z"/></marker></defs></g><g style="opacity: 1;" id="L-C-F" class="edgePath LS-C LE-F"><path style="fill:none" marker-end="url(%23arrowhead24)" d="M306.5668326346975,353.67066583942346L324.47887094558126,366.7612324581458C342.39090925646497,379.85179907686825,378.2149858782325,406.03293231431303,396.1270241891163,423.29016559970205C414.0390625,440.5473988850911,414.0390625,448.8807322184245,414.0390625,453.0473988850911L414.0390625,457.2140655517578" class="path"/><defs><marker orient="auto" markerHeight="6" markerWidth="8" markerUnits="strokeWidth" refY="5" refX="9" viewBox="0 0 10 10" id="arrowhead24"><path style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowheadPath" d="M 0 0 L 10 5 L 0 10 z"/></marker></defs></g></g><g class="edgeLabels"><g style="opacity: 1;" transform="translate(252.0234375,89)" class="edgeLabel"><g class="label" transform="translate(-32.0078125,-12)"><rect height="24" width="64.015625" ry="0" rx="0"/><foreignObject height="24" width="64.015625"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span style="" class="edgeLabel L-LS-A%27 L-LE-B" id="L-L-A-B">Can help</span></div></foreignObject></g></g><g style="opacity: 1;" transform="" class="edgeLabel"><g class="label" transform="translate(0,0)"><rect height="0" width="0" ry="0" rx="0"/><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span style="" class="edgeLabel L-LS-B%27 L-LE-C" id="L-L-B-C"></span></div></foreignObject></g></g><g style="opacity: 1;" transform="" class="edgeLabel"><g class="label" transform="translate(0,0)"><rect height="0" width="0" ry="0" rx="0"/><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span style="" class="edgeLabel L-LS-C%27 L-LE-D" id="L-L-C-D"></span></div></foreignObject></g></g><g style="opacity: 1;" transform="" class="edgeLabel"><g class="label" transform="translate(0,0)"><rect height="0" width="0" ry="0" rx="0"/><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span style="" class="edgeLabel L-LS-C%27 L-LE-E" id="L-L-C-E"></span></div></foreignObject></g></g><g style="opacity: 1;" transform="" class="edgeLabel"><g class="label" transform="translate(0,0)"><rect height="0" width="0" ry="0" rx="0"/><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span style="" class="edgeLabel L-LS-C%27 L-LE-F" id="L-L-C-F"></span></div></foreignObject></g></g></g><g class="nodes"><g style="opacity: 1;" transform="translate(252.0234375,30)" id="flowchart-A-10" class="node default"><rect class="label-container" height="44" width="68.015625" y="-22" x="-34.0078125" ry="0" rx="0"/><g transform="translate(0,0)" class="label"><g transform="translate(-24.0078125,-12)"><foreignObject height="24" width="48.015625"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml">Anyone</div></foreignObject></g></g></g><g style="opacity: 1;" transform="translate(252.0234375,148)" id="flowchart-B-11" class="node default"><rect class="label-container" height="44" width="268.015625" y="-22" x="-134.0078125" ry="5" rx="5"/><g transform="translate(0,0)" class="label"><g transform="translate(-124.0078125,-12)"><foreignObject height="24" width="248.015625"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml">Go to github.com/yuzutech/kroki</div></foreignObject></g></g></g><g style="opacity: 1;" transform="translate(252.0234375,313.6070327758789)" id="flowchart-C-13" class="node default"><polygon class="label-container" transform="translate(-93.60703125,93.60703125)" points="93.60703125,0 187.2140625,-93.60703125 93.60703125,-187.2140625 0,-93.60703125"/><g transform="translate(0,0)" class="label"><g transform="translate(-72.0078125,-12)"><foreignObject height="24" width="144.015625"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml">How to contribute?</div></foreignObject></g></g></g><g style="opacity: 1;" transform="translate(74.0078125,479.2140655517578)" id="flowchart-D-15" class="node default"><rect class="label-container" height="44" width="132.015625" y="-22" x="-66.0078125" ry="0" rx="0"/><g transform="translate(0,0)" class="label"><g transform="translate(-56.0078125,-12)"><foreignObject height="24" width="112.015625"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml">Reporting bugs</div></foreignObject></g></g></g><g style="opacity: 1;" transform="translate(252.0234375,479.2140655517578)" id="flowchart-E-17" class="node default"><rect class="label-container" height="44" width="124.015625" y="-22" x="-62.0078125" ry="0" rx="0"/><g transform="translate(0,0)" class="label"><g transform="translate(-52.0078125,-12)"><foreignObject height="24" width="104.015625"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml">Sharing ideas</div></foreignObject></g></g></g><g style="opacity: 1;" transform="translate(414.0390625,479.2140655517578)" id="flowchart-F-19" class="node default"><rect class="label-container" height="44" width="100.015625" y="-22" x="-50.0078125" ry="0" rx="0"/><g transform="translate(0,0)" class="label"><g transform="translate(-40.0078125,-12)"><foreignObject height="24" width="80.015625"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml">Advocating</div></foreignObject></g></g></g></g></g></g></svg>'/><div class="admonition is-warning"><header class="admonition-header">Escaping special characters</header><div class="admonition-body"><p>When the diagram description contains special characters, e.g. <code>\</code>s, keep in mind that these need to be escaped for proper handling when instantiating a <a href="../api/#Kroki.Diagram"><code>Diagram</code></a>.</p><p>Escaping is not typically necessary when using <a href="../api/#api-string-literals">string literals</a>.</p></div></div><pre><code class="language-julia hljs">Diagram(:svgbob, &quot;&quot;&quot;
+    0       3                          P *
+     *-------*      +y                    \\
+  1 /|    2 /|       ^                     \\
+   *-+-----* |       |                v0    \\       v3
+   | |4    | |7      | ◄╮               *----\\-----*
+   | *-----|-*     ⤹ +-----&gt; +x        /      v X   \\
+   |/      |/       / ⤴               /        o     \\
+   *-------*       v                 /                \\
+  5       6      +z              v1 *------------------* v2
+&quot;&quot;&quot;)</code></pre><img src='data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="480" height="160">
+    <style>
+        line, path, circle,rect,polygon{stroke:black;stroke-width:2;stroke-opacity:1;fill-opacity:1;stroke-linecap:round;stroke-linejoin:miter;}text{font-family:monospace;font-size:14px;}rect.backdrop{stroke:none;fill:white;}.broken{stroke-dasharray:8;}.filled{fill:black;}.bg_filled{fill:white;}.nofill{fill:white;}.end_marked_arrow{marker-end:url(%23arrow);}.start_marked_arrow{marker-start:url(%23arrow);}.end_marked_diamond{marker-end:url(%23diamond);}.start_marked_diamond{marker-start:url(%23diamond);}.end_marked_circle{marker-end:url(%23circle);}.start_marked_circle{marker-start:url(%23circle);}.end_marked_open_circle{marker-end:url(%23open_circle);}.start_marked_open_circle{marker-start:url(%23open_circle);}.end_marked_big_open_circle{marker-end:url(%23big_open_circle);}.start_marked_big_open_circle{marker-start:url(%23big_open_circle);}
+        
+    </style>
+    <defs>
+        <marker id="arrow" viewBox="-2 -2 8 8" refX="4" refY="2" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <polygon points="0,0 0,4 4,2 0,0"></polygon>
+        </marker>
+        <marker id="diamond" viewBox="-2 -2 8 8" refX="4" refY="2" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <polygon points="0,2 2,0 4,2 2,4 0,2"></polygon>
+        </marker>
+        <marker id="circle" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <circle cx="4" cy="4" r="2" class="filled"></circle>
+        </marker>
+        <marker id="open_circle" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <circle cx="4" cy="4" r="2" class="bg_filled"></circle>
+        </marker>
+        <marker id="big_open_circle" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <circle cx="4" cy="4" r="3" class="bg_filled"></circle>
+        </marker>
+    </defs>
+    <rect class="backdrop" x="0" y="0" width="480" height="160"></rect>
+    <text x="34" y="12" >0</text>
+    <text x="98" y="12" >3</text>
+    <circle cx="44" cy="24" r="3" class="filled"></circle>
+    <line x1="42" y1="28" x2="30" y2="52" class="solid"></line>
+    <line x1="44" y1="28" x2="44" y2="84" class="solid"></line>
+    <line x1="48" y1="24" x2="104" y2="24" class="solid"></line>
+    <circle cx="108" cy="24" r="3" class="filled"></circle>
+    <line x1="106" y1="28" x2="94" y2="52" class="solid"></line>
+    <line x1="108" y1="28" x2="108" y2="84" class="solid"></line>
+    <text x="18" y="44" >1</text>
+    <text x="82" y="44" >2</text>
+    <circle cx="28" cy="56" r="3" class="filled"></circle>
+    <line x1="28" y1="60" x2="28" y2="116" class="solid"></line>
+    <line x1="32" y1="56" x2="88" y2="56" class="solid"></line>
+    <circle cx="92" cy="56" r="3" class="filled"></circle>
+    <line x1="92" y1="60" x2="92" y2="116" class="solid"></line>
+    <text x="50" y="76" >4</text>
+    <text x="114" y="76" >7</text>
+    <circle cx="44" cy="88" r="3" class="filled"></circle>
+    <line x1="42" y1="92" x2="30" y2="116" class="solid"></line>
+    <line x1="48" y1="88" x2="104" y2="88" class="solid"></line>
+    <circle cx="108" cy="88" r="3" class="filled"></circle>
+    <line x1="106" y1="92" x2="94" y2="116" class="solid"></line>
+    <circle cx="28" cy="120" r="3" class="filled"></circle>
+    <line x1="32" y1="120" x2="88" y2="120" class="solid"></line>
+    <circle cx="92" cy="120" r="3" class="filled"></circle>
+    <text x="18" y="140" >5</text>
+    <text x="82" y="140" >6</text>
+    <text x="314" y="12" >P</text>
+    <circle cx="332" cy="8" r="3" class="filled"></circle>
+    <text x="306" y="60" >v0</text>
+    <text x="418" y="60" >v3</text>
+    <circle cx="324" cy="72" r="3" class="filled"></circle>
+    <line x1="322" y1="76" x2="294" y2="132" class="solid"></line>
+    <line x1="328" y1="72" x2="408" y2="72" class="solid"></line>
+    <circle cx="412" cy="72" r="3" class="filled"></circle>
+    <line x1="414" y1="76" x2="442" y2="132" class="solid"></line>
+    <text x="386" y="92" >X</text>
+    <line x1="384" y1="96" x2="382" y2="100" class="solid"></line>
+    <circle cx="380" cy="104" r="3" class="nofill"></circle>
+    <circle cx="292" cy="136" r="3" class="filled"></circle>
+    <line x1="296" y1="136" x2="440" y2="136" class="solid"></line>
+    <circle cx="444" cy="136" r="3" class="filled"></circle>
+    <text x="162" y="28" >+y</text>
+    <polygon points="192,68 184,72 192,76" class="filled"></polygon>
+    <path d="M 160,84 A 4,4 0,0,0 156,92" class="nofill"></path>
+    <polygon points="159,95 157,91 155,93" class="filled"></polygon>
+    <text x="178" y="108" >⤴</text>
+    <text x="138" y="140" >+z</text>
+    <text x="234" y="92" >+x</text>
+    <text x="266" y="140" >v1</text>
+    <text x="458" y="140" >v2</text>
+    <g>
+        <line x1="334" y1="12" x2="370" y2="84" class="solid"></line>
+        <polygon points="367,84 374,92 374,81" class="filled"></polygon>
+    </g>
+    <g>
+        <polygon points="168,44 172,32 176,44" class="filled"></polygon>
+        <line x1="172" y1="44" x2="172" y2="88" class="solid"></line>
+        <line x1="172" y1="88" x2="216" y2="88" class="solid"></line>
+        <line x1="172" y1="88" x2="158" y2="116" class="solid"></line>
+        <polygon points="216,84 224,88 216,92" class="filled"></polygon>
+        <polygon points="161,116 154,124 154,113" class="filled"></polygon>
+    </g>
+    <g>
+        <path d="M 192,72 A 4,4 0,0,1 196,76" class="nofill"></path>
+        <line x1="196" y1="76" x2="196" y2="80" class="solid"></line>
+    </g>
+</svg>
+'/><pre><code class="language-julia hljs">svgbob&quot;&quot;&quot;
+    0       3                          P *
+     *-------*      +y                    \
+  1 /|    2 /|       ^                     \
+   *-+-----* |       |                v0    \       v3
+   | |4    | |7      | ◄╮               *----\-----*
+   | *-----|-*     ⤹ +-----&gt; +x        /      v X   \
+   |/      |/       / ⤴               /        o     \
+   *-------*       v                 /                \
+  5       6      +z              v1 *------------------* v2
+&quot;&quot;&quot;</code></pre><img src='data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="480" height="160">
+    <style>
+        line, path, circle,rect,polygon{stroke:black;stroke-width:2;stroke-opacity:1;fill-opacity:1;stroke-linecap:round;stroke-linejoin:miter;}text{font-family:monospace;font-size:14px;}rect.backdrop{stroke:none;fill:white;}.broken{stroke-dasharray:8;}.filled{fill:black;}.bg_filled{fill:white;}.nofill{fill:white;}.end_marked_arrow{marker-end:url(%23arrow);}.start_marked_arrow{marker-start:url(%23arrow);}.end_marked_diamond{marker-end:url(%23diamond);}.start_marked_diamond{marker-start:url(%23diamond);}.end_marked_circle{marker-end:url(%23circle);}.start_marked_circle{marker-start:url(%23circle);}.end_marked_open_circle{marker-end:url(%23open_circle);}.start_marked_open_circle{marker-start:url(%23open_circle);}.end_marked_big_open_circle{marker-end:url(%23big_open_circle);}.start_marked_big_open_circle{marker-start:url(%23big_open_circle);}
+        
+    </style>
+    <defs>
+        <marker id="arrow" viewBox="-2 -2 8 8" refX="4" refY="2" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <polygon points="0,0 0,4 4,2 0,0"></polygon>
+        </marker>
+        <marker id="diamond" viewBox="-2 -2 8 8" refX="4" refY="2" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <polygon points="0,2 2,0 4,2 2,4 0,2"></polygon>
+        </marker>
+        <marker id="circle" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <circle cx="4" cy="4" r="2" class="filled"></circle>
+        </marker>
+        <marker id="open_circle" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <circle cx="4" cy="4" r="2" class="bg_filled"></circle>
+        </marker>
+        <marker id="big_open_circle" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <circle cx="4" cy="4" r="3" class="bg_filled"></circle>
+        </marker>
+    </defs>
+    <rect class="backdrop" x="0" y="0" width="480" height="160"></rect>
+    <text x="34" y="12" >0</text>
+    <text x="98" y="12" >3</text>
+    <circle cx="44" cy="24" r="3" class="filled"></circle>
+    <line x1="42" y1="28" x2="30" y2="52" class="solid"></line>
+    <line x1="44" y1="28" x2="44" y2="84" class="solid"></line>
+    <line x1="48" y1="24" x2="104" y2="24" class="solid"></line>
+    <circle cx="108" cy="24" r="3" class="filled"></circle>
+    <line x1="106" y1="28" x2="94" y2="52" class="solid"></line>
+    <line x1="108" y1="28" x2="108" y2="84" class="solid"></line>
+    <text x="18" y="44" >1</text>
+    <text x="82" y="44" >2</text>
+    <circle cx="28" cy="56" r="3" class="filled"></circle>
+    <line x1="28" y1="60" x2="28" y2="116" class="solid"></line>
+    <line x1="32" y1="56" x2="88" y2="56" class="solid"></line>
+    <circle cx="92" cy="56" r="3" class="filled"></circle>
+    <line x1="92" y1="60" x2="92" y2="116" class="solid"></line>
+    <text x="50" y="76" >4</text>
+    <text x="114" y="76" >7</text>
+    <circle cx="44" cy="88" r="3" class="filled"></circle>
+    <line x1="42" y1="92" x2="30" y2="116" class="solid"></line>
+    <line x1="48" y1="88" x2="104" y2="88" class="solid"></line>
+    <circle cx="108" cy="88" r="3" class="filled"></circle>
+    <line x1="106" y1="92" x2="94" y2="116" class="solid"></line>
+    <circle cx="28" cy="120" r="3" class="filled"></circle>
+    <line x1="32" y1="120" x2="88" y2="120" class="solid"></line>
+    <circle cx="92" cy="120" r="3" class="filled"></circle>
+    <text x="18" y="140" >5</text>
+    <text x="82" y="140" >6</text>
+    <text x="314" y="12" >P</text>
+    <circle cx="332" cy="8" r="3" class="filled"></circle>
+    <text x="306" y="60" >v0</text>
+    <text x="418" y="60" >v3</text>
+    <circle cx="324" cy="72" r="3" class="filled"></circle>
+    <line x1="322" y1="76" x2="294" y2="132" class="solid"></line>
+    <line x1="328" y1="72" x2="408" y2="72" class="solid"></line>
+    <circle cx="412" cy="72" r="3" class="filled"></circle>
+    <line x1="414" y1="76" x2="442" y2="132" class="solid"></line>
+    <text x="386" y="92" >X</text>
+    <line x1="384" y1="96" x2="382" y2="100" class="solid"></line>
+    <circle cx="380" cy="104" r="3" class="nofill"></circle>
+    <circle cx="292" cy="136" r="3" class="filled"></circle>
+    <line x1="296" y1="136" x2="440" y2="136" class="solid"></line>
+    <circle cx="444" cy="136" r="3" class="filled"></circle>
+    <text x="162" y="28" >+y</text>
+    <polygon points="192,68 184,72 192,76" class="filled"></polygon>
+    <path d="M 160,84 A 4,4 0,0,0 156,92" class="nofill"></path>
+    <polygon points="159,95 157,91 155,93" class="filled"></polygon>
+    <text x="178" y="108" >⤴</text>
+    <text x="138" y="140" >+z</text>
+    <text x="234" y="92" >+x</text>
+    <text x="266" y="140" >v1</text>
+    <text x="458" y="140" >v2</text>
+    <g>
+        <line x1="334" y1="12" x2="370" y2="84" class="solid"></line>
+        <polygon points="367,84 374,92 374,81" class="filled"></polygon>
+    </g>
+    <g>
+        <polygon points="168,44 172,32 176,44" class="filled"></polygon>
+        <line x1="172" y1="44" x2="172" y2="88" class="solid"></line>
+        <line x1="172" y1="88" x2="216" y2="88" class="solid"></line>
+        <line x1="172" y1="88" x2="158" y2="116" class="solid"></line>
+        <polygon points="216,84 224,88 216,92" class="filled"></polygon>
+        <polygon points="161,116 154,124 154,113" class="filled"></polygon>
+    </g>
+    <g>
+        <path d="M 192,72 A 4,4 0,0,1 196,76" class="nofill"></path>
+        <line x1="196" y1="76" x2="196" y2="80" class="solid"></line>
+    </g>
+</svg>
+'/><h3 id="Loading-from-a-file"><a class="docs-heading-anchor" href="#Loading-from-a-file">Loading from a file</a><a id="Loading-from-a-file-1"></a><a class="docs-heading-anchor-permalink" href="#Loading-from-a-file" title="Permalink"></a></h3><p>Instead of directly specifying a diagram, <a href="../api/#Kroki.Diagram"><code>Diagram</code></a>s can also load the specifications from files. This is particularly useful when creating diagrams using other tooling, e.g. <a href="https://structurizr.com">Structurizr</a> or <a href="https://excalidraw.com">Excalidraw</a>, or when sharing diagram definitions across documentation.</p><p>To load a diagram from a file, specify the path of the file as the <code>path</code> keyword argument to <a href="../api/#Kroki.Diagram"><code>Diagram</code></a>.</p><pre><code class="language-julia hljs">Diagram(
+  :structurizr;
+  path = joinpath(@__DIR__, &quot;..&quot;, &quot;architecture&quot;, &quot;workspace.dsl&quot;),
+)</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="431px" preserveAspectRatio="none" style="width:508px;height:431px;background:%23FFFFFF;" version="1.1" viewBox="0 0 508 431" width="508px" zoomAndPan="magnify"><defs/><g><rect height="26.7999" style="stroke:%2300000000;stroke-width:1.0;fill:none;" width="219" x="137.5" y="5"/><text fill="%23000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="209" x="142.5" y="23.9999">Kroki.jl - Kroki.jl - Components</text><!--MD5=[2d8b0d643503b9367c4c44efebc448b4]
+cluster Kroki.jl\n[Container]--><g id="cluster_Kroki.jl\n[Container]"><path d="M8.5,43.7999 L86.5,43.7999 A3.75,3.75 0 0 1 89,46.2999 L96,83.3998 L498.5,83.3998 A2.5,2.5 0 0 1 501,85.8998 L501,422.2999 A2.5,2.5 0 0 1 498.5,424.7999 L8.5,424.7999 A2.5,2.5 0 0 1 6,422.2999 L6,46.2999 A2.5,2.5 0 0 1 8.5,43.7999 " style="stroke:%23444444;stroke-width:1.5;fill:none;"/><line style="stroke:%23444444;stroke-width:1.5;fill:none;" x1="6" x2="96" y1="83.3998" y2="83.3998"/><text fill="%23000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="47" x="25" y="59.7999">Kroki.jl</text><text fill="%23000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="77" x="10" y="76.5998">[Container]</text></g><!--MD5=[b136d4afc22f4401e95ff45c1c92c4f8]
+entity Krokijl.Krokijl.Diagram--><g id="elem_Krokijl.Krokijl.Diagram"><rect fill="%23DDDDDD" height="118.3997" rx="2.5" ry="2.5" style="stroke:%239A9A9A;stroke-width:0.5;" width="207" x="22.5" y="95.7999"/><text fill="%23000000" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="64" x="94" y="121.8">Diagram</text><text fill="%23000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing" textLength="55" x="98.5" y="135">[Component]</text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="124" y="150.9999"> </text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="149" x="49.5" y="167.7998">Facilitates definition and</text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="183" x="32.5" y="184.5997">rendering of different diagram</text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="37" x="107.5" y="201.3997">types.</text></g><!--MD5=[f2588d364c200d1019b89dff33088d11]
+entity Krokijl.Krokijl.Exceptions--><g id="elem_Krokijl.Krokijl.Exceptions"><rect fill="%23DDDDDD" height="118.3997" rx="2.5" ry="2.5" style="stroke:%239A9A9A;stroke-width:0.5;" width="220" x="265" y="95.7999"/><text fill="%23000000" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="86" x="332" y="121.8">Exceptions</text><text fill="%23000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing" textLength="55" x="347.5" y="135">[Component]</text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="373" y="150.9999"> </text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="140" x="303" y="167.7998">Provides all exceptions</text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="196" x="275" y="184.5997">functionality in the package can</text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="38" x="356" y="201.3997">throw.</text></g><!--MD5=[9b37bacfef571a909905c818931fe1f9]
+entity Krokijl.Krokijl.ServiceManagement--><g id="elem_Krokijl.Krokijl.ServiceManagement"><rect fill="%23DDDDDD" height="135.1997" rx="2.5" ry="2.5" style="stroke:%239A9A9A;stroke-width:0.5;" width="214" x="22" y="273.7999"/><text fill="%23000000" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="160" x="49" y="299.8">Service Management</text><text fill="%23000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing" textLength="55" x="101.5" y="313">[Component]</text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="127" y="328.9999"> </text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="190" x="32" y="345.7998">Provides management over the</text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="166" x="44" y="362.5997">%27Kroki Service%27 that is being</text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="172" x="41" y="379.3997">used, including managing a</text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="88" x="85" y="396.1996">local instance.</text></g><!--MD5=[2d4430b533f4e90b08fb6d739984193f]
+entity Krokijl.Krokijl.StringLiterals--><g id="elem_Krokijl.Krokijl.StringLiterals"><rect fill="%23DDDDDD" height="101.5998" rx="2.5" ry="2.5" style="stroke:%239A9A9A;stroke-width:0.5;" width="191" x="271.5" y="290.2999"/><text fill="%23000000" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="106" x="314" y="316.3">String Literals</text><text fill="%23000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing" textLength="55" x="339.5" y="329.5">[Component]</text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="365" y="345.4999"> </text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="167" x="281.5" y="362.2998">Provide an easier means of</text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="142" x="296" y="379.0997">constructing diagrams.</text></g><!--MD5=[e05c3e606901243ca653cd1da7a2063c]
+@startuml
+title Kroki.jl - Kroki.jl - Components
+
+top to bottom direction
+
+skinparam {
+  shadowing false
+  arrowFontSize 10
+  defaultTextAlignment center
+  wrapWidth 200
+  maxMessageSize 100
+}
+
+hide stereotype
+
+skinparam rectangle<<Krokijl.Krokijl.Diagram>> {
+  BackgroundColor %23dddddd
+  FontColor %23000000
+  BorderColor %239a9a9a
+}
+skinparam rectangle<<Krokijl.Krokijl.Exceptions>> {
+  BackgroundColor %23dddddd
+  FontColor %23000000
+  BorderColor %239a9a9a
+}
+skinparam rectangle<<Krokijl.Krokijl.ServiceManagement>> {
+  BackgroundColor %23dddddd
+  FontColor %23000000
+  BorderColor %239a9a9a
+}
+skinparam rectangle<<Krokijl.Krokijl.StringLiterals>> {
+  BackgroundColor %23dddddd
+  FontColor %23000000
+  BorderColor %239a9a9a
+}
+
+package "Kroki.jl\n[Container]" <<Krokijl.Krokijl>> {
+  skinparam PackageBorderColor<<Krokijl.Krokijl>> %23444444
+  skinparam PackageFontColor<<Krokijl.Krokijl>> %23444444
+
+  rectangle "==Diagram\n<size:10>[Component]</size>\n\nFacilitates definition and rendering of different diagram types." <<Krokijl.Krokijl.Diagram>> as Krokijl.Krokijl.Diagram
+  rectangle "==Exceptions\n<size:10>[Component]</size>\n\nProvides all exceptions functionality in the package can throw." <<Krokijl.Krokijl.Exceptions>> as Krokijl.Krokijl.Exceptions
+  rectangle "==Service Management\n<size:10>[Component]</size>\n\nProvides management over the %27Kroki Service%27 that is being used, including managing a local instance." <<Krokijl.Krokijl.ServiceManagement>> as Krokijl.Krokijl.ServiceManagement
+  rectangle "==String Literals\n<size:10>[Component]</size>\n\nProvide an easier means of constructing diagrams." <<Krokijl.Krokijl.StringLiterals>> as Krokijl.Krokijl.StringLiterals
+}
+
+@enduml
+
+PlantUML version 1.2022.5(Sat Apr 30 10:55:52 GMT 2022)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>'/><h3 id="Diagram-options"><a class="docs-heading-anchor" href="#Diagram-options">Diagram options</a><a id="Diagram-options-1"></a><a class="docs-heading-anchor-permalink" href="#Diagram-options" title="Permalink"></a></h3><p>Some diagram types support <a href="https://docs.kroki.io/kroki/setup/diagram-options">diagram options</a> controlling their apearance. These options can be set when instantiating a <a href="../api/#Kroki.Diagram"><code>Diagram</code></a>.</p><p>For instance, the <code>workspace.dsl</code> file referenced in the previous section defines multiple diagrams. The diagram that is rendered in the previous section is picked randomly from this set every time the documentation is generated. The <a href="https://docs.kroki.io/kroki/setup/diagram-options/#_structurizr">Structurizr</a> diagrams support a <code>view-key</code> option to indicate which diagram should be rendered from the set defined in the file.</p><pre><code class="language-julia hljs">structurizr_diagram = Diagram(
+  :structurizr;
+  path = joinpath(@__DIR__, &quot;..&quot;, &quot;architecture&quot;, &quot;workspace.dsl&quot;),
+  options = Dict(&quot;view-key&quot; =&gt; &quot;KrokiService-Container&quot;)
+)</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="647px" preserveAspectRatio="none" style="width:1245px;height:647px;background:%23FFFFFF;" version="1.1" viewBox="0 0 1245 647" width="1245px" zoomAndPan="magnify"><defs/><g><rect height="26.7999" style="stroke:%2300000000;stroke-width:1.0;fill:none;" width="189" x="521" y="5"/><text fill="%23000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="179" x="526" y="23.9999">Kroki Service - Containers</text><!--MD5=[51cd63df162895169ae004aa1b231d94]
+cluster Kroki Service\n[Software System]--><g id="cluster_Kroki Service\n[Software System]"><path d="M8.5,217.7999 L136.5,217.7999 A3.75,3.75 0 0 1 139,220.2999 L146,257.3998 L1235.5,257.3998 A2.5,2.5 0 0 1 1238,259.8998 L1238,638.2999 A2.5,2.5 0 0 1 1235.5,640.7999 L8.5,640.7999 A2.5,2.5 0 0 1 6,638.2999 L6,220.2999 A2.5,2.5 0 0 1 8.5,217.7999 " style="stroke:%23444444;stroke-width:1.5;fill:none;"/><line style="stroke:%23444444;stroke-width:1.5;fill:none;" x1="6" x2="146" y1="257.3998" y2="257.3998"/><text fill="%23000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="91" x="28" y="233.7999">Kroki Service</text><text fill="%23000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="127" x="10" y="250.5998">[Software System]</text></g><!--MD5=[067a48fc4b9dd6500945e8171a293620]
+entity KrokiService.KrokiCore--><g id="elem_KrokiService.KrokiCore"><a href="https://kroki.io" target="_top" title="https://kroki.io" xlink:actuate="onRequest" xlink:href="https://kroki.io" xlink:show="new" xlink:title="https://kroki.io" xlink:type="simple"><rect fill="%23DDDDDD" height="135.1997" rx="2.5" ry="2.5" style="stroke:%239A9A9A;stroke-width:0.5;" width="192" x="528" y="269.7999"/><text fill="%23000000" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="82" x="583" y="295.8">Kroki Core</text><text fill="%23000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing" textLength="46" x="601" y="309">[Container]</text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="622" y="324.9999"> </text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="147" x="548.5" y="341.7998">Renders a subset of the</text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="160" x="542" y="358.5997">supported diagrams itself.</text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="168" x="538" y="375.3997">Defers to sidecontainers for</text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="97" x="575.5" y="392.1996">other diagrams.</text></a></g><!--MD5=[0c132eea4de3b66a071580db2b7a211f]
+entity KrokiService.BlockdiagService--><g id="elem_KrokiService.BlockdiagService"><a href="http://blockdiag.com" target="_top" title="http://blockdiag.com" xlink:actuate="onRequest" xlink:href="http://blockdiag.com" xlink:show="new" xlink:title="http://blockdiag.com" xlink:type="simple"><rect fill="%23DDDDDD" height="135.1997" rx="2.5" ry="2.5" style="stroke:%239A9A9A;stroke-width:0.5;" width="213" x="21.5" y="489.7999"/><text fill="%23000000" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="137" x="59.5" y="515.8">Blockdiag Service</text><text fill="%23000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing" textLength="46" x="105" y="529">[Container]</text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="126" y="544.9999"> </text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="168" x="42" y="561.7998">Renders diagrams from the</text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="189" x="31.5" y="578.5997">`blockdiag` suite of generators,</text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="163" x="44.5" y="595.3997">e.g. `blockdiag`, `seqdiag`,</text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="145" x="55.5" y="612.1996">`actdiag`, `nwdiag`, etc.</text></a></g><!--MD5=[7a350757f9fe84ee4f7d66f0441a3cfb]
+entity KrokiService.BPMNService--><g id="elem_KrokiService.BPMNService"><a href="https://bpmn.io/toolkit/bpmn-js" target="_top" title="https://bpmn.io/toolkit/bpmn-js" xlink:actuate="onRequest" xlink:href="https://bpmn.io/toolkit/bpmn-js" xlink:show="new" xlink:title="https://bpmn.io/toolkit/bpmn-js" xlink:type="simple"><rect fill="%23DDDDDD" height="118.3997" rx="2.5" ry="2.5" style="stroke:%239A9A9A;stroke-width:0.5;" width="209" x="269.5" y="498.2999"/><text fill="%23000000" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="109" x="319.5" y="524.3">BPMN Service</text><text fill="%23000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing" textLength="46" x="351" y="537.5">[Container]</text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="372" y="553.4999"> </text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="168" x="288" y="570.2998">Renders %27Business Process</text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="185" x="279.5" y="587.0997">Model and Notation%27 diagrams</text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="100" x="324" y="603.8997">using `bpmn-js`.</text></a></g><!--MD5=[82a698e576fb3d07408569d445ed7fb1]
+entity KrokiService.DiagramsnetDrawioService--><g id="elem_KrokiService.DiagramsnetDrawioService"><a href="https://diagrams.net" target="_top" title="https://diagrams.net" xlink:actuate="onRequest" xlink:href="https://diagrams.net" xlink:show="new" xlink:title="https://diagrams.net" xlink:type="simple"><rect fill="%23DDDDDD" height="120.7998" rx="2.5" ry="2.5" style="stroke:%239A9A9A;stroke-width:0.5;" width="220" x="514" y="496.7999"/><text fill="%23000000" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="162" x="541" y="522.8">Diagrams.net/Draw.io</text><text fill="%23000000" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="57" x="595.5" y="542">Service</text><text fill="%23000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing" textLength="46" x="601" y="555.2">[Container]</text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="622" y="571.1999"> </text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="196" x="524" y="587.9999">Renders %27Diagrams.net/Draw.io%27</text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="62" x="593" y="604.7998">diagrams.</text></a></g><!--MD5=[9c65d0da1f29314fb816f061f0d401f4]
+entity KrokiService.ExcalidrawService--><g id="elem_KrokiService.ExcalidrawService"><a href="https://excalidraw.com" target="_top" title="https://excalidraw.com" xlink:actuate="onRequest" xlink:href="https://excalidraw.com" xlink:show="new" xlink:title="https://excalidraw.com" xlink:type="simple"><rect fill="%23DDDDDD" height="84.7999" rx="2.5" ry="2.5" style="stroke:%239A9A9A;stroke-width:0.5;" width="216" x="769" y="514.7999"/><text fill="%23000000" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="144" x="805" y="540.8">Excalidraw Service</text><text fill="%23000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing" textLength="46" x="854" y="554">[Container]</text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="875" y="569.9999"> </text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="196" x="779" y="586.7998">Renders %27Excalidraw%27 diagrams.</text></a></g><!--MD5=[a1d6e1d539fd4fc12e4c33004f58483a]
+entity KrokiService.MermaidService--><g id="elem_KrokiService.MermaidService"><a href="https://mermaid-js.github.io" target="_top" title="https://mermaid-js.github.io" xlink:actuate="onRequest" xlink:href="https://mermaid-js.github.io" xlink:show="new" xlink:title="https://mermaid-js.github.io" xlink:type="simple"><rect fill="%23DDDDDD" height="84.7999" rx="2.5" ry="2.5" style="stroke:%239A9A9A;stroke-width:0.5;" width="202" x="1020" y="514.7999"/><text fill="%23000000" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="127" x="1057.5" y="540.8">Mermaid Service</text><text fill="%23000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing" textLength="46" x="1098" y="554">[Container]</text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="1119" y="569.9999"> </text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="182" x="1030" y="586.7998">Renders %27Mermaid%27 diagrams.</text></a></g><!--MD5=[57288ddef37060c101cc712cf734e20e]
+entity Krokijl--><g id="elem_Krokijl"><rect fill="%23DDDDDD" height="101.5998" rx="2.5" ry="2.5" style="stroke:%239A9A9A;stroke-width:0.5;" width="188" x="530" y="44.7999"/><text fill="%23000000" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="53" x="597.5" y="70.8">Kroki.jl</text><text fill="%23000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing" textLength="80" x="584" y="84">[Software System]</text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="622" y="99.9999"> </text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="164" x="540" y="116.7998">A Julia interface to a %27Kroki</text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="52" x="598" y="133.5997">Service%27.</text></g><!--MD5=[4a801b55fbd00e0060ffb52f4da69d15]
+link Krokijl to KrokiService.KrokiCore--><g id="link_Krokijl_KrokiService.KrokiCore"><path d="M624,147.0099 C624,181.1399 624,226.7999 624,264.7299 " fill="none" id="Krokijl-to-KrokiService.KrokiCore" style="stroke:%23707070;stroke-width:2.0;stroke-dasharray:7.0,7.0;"/><polygon fill="%23707070" points="624,269.7899,628,260.7899,624,264.7899,620,260.7899,624,269.7899" style="stroke:%23707070;stroke-width:2.0;"/><text fill="%23707070" font-family="sans-serif" font-size="10" lengthAdjust="spacing" textLength="68" x="625" y="187.7999">Sends encoded</text><text fill="%23707070" font-family="sans-serif" font-size="10" lengthAdjust="spacing" textLength="46" x="637.5" y="199.7999">diagram to</text></g><!--MD5=[354fb09fd71f508317612e4c23373e93]
+link KrokiService.KrokiCore to KrokiService.BlockdiagService--><g id="link_KrokiService.KrokiCore_KrokiService.BlockdiagService"><path d="M527.62,374.3299 C451.8,403.4399 343.98,446.5499 252,489.7999 C247.78,491.7799 243.5,493.8399 239.19,495.9499 " fill="none" id="KrokiService.KrokiCore-to-KrokiService.BlockdiagService" style="stroke:%23707070;stroke-width:2.0;stroke-dasharray:7.0,7.0;"/><polygon fill="%23707070" points="234.5,498.2599,244.3418,497.8882,238.9892,496.0582,240.8191,490.7056,234.5,498.2599" style="stroke:%23707070;stroke-width:2.0;"/><text fill="%23707070" font-family="sans-serif" font-size="10" lengthAdjust="spacing" textLength="79" x="374" y="445.7999">Defers `blockdiag`</text><text fill="%23707070" font-family="sans-serif" font-size="10" lengthAdjust="spacing" textLength="51" x="389.5" y="457.7999">diagrams to</text></g><!--MD5=[daa75122b992564813195caf46320b3c]
+link KrokiService.KrokiCore to KrokiService.BPMNService--><g id="link_KrokiService.KrokiCore_KrokiService.BPMNService"><path d="M547.63,404.8899 C514.79,433.5299 476.65,466.7899 444.49,494.8399 " fill="none" id="KrokiService.KrokiCore-to-KrokiService.BPMNService" style="stroke:%23707070;stroke-width:2.0;stroke-dasharray:7.0,7.0;"/><polygon fill="%23707070" points="440.6,498.2299,450.0135,495.3339,444.37,494.9455,444.7584,489.302,440.6,498.2299" style="stroke:%23707070;stroke-width:2.0;"/><text fill="%23707070" font-family="sans-serif" font-size="10" lengthAdjust="spacing" textLength="62" x="507" y="445.7999">Defers `bpmn`</text><text fill="%23707070" font-family="sans-serif" font-size="10" lengthAdjust="spacing" textLength="51" x="514" y="457.7999">diagrams to</text></g><!--MD5=[e04d9eb1c75a27cae22497f9c16c3e72]
+link KrokiService.KrokiCore to KrokiService.DiagramsnetDrawioService--><g id="link_KrokiService.KrokiCore_KrokiService.DiagramsnetDrawioService"><path d="M624,404.8899 C624,432.4799 624,464.3499 624,491.7199 " fill="none" id="KrokiService.KrokiCore-to-KrokiService.DiagramsnetDrawioService" style="stroke:%23707070;stroke-width:2.0;stroke-dasharray:7.0,7.0;"/><polygon fill="%23707070" points="624,496.7799,628,487.7799,624,491.7799,620,487.7799,624,496.7799" style="stroke:%23707070;stroke-width:2.0;"/><text fill="%23707070" font-family="sans-serif" font-size="10" lengthAdjust="spacing" textLength="90" x="625" y="445.7999">Defers `diagramsnet`</text><text fill="%23707070" font-family="sans-serif" font-size="10" lengthAdjust="spacing" textLength="51" x="646" y="457.7999">diagrams to</text></g><!--MD5=[5f5dbf96f111c6be00cad81a85a444fd]
+link KrokiService.KrokiCore to KrokiService.ExcalidrawService--><g id="link_KrokiService.KrokiCore_KrokiService.ExcalidrawService"><path d="M701.28,404.8899 C741.38,439.4399 789.3,480.7299 824.96,511.4599 " fill="none" id="KrokiService.KrokiCore-to-KrokiService.ExcalidrawService" style="stroke:%23707070;stroke-width:2.0;stroke-dasharray:7.0,7.0;"/><polygon fill="%23707070" points="828.81,514.7699,824.5964,505.8679,825.0198,511.5089,819.3788,511.9323,828.81,514.7699" style="stroke:%23707070;stroke-width:2.0;"/><text fill="%23707070" font-family="sans-serif" font-size="10" lengthAdjust="spacing" textLength="82" x="759" y="445.7999">Defers `excalidraw`</text><text fill="%23707070" font-family="sans-serif" font-size="10" lengthAdjust="spacing" textLength="51" x="776" y="457.7999">diagrams to</text></g><!--MD5=[4be1b16d64ef316aa03ed78d156c3438]
+link KrokiService.KrokiCore to KrokiService.MermaidService--><g id="link_KrokiService.KrokiCore_KrokiService.MermaidService"><path d="M720.13,372.6899 C797.66,401.3799 908.9,444.7199 1003,489.7999 C1017.22,496.6099 1032.09,504.4199 1046.29,512.2299 " fill="none" id="KrokiService.KrokiCore-to-KrokiService.MermaidService" style="stroke:%23707070;stroke-width:2.0;stroke-dasharray:7.0,7.0;"/><polygon fill="%23707070" points="1050.68,514.6599,1044.7552,506.7925,1046.3092,512.2317,1040.87,513.7858,1050.68,514.6599" style="stroke:%23707070;stroke-width:2.0;"/><text fill="%23707070" font-family="sans-serif" font-size="10" lengthAdjust="spacing" textLength="74" x="932" y="445.7999">Defers `mermaid`</text><text fill="%23707070" font-family="sans-serif" font-size="10" lengthAdjust="spacing" textLength="51" x="945" y="457.7999">diagrams to</text></g><!--MD5=[8ab022bb6a56fa1332e9e76b12d26fc5]
+@startuml
+title Kroki Service - Containers
+
+top to bottom direction
+
+skinparam {
+  shadowing false
+  arrowFontSize 10
+  defaultTextAlignment center
+  wrapWidth 200
+  maxMessageSize 100
+}
+
+hide stereotype
+
+skinparam rectangle<<KrokiService.BPMNService>> {
+  BackgroundColor %23dddddd
+  FontColor %23000000
+  BorderColor %239a9a9a
+}
+skinparam rectangle<<KrokiService.BlockdiagService>> {
+  BackgroundColor %23dddddd
+  FontColor %23000000
+  BorderColor %239a9a9a
+}
+skinparam rectangle<<KrokiService.DiagramsnetDrawioService>> {
+  BackgroundColor %23dddddd
+  FontColor %23000000
+  BorderColor %239a9a9a
+}
+skinparam rectangle<<KrokiService.ExcalidrawService>> {
+  BackgroundColor %23dddddd
+  FontColor %23000000
+  BorderColor %239a9a9a
+}
+skinparam rectangle<<KrokiService.KrokiCore>> {
+  BackgroundColor %23dddddd
+  FontColor %23000000
+  BorderColor %239a9a9a
+}
+skinparam rectangle<<Krokijl>> {
+  BackgroundColor %23dddddd
+  FontColor %23000000
+  BorderColor %239a9a9a
+}
+skinparam rectangle<<KrokiService.MermaidService>> {
+  BackgroundColor %23dddddd
+  FontColor %23000000
+  BorderColor %239a9a9a
+}
+
+rectangle "==Kroki.jl\n<size:10>[Software System]</size>\n\nA Julia interface to a %27Kroki Service%27." <<Krokijl>> as Krokijl
+
+package "Kroki Service\n[Software System]" <<KrokiService>> {
+  skinparam PackageBorderColor<<KrokiService>> %23444444
+  skinparam PackageFontColor<<KrokiService>> %23444444
+
+  rectangle "==Kroki Core\n<size:10>[Container]</size>\n\nRenders a subset of the supported diagrams itself. Defers to sidecontainers for other diagrams." <<KrokiService.KrokiCore>> as KrokiService.KrokiCore [[https://kroki.io]]
+  rectangle "==Blockdiag Service\n<size:10>[Container]</size>\n\nRenders diagrams from the `blockdiag` suite of generators, e.g. `blockdiag`, `seqdiag`, `actdiag`, `nwdiag`, etc." <<KrokiService.BlockdiagService>> as KrokiService.BlockdiagService [[http://blockdiag.com]]
+  rectangle "==BPMN Service\n<size:10>[Container]</size>\n\nRenders %27Business Process Model and Notation%27 diagrams using `bpmn-js`." <<KrokiService.BPMNService>> as KrokiService.BPMNService [[https://bpmn.io/toolkit/bpmn-js]]
+  rectangle "==Diagrams.net/Draw.io Service\n<size:10>[Container]</size>\n\nRenders %27Diagrams.net/Draw.io%27 diagrams." <<KrokiService.DiagramsnetDrawioService>> as KrokiService.DiagramsnetDrawioService [[https://diagrams.net]]
+  rectangle "==Excalidraw Service\n<size:10>[Container]</size>\n\nRenders %27Excalidraw%27 diagrams." <<KrokiService.ExcalidrawService>> as KrokiService.ExcalidrawService [[https://excalidraw.com]]
+  rectangle "==Mermaid Service\n<size:10>[Container]</size>\n\nRenders %27Mermaid%27 diagrams." <<KrokiService.MermaidService>> as KrokiService.MermaidService [[https://mermaid-js.github.io]]
+}
+
+Krokijl .[%23707070,thickness=2].> KrokiService.KrokiCore : "<color:%23707070>Sends encoded diagram to"
+KrokiService.KrokiCore .[%23707070,thickness=2].> KrokiService.BlockdiagService : "<color:%23707070>Defers `blockdiag` diagrams to"
+KrokiService.KrokiCore .[%23707070,thickness=2].> KrokiService.BPMNService : "<color:%23707070>Defers `bpmn` diagrams to"
+KrokiService.KrokiCore .[%23707070,thickness=2].> KrokiService.DiagramsnetDrawioService : "<color:%23707070>Defers `diagramsnet` diagrams to"
+KrokiService.KrokiCore .[%23707070,thickness=2].> KrokiService.ExcalidrawService : "<color:%23707070>Defers `excalidraw` diagrams to"
+KrokiService.KrokiCore .[%23707070,thickness=2].> KrokiService.MermaidService : "<color:%23707070>Defers `mermaid` diagrams to"
+@enduml
+
+PlantUML version 1.2022.5(Sat Apr 30 10:55:52 GMT 2022)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>'/><p>Another use case is specifying <a href="https://docs.kroki.io/kroki/setup/diagram-options/#_plantuml">a theme for PlantUML diagrams</a>.</p><pre><code class="language-julia hljs">Diagram(:plantuml, &quot;Kroki -&gt; Julia: Hello&quot;; options = Dict(&quot;theme&quot; =&gt; &quot;amiga&quot;))</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="122px" preserveAspectRatio="none" style="width:144px;height:122px;background:%230B58A8;" version="1.1" viewBox="0 0 144 122" width="144px" zoomAndPan="magnify"><defs/><g><line style="stroke:%23FFFFFF;stroke-width:1.0;stroke-dasharray:5.0,5.0;" x1="42" x2="42" y1="36.7999" y2="86.3999"/><line style="stroke:%23FFFFFF;stroke-width:1.0;stroke-dasharray:5.0,5.0;" x1="116" x2="116" y1="36.7999" y2="86.3999"/><rect fill="%230B58A8" height="30.7999" rx="2.5" ry="2.5" style="stroke:%23FFFFFF;stroke-width:1.0;" width="45" x="20" y="5"/><text fill="%23FFFFFF" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="31" x="27" y="25.9999">Kroki</text><rect fill="%230B58A8" height="30.7999" rx="2.5" ry="2.5" style="stroke:%23FFFFFF;stroke-width:1.0;" width="45" x="20" y="85.3999"/><text fill="%23FFFFFF" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="31" x="27" y="106.3999">Kroki</text><rect fill="%230B58A8" height="30.7999" rx="2.5" ry="2.5" style="stroke:%23FFFFFF;stroke-width:1.0;" width="43" x="95" y="5"/><text fill="%23FFFFFF" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="29" x="102" y="25.9999">Julia</text><rect fill="%230B58A8" height="30.7999" rx="2.5" ry="2.5" style="stroke:%23FFFFFF;stroke-width:1.0;" width="43" x="95" y="85.3999"/><text fill="%23FFFFFF" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="29" x="102" y="106.3999">Julia</text><polygon fill="%23FFFFFF" points="104.5,64.3999,114.5,68.3999,104.5,72.3999,108.5,68.3999" style="stroke:%23FFFFFF;stroke-width:1.0;"/><line style="stroke:%23FFFFFF;stroke-width:1.0;" x1="42.5" x2="110.5" y1="68.3999" y2="68.3999"/><text fill="%23FFFFFF" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="29" x="49.5" y="63.7999">Hello</text><!--MD5=[a975d72a40744910ff5f0d3f7f7aa988]
+@startuml
+!theme amiga
+Kroki -> Julia: Hello
+@enduml
+
+@startuml
+
+
+
+
+
+
+<style>
+  root {
+    BackgroundColor %230B58A8
+    FontColor %23FFFFFF
+    FontName Verdana
+    HyperLinkColor %23FDA325
+    LineColor %23FFFFFF
+    LineThickness 1
+    Margin 5
+  }
+  caption {
+    LineThickness 0
+  }
+  footer {
+    LineThickness 0
+  }
+  groupHeader {
+    BackgroundColor %23FFFFFF
+    FontColor %230B58A8
+    FontStyle bold
+  }
+  header {
+    LineThickness 0
+  }
+  node {
+    MaximumWidth 300
+  }
+  referenceHeader {
+    BackgroundColor %23FFFFFF
+    FontColor %230B58A8
+    FontStyle bold
+  }
+  separator {
+    BackgroundColor %23FFFFFF
+    FontColor %230B58A8
+    FontStyle bold
+  }
+  title {
+    FontSize 22
+    LineThickness 0
+  }
+</style>
+
+skinparam ArrowLollipopColor %23FFFFFF
+skinparam BackgroundColor %230B58A8
+skinparam DefaultFontName Verdana
+skinparam DefaultMonospacedFontName Courier
+skinparam LifelineStrategy nosolid
+skinparam ParticipantPadding 10
+skinparam SequenceLifeLineBorderColor %23FFFFFF
+skinparam Shadowing false
+skinparam UseBetaStyle true
+
+skinparam Activity {
+  BackgroundColor %230B58A8
+  BarColor %23FFFFFF
+  BorderColor %23FFFFFF
+  FontColor %23FFFFFF
+  FontName Verdana
+}
+skinparam Boundary {
+  FontColor %23FFFFFF
+}
+skinparam Box {
+  Padding 5
+}
+skinparam CircledCharacter {
+  FontColor %230B58A8
+  FontName Courier
+  Radius 9
+}
+skinparam Class {
+  BackgroundColor %230B58A8
+  BorderColor %23FFFFFF
+  FontColor %23FFFFFF
+  FontName Verdana
+}
+skinparam ClassAttribute {
+  FontColor %23FFFFFF
+  FontName Verdana
+}
+skinparam ClassStereotype {
+  FontColor %23FFFFFF
+  FontName Verdana
+}
+skinparam Footer {
+  FontColor %23FFFFFF
+  FontName Verdana
+}
+skinparam Header {
+  FontColor %23FFFFFF
+  FontName Verdana
+}
+skinparam Hyperlink {
+  Color %23FDA325
+}
+skinparam IconPackage {
+  Color %23FFFFFF
+  BackgroundColor %230B58A8
+}
+skinparam IconPrivate {
+  Color %23FFFFFF
+  BackgroundColor %230B58A8
+}
+skinparam IconProtected {
+  Color %23FFFFFF
+  BackgroundColor %230B58A8
+}
+skinparam IconPublic {
+  Color %23FFFFFF
+  BackgroundColor %230B58A8
+}
+skinparam Note {
+  FontColor %23FFFFFF
+  FontName Verdana
+}
+skinparam Object {
+  BorderColor %23FFFFFF
+}
+skinparam Package {
+  BorderColor %23FFFFFF
+  FontColor %23FFFFFF
+  FontName Verdana
+}
+skinparam State {
+  BackgroundColor %230B58A8
+  BorderColor %23FFFFFF
+}
+skinparam StereotypeA {
+  BackgroundColor %23FFFFFF
+  BorderColor %23FFFFFF
+}
+skinparam StereotypeC {
+  BackgroundColor %23FFFFFF
+  BorderColor %23FFFFFF
+}
+skinparam StereotypeE {
+  BackgroundColor %23FFFFFF
+  BorderColor %23FFFFFF
+}
+skinparam StereotypeI {
+  BackgroundColor %23FFFFFF
+  BorderColor %23FFFFFF
+}
+skinparam StereotypeN {
+  BackgroundColor %23FFFFFF
+  BorderColor %23FFFFFF
+}
+skinparam UseCaseStereoType {
+  FontColor %23FFFFFF
+  FontName Verdana
+}
+Kroki -> Julia: Hello
+@enduml
+
+PlantUML version 1.2022.5(Sat Apr 30 10:55:52 GMT 2022)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>'/><pre><code class="language-julia hljs">Diagram(:plantuml, &quot;Julia -&gt; Kroki: Hello!&quot;; options = Dict(&quot;theme&quot; =&gt; &quot;crt-amber&quot;))</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="122px" preserveAspectRatio="none" style="width:144px;height:122px;background:%23282828;" version="1.1" viewBox="0 0 144 122" width="144px" zoomAndPan="magnify"><defs/><g><line style="stroke:%23FFB000;stroke-width:1.0;stroke-dasharray:5.0,5.0;" x1="41" x2="41" y1="36.7999" y2="86.3999"/><line style="stroke:%23FFB000;stroke-width:1.0;stroke-dasharray:5.0,5.0;" x1="115" x2="115" y1="36.7999" y2="86.3999"/><rect fill="%23282828" height="30.7999" rx="2.5" ry="2.5" style="stroke:%23FFB000;stroke-width:1.0;" width="43" x="20" y="5"/><text fill="%23FFB000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="29" x="27" y="25.9999">Julia</text><rect fill="%23282828" height="30.7999" rx="2.5" ry="2.5" style="stroke:%23FFB000;stroke-width:1.0;" width="43" x="20" y="85.3999"/><text fill="%23FFB000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="29" x="27" y="106.3999">Julia</text><rect fill="%23282828" height="30.7999" rx="2.5" ry="2.5" style="stroke:%23FFB000;stroke-width:1.0;" width="45" x="93" y="5"/><text fill="%23FFB000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="31" x="100" y="25.9999">Kroki</text><rect fill="%23282828" height="30.7999" rx="2.5" ry="2.5" style="stroke:%23FFB000;stroke-width:1.0;" width="45" x="93" y="85.3999"/><text fill="%23FFB000" font-family="Verdana" font-size="14" lengthAdjust="spacing" textLength="31" x="100" y="106.3999">Kroki</text><polygon fill="%23FFB000" points="103.5,64.3999,113.5,68.3999,103.5,72.3999,107.5,68.3999" style="stroke:%23FFB000;stroke-width:1.0;"/><line style="stroke:%23FFB000;stroke-width:1.0;" x1="41.5" x2="109.5" y1="68.3999" y2="68.3999"/><text fill="%23FFB000" font-family="Verdana" font-size="13" lengthAdjust="spacing" textLength="33" x="48.5" y="63.7999">Hello!</text><!--MD5=[f51662d021d1b3f4911518b985683daf]
+@startuml
+!theme crt-amber
+Julia -> Kroki: Hello!
+@enduml
+
+@startuml
+
+
+
+
+
+
+<style>
+  root {
+    BackgroundColor %23282828
+    FontColor %23FFB000
+    FontName Verdana
+    HyperLinkColor %23FFCC00
+    LineColor %23FFB000
+    LineThickness 1
+    Margin 5
+  }
+  box {
+    LineStyle 12-18
+    LineThickness 3
+  }
+  caption {
+    LineThickness 0
+  }
+  footer {
+    LineThickness 0
+  }
+  groupHeader {
+    BackgroundColor %23FFB000
+    FontColor %23282828
+    FontStyle bold
+  }
+  header {
+    LineThickness 0
+  }
+  node {
+    MaximumWidth 300
+  }
+  referenceHeader {
+    BackgroundColor %23FFB000
+    FontColor %23282828
+    FontStyle bold
+  }
+  separator {
+    BackgroundColor %23FFB000
+    FontColor %23282828
+    FontStyle bold
+  }
+  title {
+    FontSize 22
+    LineThickness 0
+  }
+</style>
+
+skinparam ArrowLollipopColor %23FFB000
+skinparam BackgroundColor %23282828
+skinparam DefaultFontName Verdana
+skinparam DefaultMonospacedFontName Courier
+skinparam LifelineStrategy solid
+skinparam ParticipantPadding 10
+skinparam SequenceLifeLineBorderColor %23FFB000
+skinparam Shadowing false
+skinparam UseBetaStyle true
+
+skinparam Activity {
+  BackgroundColor %23282828
+  BarColor %23FFB000
+  BorderColor %23FFB000
+  FontColor %23FFB000
+  FontName Verdana
+}
+skinparam Boundary {
+  FontColor %23FFB000
+}
+skinparam Box {
+  Padding 5
+}
+skinparam CircledCharacter {
+  FontColor %23282828
+  FontName Courier
+  Radius 9
+}
+skinparam Class {
+  BackgroundColor %23282828
+  BorderColor %23FFB000
+  FontColor %23FFB000
+  FontName Verdana
+}
+skinparam ClassAttribute {
+  FontColor %23FFB000
+  FontName Verdana
+}
+skinparam ClassStereotype {
+  FontColor %23FFB000
+  FontName Verdana
+}
+skinparam Footer {
+  FontColor %23FFB000
+  FontName Verdana
+}
+skinparam Header {
+  FontColor %23FFB000
+  FontName Verdana
+}
+skinparam Hyperlink {
+  Color %23FFCC00
+}
+skinparam IconPackage {
+  Color %23FFB000
+  BackgroundColor %23282828
+}
+skinparam IconPrivate {
+  Color %23FFB000
+  BackgroundColor %23282828
+}
+skinparam IconProtected {
+  Color %23FFB000
+  BackgroundColor %23282828
+}
+skinparam IconPublic {
+  Color %23FFB000
+  BackgroundColor %23282828
+}
+skinparam Note {
+  FontColor %23FFB000
+  FontName Verdana
+}
+skinparam Object {
+  BorderColor %23FFB000
+}
+skinparam Package {
+  BorderColor %23FFB000
+  FontColor %23FFB000
+  FontName Verdana
+}
+skinparam State {
+  BackgroundColor %23282828
+  BorderColor %23FFB000
+}
+skinparam StereotypeA {
+  BackgroundColor %23FFB000
+  BorderColor %23FFB000
+}
+skinparam StereotypeC {
+  BackgroundColor %23FFB000
+  BorderColor %23FFB000
+}
+skinparam StereotypeE {
+  BackgroundColor %23FFB000
+  BorderColor %23FFB000
+}
+skinparam StereotypeI {
+  BackgroundColor %23FFB000
+  BorderColor %23FFB000
+}
+skinparam StereotypeN {
+  BackgroundColor %23FFB000
+  BorderColor %23FFB000
+}
+skinparam UseCaseStereoType {
+  FontColor %23FFB000
+  FontName Verdana
+}
+Julia -> Kroki: Hello!
+@enduml
+
+PlantUML version 1.2022.5(Sat Apr 30 10:55:52 GMT 2022)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>'/><p>Instead of specifying diagram options at <a href="../api/#Kroki.Diagram"><code>Diagram</code></a> construction, they can also be passed directly to the <a href="../api/#Kroki.render"><code>render</code></a> function. For instance, to select a different diagram from the set of Structurizr diagrams previously loaded from file.</p><pre><code class="language-julia hljs"># A helper wrapper to ensure the output of `render` can be visualized directly
+# within `Documenter`
+DocumenterSvg(
+  render(
+    structurizr_diagram, &quot;svg&quot;;
+    options = Dict(&quot;view-key&quot; =&gt; &quot;Krokijl-Krokijl-Component&quot;)
+  )
+)</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="431px" preserveAspectRatio="none" style="width:508px;height:431px;background:%23FFFFFF;" version="1.1" viewBox="0 0 508 431" width="508px" zoomAndPan="magnify"><defs/><g><rect height="26.7999" style="stroke:%2300000000;stroke-width:1.0;fill:none;" width="219" x="137.5" y="5"/><text fill="%23000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="209" x="142.5" y="23.9999">Kroki.jl - Kroki.jl - Components</text><!--MD5=[2d8b0d643503b9367c4c44efebc448b4]
+cluster Kroki.jl\n[Container]--><g id="cluster_Kroki.jl\n[Container]"><path d="M8.5,43.7999 L86.5,43.7999 A3.75,3.75 0 0 1 89,46.2999 L96,83.3998 L498.5,83.3998 A2.5,2.5 0 0 1 501,85.8998 L501,422.2999 A2.5,2.5 0 0 1 498.5,424.7999 L8.5,424.7999 A2.5,2.5 0 0 1 6,422.2999 L6,46.2999 A2.5,2.5 0 0 1 8.5,43.7999 " style="stroke:%23444444;stroke-width:1.5;fill:none;"/><line style="stroke:%23444444;stroke-width:1.5;fill:none;" x1="6" x2="96" y1="83.3998" y2="83.3998"/><text fill="%23000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="47" x="25" y="59.7999">Kroki.jl</text><text fill="%23000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="77" x="10" y="76.5998">[Container]</text></g><!--MD5=[b136d4afc22f4401e95ff45c1c92c4f8]
+entity Krokijl.Krokijl.Diagram--><g id="elem_Krokijl.Krokijl.Diagram"><rect fill="%23DDDDDD" height="118.3997" rx="2.5" ry="2.5" style="stroke:%239A9A9A;stroke-width:0.5;" width="207" x="22.5" y="95.7999"/><text fill="%23000000" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="64" x="94" y="121.8">Diagram</text><text fill="%23000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing" textLength="55" x="98.5" y="135">[Component]</text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="124" y="150.9999"> </text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="149" x="49.5" y="167.7998">Facilitates definition and</text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="183" x="32.5" y="184.5997">rendering of different diagram</text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="37" x="107.5" y="201.3997">types.</text></g><!--MD5=[f2588d364c200d1019b89dff33088d11]
+entity Krokijl.Krokijl.Exceptions--><g id="elem_Krokijl.Krokijl.Exceptions"><rect fill="%23DDDDDD" height="118.3997" rx="2.5" ry="2.5" style="stroke:%239A9A9A;stroke-width:0.5;" width="220" x="265" y="95.7999"/><text fill="%23000000" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="86" x="332" y="121.8">Exceptions</text><text fill="%23000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing" textLength="55" x="347.5" y="135">[Component]</text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="373" y="150.9999"> </text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="140" x="303" y="167.7998">Provides all exceptions</text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="196" x="275" y="184.5997">functionality in the package can</text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="38" x="356" y="201.3997">throw.</text></g><!--MD5=[9b37bacfef571a909905c818931fe1f9]
+entity Krokijl.Krokijl.ServiceManagement--><g id="elem_Krokijl.Krokijl.ServiceManagement"><rect fill="%23DDDDDD" height="135.1997" rx="2.5" ry="2.5" style="stroke:%239A9A9A;stroke-width:0.5;" width="214" x="22" y="273.7999"/><text fill="%23000000" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="160" x="49" y="299.8">Service Management</text><text fill="%23000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing" textLength="55" x="101.5" y="313">[Component]</text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="127" y="328.9999"> </text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="190" x="32" y="345.7998">Provides management over the</text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="166" x="44" y="362.5997">%27Kroki Service%27 that is being</text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="172" x="41" y="379.3997">used, including managing a</text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="88" x="85" y="396.1996">local instance.</text></g><!--MD5=[2d4430b533f4e90b08fb6d739984193f]
+entity Krokijl.Krokijl.StringLiterals--><g id="elem_Krokijl.Krokijl.StringLiterals"><rect fill="%23DDDDDD" height="101.5998" rx="2.5" ry="2.5" style="stroke:%239A9A9A;stroke-width:0.5;" width="191" x="271.5" y="290.2999"/><text fill="%23000000" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="106" x="314" y="316.3">String Literals</text><text fill="%23000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing" textLength="55" x="339.5" y="329.5">[Component]</text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="365" y="345.4999"> </text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="167" x="281.5" y="362.2998">Provide an easier means of</text><text fill="%23000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="142" x="296" y="379.0997">constructing diagrams.</text></g><!--MD5=[e05c3e606901243ca653cd1da7a2063c]
+@startuml
+title Kroki.jl - Kroki.jl - Components
+
+top to bottom direction
+
+skinparam {
+  shadowing false
+  arrowFontSize 10
+  defaultTextAlignment center
+  wrapWidth 200
+  maxMessageSize 100
+}
+
+hide stereotype
+
+skinparam rectangle<<Krokijl.Krokijl.Diagram>> {
+  BackgroundColor %23dddddd
+  FontColor %23000000
+  BorderColor %239a9a9a
+}
+skinparam rectangle<<Krokijl.Krokijl.Exceptions>> {
+  BackgroundColor %23dddddd
+  FontColor %23000000
+  BorderColor %239a9a9a
+}
+skinparam rectangle<<Krokijl.Krokijl.ServiceManagement>> {
+  BackgroundColor %23dddddd
+  FontColor %23000000
+  BorderColor %239a9a9a
+}
+skinparam rectangle<<Krokijl.Krokijl.StringLiterals>> {
+  BackgroundColor %23dddddd
+  FontColor %23000000
+  BorderColor %239a9a9a
+}
+
+package "Kroki.jl\n[Container]" <<Krokijl.Krokijl>> {
+  skinparam PackageBorderColor<<Krokijl.Krokijl>> %23444444
+  skinparam PackageFontColor<<Krokijl.Krokijl>> %23444444
+
+  rectangle "==Diagram\n<size:10>[Component]</size>\n\nFacilitates definition and rendering of different diagram types." <<Krokijl.Krokijl.Diagram>> as Krokijl.Krokijl.Diagram
+  rectangle "==Exceptions\n<size:10>[Component]</size>\n\nProvides all exceptions functionality in the package can throw." <<Krokijl.Krokijl.Exceptions>> as Krokijl.Krokijl.Exceptions
+  rectangle "==Service Management\n<size:10>[Component]</size>\n\nProvides management over the %27Kroki Service%27 that is being used, including managing a local instance." <<Krokijl.Krokijl.ServiceManagement>> as Krokijl.Krokijl.ServiceManagement
+  rectangle "==String Literals\n<size:10>[Component]</size>\n\nProvide an easier means of constructing diagrams." <<Krokijl.Krokijl.StringLiterals>> as Krokijl.Krokijl.StringLiterals
+}
+
+@enduml
+
+PlantUML version 1.2022.5(Sat Apr 30 10:55:52 GMT 2022)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>'/><div class="admonition is-info"><header class="admonition-header">A note on `view-key`s</header><div class="admonition-body"><p>The <code>view-key</code>s for Structurizr diagrams can either be dynamic and obtained from the <a href="https://structurizr.com/help/lite">Structurizr (Lite) software</a>, or they can be specified as <a href="https://github.com/structurizr/dsl/blob/master/docs/language-reference.md#views">the second argument to &#39;view definitions&#39; using the Structurizr DSL</a>.</p></div></div><h2 id="Rendering-to-a-specific-format"><a class="docs-heading-anchor" href="#Rendering-to-a-specific-format">Rendering to a specific format</a><a id="Rendering-to-a-specific-format-1"></a><a class="docs-heading-anchor-permalink" href="#Rendering-to-a-specific-format" title="Permalink"></a></h2><p>To render to a specific format, explicitly call the <a href="../api/#Kroki.render"><code>render</code></a> function on a <a href="../api/#Kroki.Diagram"><code>Diagram</code></a>, specifying the desired output format.</p><div class="admonition is-warning"><header class="admonition-header">Output format support</header><div class="admonition-body"><p>All diagram types support SVG output, other supported output formats vary per diagram type. See <a href="../#diagram-support">the support table</a> for an overview.</p></div></div><pre><code class="language-julia hljs">mermaid_diagram = mermaid&quot;&quot;&quot;
+graph LR
+  Foo --&gt; Bar
+  Bar --&gt; Baz
+  Bar --&gt; Bar
+  Baz --&gt; Quuz
+  Quuz --&gt; Foo
+  Quuz --&gt; Bar
+&quot;&quot;&quot;
+
+mermaid_diagram_as_png = render(mermaid_diagram, &quot;png&quot;)
+
+# The PNG header
+# See http://www.libpng.org/pub/png/spec/1.2/PNG-Rationale.html#R.PNG-file-signature
+Char.(mermaid_diagram_as_png[1:8])</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">8-element Vector{Char}:
+ &#39;\u89&#39;: Unicode U+0089 (category Cc: Other, control)
+ &#39;P&#39;: ASCII/Unicode U+0050 (category Lu: Letter, uppercase)
+ &#39;N&#39;: ASCII/Unicode U+004E (category Lu: Letter, uppercase)
+ &#39;G&#39;: ASCII/Unicode U+0047 (category Lu: Letter, uppercase)
+ &#39;\r&#39;: ASCII/Unicode U+000D (category Cc: Other, control)
+ &#39;\n&#39;: ASCII/Unicode U+000A (category Cc: Other, control)
+ &#39;\x1a&#39;: ASCII/Unicode U+001A (category Cc: Other, control)
+ &#39;\n&#39;: ASCII/Unicode U+000A (category Cc: Other, control)</code></pre><h3 id="Saving-to-a-file"><a class="docs-heading-anchor" href="#Saving-to-a-file">Saving to a file</a><a id="Saving-to-a-file-1"></a><a class="docs-heading-anchor-permalink" href="#Saving-to-a-file" title="Permalink"></a></h3><p>Once a diagram has been rendered, it&#39;s straightforward to write it to a file using <code>write</code>.</p><pre><code class="language-julia hljs">write(&quot;mermaid_diagram.png&quot;, mermaid_diagram_as_png)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">8808</code></pre><p><img src="../mermaid_diagram.png" alt="Mermaid diagram as PNG example"/></p><p>Note the difference in file size and fonts when rendering to SVG.</p><pre><code class="language-julia hljs">write(&quot;mermaid_diagram.svg&quot;, render(mermaid_diagram, &quot;svg&quot;))</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">11790</code></pre><p><img src="../mermaid_diagram.svg" alt="Mermaid diagram as SVG example"/></p><h2 id="Controlling-text-rendering"><a class="docs-heading-anchor" href="#Controlling-text-rendering">Controlling text rendering</a><a id="Controlling-text-rendering-1"></a><a class="docs-heading-anchor-permalink" href="#Controlling-text-rendering" title="Permalink"></a></h2><p>Some diagrams support rendering to text, e.g. PlantUML and Structurizr. This can be based on ASCII or Unicode character sets. Which character set is used, is controlled using the <a href="../api/#Kroki.TEXT_PLAIN_SHOW_MIME_TYPE"><code>Kroki.TEXT_PLAIN_SHOW_MIME_TYPE</code></a> variable.</p><p>Setting a <code>text/plain</code> MIME type results in the use of the limited ASCII character set.</p><pre><code class="language-julia hljs">plantuml_diagram = plantuml&quot;&quot;&quot;
+Kroki -&gt; Documenter: I can render this as text in two ways!
+Kroki &lt;- Documenter: Nice!
+&quot;&quot;&quot;
+
+Kroki.TEXT_PLAIN_SHOW_MIME_TYPE[] = MIME&quot;text/plain&quot;()
+println(sprint(show, MIME&quot;text/plain&quot;(), plantuml_diagram))</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">     ,-----.                              ,----------.
+     |Kroki|                              |Documenter|
+     `--+--&#39;                              `----+-----&#39;
+        |I can render this as text in two ways!|
+        |--------------------------------------&gt;
+        |                                      |
+        |                Nice!                 |
+        |&lt;--------------------------------------
+     ,--+--.                              ,----+-----.
+     |Kroki|                              |Documenter|
+     `-----&#39;                              `----------&#39;</code></pre><p>Setting a <code>text/plain; charset=utf-8</code> MIME type, which is the default, results in nicer looking diagrams due to the use of Unicode characters.</p><pre><code class="language-julia hljs">Kroki.TEXT_PLAIN_SHOW_MIME_TYPE[] = MIME&quot;text/plain; charset=utf-8&quot;()
+println(sprint(show, MIME&quot;text/plain&quot;(), plantuml_diagram))</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">     ┌─────┐                              ┌──────────┐
+     │Kroki│                              │Documenter│
+     └──┬──┘                              └────┬─────┘
+        │I can render this as text in two ways!│
+        │──────────────────────────────────────&gt;
+        │                                      │
+        │                Nice!                 │
+        │&lt;──────────────────────────────────────
+     ┌──┴──┐                              ┌────┴─────┐
+     │Kroki│                              │Documenter│
+     └─────┘                              └──────────┘</code></pre><p>Configuring an invalid MIME type results in an error upon rendering to a <code>text/plain</code> target.</p><pre><code class="language-julia hljs">Kroki.TEXT_PLAIN_SHOW_MIME_TYPE[] = MIME&quot;not-a-known/mime-type&quot;()
+
+try
+  sprint(show, MIME&quot;text/plain&quot;(), plantuml_diagram)
+catch exception
+  println(sprint(showerror, exception))
+end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">The selected `MIME` type must be one of `text/plain; charset=utf-8` or `text/plain`. Got `not-a-known/mime-type`.</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../">« Home</a><a class="docs-footer-nextpage" href="../api/">API »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.19 on <span class="colophon-date" title="Tuesday 26 July 2022 07:49">Tuesday 26 July 2022</span>. Using Julia version 1.7.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
