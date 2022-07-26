@@ -1,0 +1,30 @@
+version: "3"
+services:
+  core:
+    image: yuzutech/kroki
+    depends_on:
+      - blockdiag
+      - bpmn
+      - excalidraw
+      - mermaid
+    environment:
+      - KROKI_BLOCKDIAG_HOST=blockdiag
+      - KROKI_BPMN_HOST=bpmn
+      - KROKI_DIAGRAMSNET_HOST=diagramsnet
+      - KROKI_EXCALIDRAW_HOST=excalidraw
+      - KROKI_MERMAID_HOST=mermaid
+      # Enable inclusion of, for instance, external PlantUML descriptions and
+      # Vega datasets
+      - KROKI_SAFE_MODE=unsafe
+    ports:
+      - 8000:8000
+  blockdiag:
+    image: yuzutech/kroki-blockdiag
+  bpmn:
+    image: yuzutech/kroki-bpmn
+  diagramsnet:
+    image: yuzutech/kroki-diagramsnet
+  excalidraw:
+    image: yuzutech/kroki-excalidraw
+  mermaid:
+    image: yuzutech/kroki-mermaid
