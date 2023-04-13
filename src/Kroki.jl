@@ -235,6 +235,7 @@ DIAGRAM_TYPE_METADATA = Dict{Symbol, DiagramTypeMetadata}(
     "C4 with PlantUML",
     "https://github.com/plantuml-stdlib/C4-PlantUML",
   ),
+  :d2 => DiagramTypeMetadata("D2", "https://d2lang.com"),
   :diagramsnet => DiagramTypeMetadata("diagrams.net", "https://diagrams.net"),
   :ditaa => DiagramTypeMetadata("ditaa", "http://ditaa.sourceforge.net"),
   :erd => DiagramTypeMetadata("erd", "https://github.com/BurntSushi/erd"),
@@ -322,8 +323,16 @@ const LIMITED_DIAGRAM_SUPPORT = MIMEToDiagramTypeMap(
     :vega,
     :vegalite,
   ),
-  MIME"image/svg+xml"() =>
-    (:bpmn, :bytefield, :excalidraw, :nomnoml, :pikchr, :svgbob, :wavedrom),
+  MIME"image/svg+xml"() => (
+    :bpmn,
+    :bytefield,
+    :d2,
+    :excalidraw,
+    :nomnoml,
+    :pikchr,
+    :svgbob,
+    :wavedrom
+  ),
   MIME"text/plain"() => (:c4plantuml, :plantuml, :structurizr),
   MIME"text/plain; charset=utf-8"() => (:c4plantuml, :plantuml, :structurizr),
 )
