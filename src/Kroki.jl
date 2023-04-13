@@ -259,6 +259,7 @@ DIAGRAM_TYPE_METADATA = Dict{Symbol, DiagramTypeMetadata}(
   :vega => DiagramTypeMetadata("Vega", "https://vega.github.io/vega"),
   :vegalite => DiagramTypeMetadata("Vega-Lite", "https://vega.github.io/vega-lite"),
   :wavedrom => DiagramTypeMetadata("WaveDrom", "https://wavedrom.com"),
+  :wireviz => DiagramTypeMetadata("WireViz", "https://github.com/formatc1702/WireViz"),
 )
 
 """
@@ -328,6 +329,7 @@ const LIMITED_DIAGRAM_SUPPORT = MIMEToDiagramTypeMap(
     :umlet,
     :vega,
     :vegalite,
+    :wireviz,
   ),
   MIME"image/svg+xml"() => (
     :bpmn,
