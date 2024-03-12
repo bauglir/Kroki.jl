@@ -76,17 +76,17 @@ workspace {
   }
 
   views {
-    container kroki_jl {
+    container kroki_jl PackageContainers {
       include *
       autoLayout lr
     }
 
-    component library {
+    component library PackageComponents {
       include *
       autoLayout bt
     }
 
-    container kroki_service {
+    container kroki_service ServiceContainers {
       include *
       autoLayout tb
     }

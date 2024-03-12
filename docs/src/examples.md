@@ -182,7 +182,7 @@ rendered from the set defined in the file.
 structurizr_diagram = Diagram(
   :structurizr;
   path = joinpath(@__DIR__, "..", "architecture", "workspace.dsl"),
-  options = Dict("view-key" => "KrokiService-Container")
+  options = Dict("view-key" => "ServiceContainers")
 )
 ```
 
@@ -218,7 +218,7 @@ end
 DocumenterSvg(
   render(
     structurizr_diagram, "svg";
-    options = Dict("view-key" => "Krokijl-Krokijl-Component")
+    options = Dict("view-key" => "PackageComponents")
   )
 )
 ```
