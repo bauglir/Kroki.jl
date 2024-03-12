@@ -89,23 +89,25 @@ end
     end
 
     @testset "takes `options` into account" begin
-      expected_theme_name = "materia"
-      options = Dict{String, String}("theme" => expected_theme_name)
+      options = Dict{String, String}("theme" => "materia")
       diagram = Diagram(:plantuml, "A -> B: C"; options)
 
+      # The most straightforward way to differentiate between the themes used
+      # for testing is by checking the associated fonts. The "Materia" theme
+      # relies on "Verdana", whereas the "Sketchy" theme relies on the
+      # handwritten look of "Segoe Print"
       @testset "defaults to `Diagram` options" begin
         rendered = String(render(diagram, "svg"))
 
-        @test occursin("!theme $(expected_theme_name)", rendered)
+        @test occursin("Verdana", rendered)
       end
 
       @testset "allows definition at render-time" begin
-        expected_overridden_theme = "sketchy"
         rendered = String(
-          render(diagram, "svg"; options = Dict("theme" => expected_overridden_theme)),
+          render(diagram, "svg"; options = Dict{String, String}("theme" => "sketchy")),
         )
 
-        @test occursin("!theme $(expected_overridden_theme)", rendered)
+        @test occursin("Segoe Print", rendered)
       end
     end
   end
