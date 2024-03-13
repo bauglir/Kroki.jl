@@ -5,8 +5,8 @@ const running_in_ci = get(ENV, "CI", nothing) == "true"
 makedocs(
   authors = "Joris Kraak",
   modules = [Kroki],
-  sitename = "Kroki.jl",
   pages = ["Home" => "index.md", "Examples" => "examples.md", "API" => "api.md"],
+  sitename = "Kroki.jl",
   warnonly = !running_in_ci,
 )
 
