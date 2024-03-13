@@ -124,8 +124,6 @@ through [`setEndpoint!`](@ref).
 # Example
 
 `julia> Kroki.Service.info()`
-
-$(info())
 """
 function info()
   try
