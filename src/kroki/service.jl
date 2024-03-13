@@ -9,6 +9,11 @@ This module also enables management of a local service instance, provided
 [Docker](https://docker.com) and [Docker
 Compose](https://docs.docker.com/compose/) are available on the system.
 
+!!! warning "Removing service container images"
+    Functions for removing container images that have been downloaded are _not_
+    included. It will be necessary to manually clean up the container images
+    retrieved by the service management functions.
+
 By default, the functions managing locally running services will rely on the
 `latest` tag for the [`yuzutech/kroki` container
 image](https://hub.docker.com/r/yuzutech/kroki/tags). This typically means the
