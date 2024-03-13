@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: julia-actions/setup-julia@v1
         with:
-          version: '1.7.3'
+          version: '1.10'
 
       - uses: actions/checkout@v3
       - name: Install JuliaFormatter and format
