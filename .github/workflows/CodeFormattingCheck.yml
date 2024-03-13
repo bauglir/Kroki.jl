@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install JuliaFormatter and format
         run: |
-          julia  -e 'using Pkg; Pkg.add(PackageSpec(name="JuliaFormatter", version="1.0.3"))'
+          julia  -e 'using Pkg; Pkg.add(PackageSpec(name="JuliaFormatter", version="1.0.53"))'
           julia  -e 'using JuliaFormatter; format("."; indent = 2, remove_extra_newlines = true, verbose = true, whitespace_typedefs = true, whitespace_ops_in_indices = true)'
 
       - name: Format check
