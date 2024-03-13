@@ -19,10 +19,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           semantic_version: 23.0.2
+          extends: |
+            @ethima/semantic-release-configuration
           extra_plugins: |
-            @semantic-release/changelog
-            @semantic-release/git
-            @google/semantic-release-replace-plugin
+            @ethima/semantic-release-configuration
       - name: Notify JuliaRegistrator of new release
         uses: peter-evans/commit-comment@v3
         with:
