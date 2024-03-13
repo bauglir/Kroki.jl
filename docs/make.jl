@@ -7,7 +7,7 @@ makedocs(
   modules = [Kroki],
   sitename = "Kroki.jl",
   pages = ["Home" => "index.md", "Examples" => "examples.md", "API" => "api.md"],
-  strict = running_in_ci,
+  warnonly = !running_in_ci,
 )
 
 if running_in_ci
