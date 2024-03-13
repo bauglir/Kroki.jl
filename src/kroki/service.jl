@@ -1,10 +1,34 @@
-"""
+# The docstring is included here to ensure visibility, but needs to be stored
+# in a variable and associated to the module _after_ it has been define so that
+# the docstring can refer to functions defined within the module
+service_module_docstring = """
 Defines functions and constants managing the Kroki service the rest of the
 package uses to render diagrams. These services can be either local or remote.
 
 This module also enables management of a local service instance, provided
 [Docker](https://docker.com) and [Docker
 Compose](https://docs.docker.com/compose/) are available on the system.
+
+!!! warning "Removing service container images"
+    Functions for removing container images that have been downloaded are _not_
+    included. It will be necessary to manually clean up the container images
+    retrieved by the service management functions.
+
+By default, the functions managing locally running services will rely on the
+`latest` tag for the [`yuzutech/kroki` container
+image](https://hub.docker.com/r/yuzutech/kroki/tags). This typically means the
+most recently released version of Kroki will be used. In this mode,
+[`Kroki.Service.update!`](@ref) can be used to pull in the most recent version.
+A `KROKI_CONTAINER_IMAGE_TAG` environment variable can be configured, prior to
+invoking [`Kroki.Service.start!`](@ref), to start the services corresponding to
+a specific version of Kroki. It is important the variable matches an existing
+tag for the container image.
+
+!!! warning "Changing Kroki versions"
+    Changing the `KROKI_CONTAINER_IMAGE_TAG` environment variable after calling
+    [`Kroki.Service.start!`](@ref) may result in manual cleanup of containers
+    being necessary as the service management functions will _not_ keep track
+    of which versions of services were previously started.
 """
 module Service
 
@@ -236,3 +260,4 @@ end
 __init__() = setEndpoint!()
 
 end
+@doc service_module_docstring Service
