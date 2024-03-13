@@ -36,10 +36,11 @@ jobs:
       - uses: julia-actions/julia-runtest@v1
       - uses: julia-actions/julia-processcoverage@v1
       - name: Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
-          file: ./lcov.info
           env_vars: OS,JULIA
+          file: ./lcov.info
+          token: ${{ secrets.CODECOV_TOKEN }}
       - name: Coveralls parallel
         uses: coverallsapp/github-action@master
         with:
