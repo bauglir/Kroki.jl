@@ -254,6 +254,7 @@ DIAGRAM_TYPE_METADATA = Dict{Symbol, DiagramTypeMetadata}(
   :svgbob =>
     DiagramTypeMetadata("Svgbob", "https://ivanceras.github.io/content/Svgbob.html"),
   :symbolator => DiagramTypeMetadata("Symbolator", "https://github.com/kevinpt/symbolator"),
+  :tikz => DiagramTypeMetadata("Symbolator", "https://github.com/pgf-tikz/pgf"),
   :umlet => DiagramTypeMetadata("UMLet", "https://github.com/umlet/umlet"),
   :vega => DiagramTypeMetadata("Vega", "https://vega.github.io/vega"),
   :vegalite => DiagramTypeMetadata("Vega-Lite", "https://vega.github.io/vega-lite"),
@@ -302,10 +303,11 @@ const LIMITED_DIAGRAM_SUPPORT = MIMEToDiagramTypeMap(
     :rackdiag,
     :erd,
     :graphviz,
+    :tikz,
     :vega,
     :vegalite,
   ),
-  MIME"image/jpeg"() => (:c4plantuml, :erd, :graphviz, :plantuml, :structurizr, :umlet),
+  MIME"image/jpeg"() => (:c4plantuml, :erd, :graphviz, :plantuml, :structurizr, :tikz, :umlet),
   MIME"image/png"() => (
     :blockdiag,
     :seqdiag,
@@ -322,6 +324,7 @@ const LIMITED_DIAGRAM_SUPPORT = MIMEToDiagramTypeMap(
     :plantuml,
     :structurizr,
     :symbolator,
+    :tikz,
     :umlet,
     :vega,
     :vegalite,
