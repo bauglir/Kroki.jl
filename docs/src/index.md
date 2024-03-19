@@ -25,7 +25,7 @@ and background.
 
 ## Installation & Usage
 
-Install Kroki through Julia's package manager
+Install the package through Julia's package manager
 
 ```
 (v1.10) pkg> add Kroki
@@ -54,6 +54,15 @@ Julia -> Kroki: Sure!
 
 See the [examples section](@ref Examples) for more details and, well, examples.
 
+!!! warning "Getting Help"
+    For feature requests and bug reports related to this Julia package use [the
+    Issue tracker on GitHub](https://github.com/bauglir/Kroki.jl/issues).
+
+    To get help regarding Kroki itself, e.g. for operational issues with the
+    publicly hosted Kroki server, requests for adding support for additional
+    diagram types, etc. please refer to [the Getting Help section of the Kroki
+    documentation](https://docs.kroki.io/kroki/project/get-help/).
+
 The package can be configured to use the publicly hosted server at
 [https://kroki.io](https://kroki.io) or a [self-hosted
 instance](https://docs.kroki.io/kroki/setup/install), see [`setEndpoint!`](@ref
@@ -61,6 +70,42 @@ Kroki.Service.setEndpoint!) for details. Facilities, e.g. [`start!`](@ref
 Kroki.Service.start!), [`status`](@ref Kroki.Service.status), [`stop!`](@ref
 Kroki.Service.stop!), etc. are included to help with the self-hosting scenario,
 provided [Docker Compose](https://docs.docker.com/compose) is available.
+
+!!! tip "Kroki and Continuous Integration (CI)"
+    Running a dedicated Kroki instance in CI environments can help ensure more
+    reliable builds, e.g. when building documentation with integrated diagrams,
+    etc. There are multiple ways of achieving this, increasing in
+    difficulty/maintenance burden.
+
+    The service management functions mentioned above are the most
+    straightforward way to get a local version of Kroki running. Public GitHub
+    Actions runners have all the necessary tools supporting these functions
+    readily installed. Hence, a call to [`Kroki.Service.start!`](@ref) is all
+    that is necessary to run a local Kroki service on GitHub Actions. For
+    instance from the `make.jl` script typically used for documentation
+    generation. Other CI environments, such as GitLab CI, Travis, private
+    GitHub Actions runners, etc. may require separate installation of Docker
+    and/or Docker Compose.
+
+    Alternatively, [the Docker Compose
+    definitions](https://github.com/bauglir/Kroki.jl/blob/main/support/docker-services.yml)
+    can be leveraged in combination with an action such as
+    [`isbang/compose-action`](https://github.com/isbang/compose-action) to
+    launch the necessary services.
+
+    It is also possible to use functionality such as [service
+    containers](https://docs.github.com/en/actions/using-containerized-services/about-service-containers).
+    It is important to take into account such an approach will require
+    duplication of much of the configuration readily provided by the solutions
+    mentioned above. Refer to Kroki's documentation for more information on
+    [the necessary container
+    images](https://docs.kroki.io/kroki/setup/install/#images).
+
+    In the last two cases it is important to remember to correctly configure
+    the endpoint for the package using [`Kroki.Service.setEndpoint!`](@ref). In
+    the first case this will be handled automatically, provided the services
+    are started within the same Julia session as where the diagrams are
+    rendered.
 
 ## [Supported Diagram Types](@id diagram-support)
 
