@@ -25,7 +25,7 @@ and background.
 
 ## Installation & Usage
 
-Install Kroki through Julia's package manager
+Install the package through Julia's package manager
 
 ```
 (v1.10) pkg> add Kroki
@@ -53,6 +53,15 @@ Julia -> Kroki: Sure!
 ```
 
 See the [examples section](@ref Examples) for more details and, well, examples.
+
+!!! warning "Getting Help"
+    For feature requests and bug reports related to this Julia package use [the
+    Issue tracker on GitHub](https://github.com/bauglir/Kroki.jl/issues).
+
+    To get help regarding Kroki itself, e.g. for operational issues with the
+    publicly hosted Kroki server, requests for adding support for additional
+    diagram types, etc. please refer to [the Getting Help section of the Kroki
+    documentation](https://docs.kroki.io/kroki/project/get-help/).
 
 The package can be configured to use the publicly hosted server at
 [https://kroki.io](https://kroki.io) or a [self-hosted
