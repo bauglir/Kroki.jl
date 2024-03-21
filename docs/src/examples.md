@@ -229,7 +229,7 @@ DocumenterSvg(
     from the [Structurizr (Lite) software](https://structurizr.com/help/lite),
     or they can be specified as [the second argument to 'view definitions'
     using the Structurizr
-    DSL](https://github.com/structurizr/dsl/blob/master/docs/language-reference.md#views).
+    DSL](https://docs.structurizr.com/dsl/language#views).
 
 ## Rendering to a specific format
 
