@@ -255,7 +255,7 @@ DIAGRAM_TYPE_METADATA = Dict{Symbol, DiagramTypeMetadata}(
     DiagramTypeMetadata("Svgbob", "https://ivanceras.github.io/content/Svgbob.html"),
   :symbolator =>
     DiagramTypeMetadata("Symbolator", "https://github.com/kevinpt/symbolator"),
-  :tikz => DiagramTypeMetadata("Symbolator", "https://github.com/pgf-tikz/pgf"),
+  :tikz => DiagramTypeMetadata("TikZ/PGF", "https://github.com/pgf-tikz/pgf"),
   :umlet => DiagramTypeMetadata("UMLet", "https://github.com/umlet/umlet"),
   :vega => DiagramTypeMetadata("Vega", "https://vega.github.io/vega"),
   :vegalite => DiagramTypeMetadata("Vega-Lite", "https://vega.github.io/vega-lite"),
