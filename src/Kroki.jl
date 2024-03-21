@@ -253,8 +253,9 @@ DIAGRAM_TYPE_METADATA = Dict{Symbol, DiagramTypeMetadata}(
   :structurizr => DiagramTypeMetadata("Structurizr", "https://structurizr.com"),
   :svgbob =>
     DiagramTypeMetadata("Svgbob", "https://ivanceras.github.io/content/Svgbob.html"),
-  :symbolator => DiagramTypeMetadata("Symbolator", "https://github.com/kevinpt/symbolator"),
-  :tikz => DiagramTypeMetadata("Symbolator", "https://github.com/pgf-tikz/pgf"),
+  :symbolator =>
+    DiagramTypeMetadata("Symbolator", "https://github.com/kevinpt/symbolator"),
+  :tikz => DiagramTypeMetadata("TikZ/PGF", "https://github.com/pgf-tikz/pgf"),
   :umlet => DiagramTypeMetadata("UMLet", "https://github.com/umlet/umlet"),
   :vega => DiagramTypeMetadata("Vega", "https://vega.github.io/vega"),
   :vegalite => DiagramTypeMetadata("Vega-Lite", "https://vega.github.io/vega-lite"),
@@ -334,17 +335,8 @@ const LIMITED_DIAGRAM_SUPPORT = MIMEToDiagramTypeMap(
     :vegalite,
     :wireviz,
   ),
-  MIME"image/svg+xml"() => (
-    :bpmn,
-    :bytefield,
-    :d2,
-    :dbml,
-    :excalidraw,
-    :nomnoml,
-    :pikchr,
-    :svgbob,
-    :wavedrom
-  ),
+  MIME"image/svg+xml"() =>
+    (:bpmn, :bytefield, :d2, :dbml, :excalidraw, :nomnoml, :pikchr, :svgbob, :wavedrom),
   MIME"text/plain"() => (:c4plantuml, :plantuml, :structurizr),
   MIME"text/plain; charset=utf-8"() => (:c4plantuml, :plantuml, :structurizr),
 )
