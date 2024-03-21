@@ -38,13 +38,6 @@ workspace {
         library -> this "Sends encoded diagram to"
       }
 
-      container "Blockdiag Service" {
-        description "Renders diagrams from the `blockdiag` suite of generators, e.g. `blockdiag`, `seqdiag`, `actdiag`, `nwdiag`, etc."
-        url http://blockdiag.com
-
-        kroki_core -> this "Defers `blockdiag` diagrams to"
-      }
-
       container "BPMN Service" {
         description "Renders 'Business Process Model and Notation' diagrams using `bpmn-js`."
         url https://bpmn.io/toolkit/bpmn-js
