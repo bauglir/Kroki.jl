@@ -28,4 +28,4 @@ jobs:
         uses: peter-evans/commit-comment@v3
         if: steps.semantic-release.outputs.new_release_published == 'true'
         with:
-          body: '@JuliaRegistrator register branch=main'
+          body: '@JuliaRegistrator register branch=${{ steps.semantic-release.outputs.new_release_git_tag }}'
