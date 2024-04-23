@@ -12,6 +12,7 @@ jobs:
       - uses: julia-actions/setup-julia@v2
         with:
           version: '1.10'
+      - uses: julia-actions/cache@v1
       - name: Install CompatHelper
         run: julia -e 'using Pkg; Pkg.add("CompatHelper")'
       - name: Update Dependencies
