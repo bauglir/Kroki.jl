@@ -378,16 +378,6 @@ Base.showable(::MIME"image/svg+xml", ::Diagram) = true
 Base.showable(::T, diagram::Diagram) where {T <: MIME} =
   Symbol(lowercase(String(diagram.type))) ∈ get(LIMITED_DIAGRAM_SUPPORT, T(), Tuple([]))
 
-# Calling `Base.show` for JPEGs is explicitly disabled, for the time being.
-# JPEG rendering is broken for all, supposedly supported, diagram types in the
-# Kroki service. Should the support be fixed in the service, this method can be
-# easily redefined by consuming software to support JPEG in case Kroki.jl has
-# not been updated and released.
-#
-# Note that this only affects automatic rendering of `Diagram`s to JPEGs in
-# supported environments. It is still possible to use `render` to render JPEGs
-Base.showable(::MIME"image/jpeg", ::Diagram) = false
-
 """
 Defines the MIME type to be used when `show` gets called on a [`Diagram`](@ref)
 for the `text/plain` MIME type.
