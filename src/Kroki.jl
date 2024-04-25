@@ -140,7 +140,9 @@ they occur.
 
 _SVG output is supported for all [`Diagram`](@ref) types_. See the [support
 table](@ref diagram-support) for an overview of other supported output formats
-per diagram type.
+per diagram type and [`overrideShowable`](@ref) in case it is necessary to
+override default `Base.show` behavior, e.g. to disable a specific output
+format.
 """
 render(
   diagram::Diagram,
@@ -354,6 +356,48 @@ const MIME_TO_RENDER_ARGUMENT_MAP = Dict{MIME, String}(
   MIME"text/plain; charset=utf-8"() => "utxt",
 )
 
+"""
+Normalizes the `type` of the [`Diagram`](@ref) enabling consistent comparisons,
+etc. while enabling user-facing case insensitivity.
+"""
+normalizeDiagramType(diagram::Diagram) = normalizeDiagramType(diagram.type)
+normalizeDiagramType(diagram_type::Symbol) = Symbol(lowercase(String(diagram_type)))
+
+"""
+Overrides the behavior of `Base.showable` for a specific `output_format` and
+`diagram_type` relative to what is recorded in
+[`LIMITED_DIAGRAM_SUPPORT`](@ref). The overrides are tracked through
+[`SHOWABLE_OVERRIDES`](@ref).
+
+Note that overriding whether a diagram type is `showable` for a specific output
+format, specifically enabling one, requires the Kroki service to support it for
+a diagram to properly render!
+"""
+function overrideShowable(output_format::MIME, diagram_type::Symbol, supported::Bool)
+  SHOWABLE_OVERRIDES[(normalizeDiagramType(diagram_type), output_format)] = supported
+end
+
+"""
+Resets [`SHOWABLE_OVERRIDES`](@ref) so that the default `showable` support is
+enabled for all diagram types.
+"""
+resetShowableOverrides() = empty!(SHOWABLE_OVERRIDES)
+
+"""
+Tracks overrides that should be applied to the output format support registered
+in [`LIMITED_DIAGRAM_SUPPORT`](@ref) for specific diagram types.
+
+Typically used to disable an output format that might selected by `Base.show`
+to render a specific diagram type to for a given display in case that produces
+undesired results. Can also be used to enable output formats in addition to SVG
+for new diagram types that support them and that may not have been added to
+this package's [`LIMITED_DIAGRAM_SUPPORT`](@ref) yet.
+
+Should be manipulated using [`overrideShowable`](@ref) and
+[`resetShowableOverrides`](@ref).
+"""
+const SHOWABLE_OVERRIDES = Dict{Tuple{Symbol, MIME}, Bool}()
+
 # `Base.show` methods should only be defined for diagram types that actually
 # support the desired output format. This would make sure incompatible formats
 # are not accidentally rendered on compatible `AbstractDisplay`s causing
@@ -369,14 +413,22 @@ Base.show(io::IO, ::T, diagram::Diagram) where {T <: MIME} =
 # to render this MIME type, it is simply forwarded to that method
 Base.show(io::IO, ::MIME"text/plain", diagram::Diagram) = show(io, diagram)
 
-# SVG output is supported by _all_ diagram types. An additional `showable`
-# method is necessary as `LIMITED_DIAGRAM_SUPPORT` documents only those diagram
-# types that _only_ support SVG. This makes sure SVG output also works for new
-# diagram types if they get added to the Kroki service, but not yet to this
-# package
-Base.showable(::MIME"image/svg+xml", ::Diagram) = true
-Base.showable(::T, diagram::Diagram) where {T <: MIME} =
-  Symbol(lowercase(String(diagram.type))) ∈ get(LIMITED_DIAGRAM_SUPPORT, T(), Tuple([]))
+function Base.showable(output_format::T, diagram::Diagram) where {T <: MIME}
+  diagram_type = normalizeDiagramType(diagram)
+
+  override_index = (diagram_type, output_format)
+  if haskey(SHOWABLE_OVERRIDES, override_index)
+    return SHOWABLE_OVERRIDES[override_index]
+  elseif T === MIME"image/svg+xml"
+    # SVG output is supported by _all_ diagram types. Instead of encoding
+    # this for all types  in `LIMITED_DIAGRAM_SUPPORT` this is tracked here
+    # so that SVG output also works for new diagram types if they get added
+    # to the Kroki service, but not yet to this package
+    return true
+  else
+    return diagram_type ∈ get(LIMITED_DIAGRAM_SUPPORT, output_format, Tuple([]))
+  end
+end
 
 """
 Defines the MIME type to be used when `show` gets called on a [`Diagram`](@ref)

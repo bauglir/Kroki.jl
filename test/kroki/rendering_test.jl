@@ -2,8 +2,12 @@ module RenderingTest
 
 using Test: @test, @testset, @test_throws
 
-using Kroki: Diagram, Kroki, render
+using Kroki: Diagram, Kroki, overrideShowable, render, resetShowableOverrides
 using Kroki.Exceptions: InvalidOutputFormatError, UnsupportedMIMETypeError
+
+PDF_MIME_TYPE = MIME"application/pdf"()
+PNG_MIME_TYPE = MIME"image/png"()
+SVG_MIME_TYPE = MIME"image/svg+xml"()
 
 function testShowMethodRenders(
   diagram::Diagram,
@@ -113,10 +117,6 @@ end
   end
 
   @testset "`Base.show`" begin
-    pdf_mime_type = MIME"application/pdf"()
-    png_mime_type = MIME"image/png"()
-    svg_mime_type = MIME"image/svg+xml"()
-
     # Svgbob diagrams only support SVG output. Any other formats should throw
     # `InvalidOutputFormatError`s when called directly.
     #
@@ -125,20 +125,20 @@ end
     # should be overridden to indicate the diagram cannot be rendered in the
     # specified MIME type
     svgbob_diagram = Diagram(:svgbob, "-->[_...__... ]")
-    @test_throws(InvalidOutputFormatError, show(IOBuffer(), pdf_mime_type, svgbob_diagram))
-    @test !showable(pdf_mime_type, svgbob_diagram)
-    @test_throws(InvalidOutputFormatError, sprint(show, png_mime_type, svgbob_diagram))
-    @test !showable(png_mime_type, svgbob_diagram)
+    @test_throws(InvalidOutputFormatError, show(IOBuffer(), PDF_MIME_TYPE, svgbob_diagram))
+    @test !showable(PDF_MIME_TYPE, svgbob_diagram)
+    @test_throws(InvalidOutputFormatError, sprint(show, PNG_MIME_TYPE, svgbob_diagram))
+    @test !showable(PNG_MIME_TYPE, svgbob_diagram)
     @test_throws(
       InvalidOutputFormatError,
       show(IOBuffer(), MIME"image/jpeg"(), svgbob_diagram)
     )
     @test !showable("image/jpeg", svgbob_diagram)
-    testShowMethodRenders(svgbob_diagram, svg_mime_type, "svg")
+    testShowMethodRenders(svgbob_diagram, SVG_MIME_TYPE, "svg")
     @test !showable("non-existent/mime-type", svgbob_diagram)
 
     plantuml_diagram = Diagram(:PlantUML, "A -> B: C")
-    testShowMethodRenders(plantuml_diagram, png_mime_type, "png")
+    testShowMethodRenders(plantuml_diagram, PNG_MIME_TYPE, "png")
     # PlantUML diagrams support SVG, but are not part of the
     # `LIMITED_DIAGRAM_SUPPORT` as they support more output formats.
     #
@@ -146,8 +146,8 @@ end
     # is necessary to make sure a `showable` method is available to indicate
     # SVG is always supported to those enviroments that need to query that
     # information
-    @test showable(svg_mime_type, plantuml_diagram)
-    testShowMethodRenders(plantuml_diagram, svg_mime_type, "svg")
+    @test showable(SVG_MIME_TYPE, plantuml_diagram)
+    testShowMethodRenders(plantuml_diagram, SVG_MIME_TYPE, "svg")
 
     @testset "`text/plain`" begin
       plain_text_mime_type = MIME"text/plain"()
@@ -173,7 +173,7 @@ end
         testShowMethodRenders(plantuml_diagram, MIME"text/plain"(), "txt")
 
         @testset "generates an error if an invalid `text/plain` MIME type is configured" begin
-          Kroki.TEXT_PLAIN_SHOW_MIME_TYPE[] = png_mime_type
+          Kroki.TEXT_PLAIN_SHOW_MIME_TYPE[] = PNG_MIME_TYPE
 
           @test_throws(
             UnsupportedMIMETypeError,
@@ -183,6 +183,41 @@ end
 
         Kroki.TEXT_PLAIN_SHOW_MIME_TYPE[] = original_text_plain_mimetype
       end
+    end
+
+    @testset "overrides" begin
+      diagram = Diagram(:plantuml, "A -> B: C")
+
+      @testset "for `image/svg+xml`" begin
+        # SVG is supported by default
+        @test showable(SVG_MIME_TYPE, diagram)
+        overrideShowable(SVG_MIME_TYPE, :plantuml, false)
+        @test !showable(SVG_MIME_TYPE, diagram)
+      end
+
+      @testset "for other MIME types" begin
+        # PDF is supported explicitly for PlantUML through the
+        # `LIMITED_DIAGRAM_SUPPORT`
+        @test showable(PDF_MIME_TYPE, diagram)
+        overrideShowable(PDF_MIME_TYPE, :plantuml, false)
+        @test !showable(PDF_MIME_TYPE, diagram)
+      end
+
+      resetShowableOverrides()
+      @test showable(SVG_MIME_TYPE, diagram)
+      @test showable(PDF_MIME_TYPE, diagram)
+
+      @testset "diagram types are case insensitive" begin
+        overrideShowable(SVG_MIME_TYPE, :PlAnTuMl, false)
+        @test !showable(SVG_MIME_TYPE, diagram)
+
+        overrideShowable(PDF_MIME_TYPE, :PlantUML, false)
+        @test !showable(PDF_MIME_TYPE, diagram)
+      end
+
+      resetShowableOverrides()
+      @test showable(SVG_MIME_TYPE, diagram)
+      @test showable(PDF_MIME_TYPE, diagram)
     end
   end
 end
