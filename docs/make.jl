@@ -5,9 +5,9 @@ const running_in_ci = get(ENV, "CI", nothing) == "true"
 makedocs(
   authors = "Joris Kraak",
   modules = [Kroki],
-  sitename = "Kroki.jl",
   pages = ["Home" => "index.md", "Examples" => "examples.md", "API" => "api.md"],
-  strict = running_in_ci,
+  sitename = "Kroki.jl",
+  warnonly = !running_in_ci,
 )
 
 if running_in_ci

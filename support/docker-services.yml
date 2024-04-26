@@ -1,14 +1,13 @@
+---
 version: "3"
 services:
   core:
-    image: yuzutech/kroki
+    image: yuzutech/kroki:${KROKI_CONTAINER_IMAGE_TAG:-latest}
     depends_on:
-      - blockdiag
       - bpmn
       - excalidraw
       - mermaid
     environment:
-      - KROKI_BLOCKDIAG_HOST=blockdiag
       - KROKI_BPMN_HOST=bpmn
       - KROKI_DIAGRAMSNET_HOST=diagramsnet
       - KROKI_EXCALIDRAW_HOST=excalidraw
@@ -18,13 +17,11 @@ services:
       - KROKI_SAFE_MODE=unsafe
     ports:
       - 8000:8000
-  blockdiag:
-    image: yuzutech/kroki-blockdiag
   bpmn:
-    image: yuzutech/kroki-bpmn
+    image: yuzutech/kroki-bpmn:${KROKI_CONTAINER_IMAGE_TAG:-latest}
   diagramsnet:
-    image: yuzutech/kroki-diagramsnet
+    image: yuzutech/kroki-diagramsnet:${KROKI_CONTAINER_IMAGE_TAG:-latest}
   excalidraw:
-    image: yuzutech/kroki-excalidraw
+    image: yuzutech/kroki-excalidraw:${KROKI_CONTAINER_IMAGE_TAG:-latest}
   mermaid:
-    image: yuzutech/kroki-mermaid
+    image: yuzutech/kroki-mermaid:${KROKI_CONTAINER_IMAGE_TAG:-latest}

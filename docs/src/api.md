@@ -13,7 +13,9 @@ Diagram(::Symbol, ::AbstractString)
 Diagram(::Symbol; ::Union{Nothing,AbstractString}, ::Union{Nothing,AbstractString})
 SUPPORTED_TEXT_PLAIN_SHOW_MIME_TYPES
 TEXT_PLAIN_SHOW_MIME_TYPE
+overrideShowable
 render
+resetShowableOverrides
 ```
 
 ### Service Management
@@ -41,8 +43,10 @@ DiagramTypeMetadata
 DIAGRAM_TYPE_METADATA
 LIMITED_DIAGRAM_SUPPORT
 MIME_TO_RENDER_ARGUMENT_MAP
+SHOWABLE_OVERRIDES
 UriSafeBase64Payload
 getDiagramTypeMetadata
+normalizeDiagramType
 ```
 
 ### Documentation

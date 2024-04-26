@@ -32,7 +32,7 @@ when contributing.
 Install Kroki through Julia's package manager
 
 ```
-(v1.7) pkg> add Kroki
+(v1.10) pkg> add Kroki
 ```
 
 Construct diagrams using the

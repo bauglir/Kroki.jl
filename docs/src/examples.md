@@ -182,7 +182,7 @@ rendered from the set defined in the file.
 structurizr_diagram = Diagram(
   :structurizr;
   path = joinpath(@__DIR__, "..", "architecture", "workspace.dsl"),
-  options = Dict("view-key" => "KrokiService-Container")
+  options = Dict("view-key" => "ServiceContainers")
 )
 ```
 
@@ -218,7 +218,7 @@ end
 DocumenterSvg(
   render(
     structurizr_diagram, "svg";
-    options = Dict("view-key" => "Krokijl-Krokijl-Component")
+    options = Dict("view-key" => "PackageComponents")
   )
 )
 ```
@@ -229,7 +229,7 @@ DocumenterSvg(
     from the [Structurizr (Lite) software](https://structurizr.com/help/lite),
     or they can be specified as [the second argument to 'view definitions'
     using the Structurizr
-    DSL](https://github.com/structurizr/dsl/blob/master/docs/language-reference.md#views).
+    DSL](https://docs.structurizr.com/dsl/language#views).
 
 ## Rendering to a specific format
 
@@ -269,15 +269,54 @@ using `write`.
 write("mermaid_diagram.png", mermaid_diagram_as_png)
 ```
 
-![Mermaid diagram as PNG example](mermaid_diagram.png)
-
-Note the difference in file size and fonts when rendering to SVG.
+Note the difference in file size when rendering to SVG.
 
 ```@example diagrams
 write("mermaid_diagram.svg", render(mermaid_diagram, "svg"))
 ```
 
-![Mermaid diagram as SVG example](mermaid_diagram.svg)
+### Overriding `Base.show` behavior
+
+In some cases the output format that is used may affect how the final diagram
+renders. Although it is always possible to explicitly fall back to calling
+`render` in these cases, this may be cumbersome when writing documentation,
+etc. and having to explicitly do that for every diagram of a specific type. As
+an alternative, it is possible to instruct `Kroki` to ignore certain output
+formats when rendering a specific diagram type using `Base.show`.
+
+For instance, by default (in most cases) a Mermaid diagram will be rendered as
+an SVG. Due to the way these diagrams are rendered by Kroki this may result in
+text getting cut off, see
+[yuzutech/kroki#1345](https://github.com/yuzutech/kroki/issues/1345) for
+details.
+
+```@example diagrams
+mermaid_diagram
+```
+
+!!! tip "Inspecting the output format of an image"
+
+    The most straightforward way of inspecting the output format is to open the
+    image in a new tab in your browser and checking its extension, e.g. by
+    right clicking on it and selecting _Open image in new tab_ in Chrome or a
+    similar browser. Alternatively the type of the rendered image can be seen
+    by inspecting the source of this page.
+
+Using [`Kroki.overrideShowable`](@ref), `Kroki` can be instructed to not render
+to SVG and pick the next most suitable output format with a fallback of
+rendering the diagram to text if none are available.
+
+```@example diagrams
+Kroki.overrideShowable(MIME"image/svg+xml"(), :mermaid, false)
+```
+
+For Mermaid diagrams in the context of `Documenter` this means rendering the
+diagram as a PNG. When rendering to PNG the previously mentioned font issues do
+not arise.
+
+```@example diagrams
+mermaid_diagram
+```
 
 ## Controlling text rendering
 
