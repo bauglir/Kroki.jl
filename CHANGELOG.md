@@ -1,5 +1,23 @@
 # Changelog
 
+# [1.0.0](https://github.com/bauglir/Kroki.jl/compare/v0.2.0...v1.0.0) (2024-04-26)
+
+
+### Bug Fixes
+
+* **diagram:** re-enable automatic JPEG rendering through `Base.show` ([131f93f](https://github.com/bauglir/Kroki.jl/commit/131f93f60e5d57209054bb294cccf6b9c3258612))
+* replace JPEG with PDF output for PlantUML and Structurizr ([6d219cf](https://github.com/bauglir/Kroki.jl/commit/6d219cf90b8c2aa38593f23781b22a2277e29d7a)), closes [yuzutech/kroki#1536](https://github.com/yuzutech/kroki/issues/1536)
+
+
+### Features
+
+* **service:** enable configuration of the Kroki version ([ff03e66](https://github.com/bauglir/Kroki.jl/commit/ff03e6698fbf07c1075c75deca735b48ef55399f))
+* support D2 diagrams ([134bfcd](https://github.com/bauglir/Kroki.jl/commit/134bfcd7bcfb7c93f7e75c635a81387c8200fb89)), closes [#42](https://github.com/bauglir/Kroki.jl/issues/42)
+* support DBML diagrams ([c03743a](https://github.com/bauglir/Kroki.jl/commit/c03743ac2d442f884a77364d43ee089ee19666be)), closes [#42](https://github.com/bauglir/Kroki.jl/issues/42)
+* support Symbolator diagrams ([c30714e](https://github.com/bauglir/Kroki.jl/commit/c30714e73dab07b1eb631c36f4b8ab02a62b787f)), closes [#42](https://github.com/bauglir/Kroki.jl/issues/42)
+* support Tikz/PGF plots ([59f4008](https://github.com/bauglir/Kroki.jl/commit/59f400849839ed4d71a5f1002efd5ef1df4db40e)), closes [#46](https://github.com/bauglir/Kroki.jl/issues/46)
+* support WireViz diagrams ([04addeb](https://github.com/bauglir/Kroki.jl/commit/04addebe3e7c3acf466ec2b94a9a1832f885ac89)), closes [#42](https://github.com/bauglir/Kroki.jl/issues/42)
+
 # [0.2.0](https://github.com/bauglir/Kroki.jl/compare/v0.1.0...v0.2.0) (2022-07-26)
 
 
