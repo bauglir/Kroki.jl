@@ -33,7 +33,7 @@ tag for the container image.
 module Service
 
 using HTTP: get as httpget
-using JSON: parse as parseJSON
+using JSON: Object as JSONObject, parse as parseJSON
 using Markdown: parse as parseMarkdown
 
 using ..Exceptions: InfoRetrievalError
@@ -115,8 +115,15 @@ executeDockerCompose(cmd::String) = executeDockerCompose([cmd])
 # be mocked out in tests
 const EXECUTE_DOCKER_COMPOSE = Ref{Any}(executeDockerCompose)
 
+# The `parse` function in `JSON@1` returns a `JSON.Object`, imported as
+# `JSONObject`. Versions prior to that return a regular `Dict`. `JSON@1` is not
+# suported on Julia versions prior to v1.9. The following construct maintains
+# compatibility with older Julia versions down to Julia v1.6
+const KrokiServiceVersionData =
+  @isdefined(JSONObject) ? JSONObject{String, Any} : Dict{String, Any}
+
 function infoVersionOverview(
-  kroki_service_version::Dict{String, Any},
+  kroki_service_version::KrokiServiceVersionData,
   diagram_type_versions::Vector{String},
 )
   return parseMarkdown(
