@@ -50,7 +50,7 @@ const DEFAULT_ENDPOINT = "https://kroki.io"
 
 """
 A specialized `Exception` to include reporting instructions for specific types
-of errors that may occur while trying to execute `docker-compose`.
+of errors that may occur while trying to execute `docker compose`.
 """
 struct DockerComposeExecutionError <: Exception
   message::String
@@ -58,7 +58,7 @@ end
 Base.showerror(io::IO, error::DockerComposeExecutionError) = print(
   io,
   """
-An error occurred while executing `docker-compose`.
+An error occurred while executing `docker compose`.
 
 This may be caused by a change in its interface. If you believe this error to
 be caused by Kroki.jl itself instead of a configuration error on the system,
@@ -93,7 +93,7 @@ function executeDockerCompose(cmd::Vector{String})
   try
     run(
       pipeline(
-        `docker-compose --file $(SERVICE_DEFINITION_FILE) --project-name krokijl $cmd`;
+        `docker compose --file $(SERVICE_DEFINITION_FILE) --project-name krokijl $cmd`;
         stderr = captured_stderr,
         stdout = captured_stdout,
       ),
