@@ -14,12 +14,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Semantic Release
-        uses: cycjimmy/semantic-release-action@v4
+        uses: cycjimmy/semantic-release-action@v6
         id: semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          semantic_version: 23.0.2
+          semantic_version: 25.0.3
           extends: |
             @ethima/semantic-release-configuration
           extra_plugins: |
