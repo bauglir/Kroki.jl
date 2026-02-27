@@ -33,7 +33,7 @@ tag for the container image.
 module Service
 
 using HTTP: get as httpget
-using JSON: parse as parseJSON
+using JSON: Object as JSONObject, parse as parseJSON
 using Markdown: parse as parseMarkdown
 
 using ..Exceptions: InfoRetrievalError
@@ -50,7 +50,7 @@ const DEFAULT_ENDPOINT = "https://kroki.io"
 
 """
 A specialized `Exception` to include reporting instructions for specific types
-of errors that may occur while trying to execute `docker-compose`.
+of errors that may occur while trying to execute `docker compose`.
 """
 struct DockerComposeExecutionError <: Exception
   message::String
@@ -58,7 +58,7 @@ end
 Base.showerror(io::IO, error::DockerComposeExecutionError) = print(
   io,
   """
-An error occurred while executing `docker-compose`.
+An error occurred while executing `docker compose`.
 
 This may be caused by a change in its interface. If you believe this error to
 be caused by Kroki.jl itself instead of a configuration error on the system,
@@ -93,7 +93,7 @@ function executeDockerCompose(cmd::Vector{String})
   try
     run(
       pipeline(
-        `docker-compose --file $(SERVICE_DEFINITION_FILE) --project-name krokijl $cmd`;
+        `docker compose --file $(SERVICE_DEFINITION_FILE) --project-name krokijl $cmd`;
         stderr = captured_stderr,
         stdout = captured_stdout,
       ),
@@ -115,8 +115,15 @@ executeDockerCompose(cmd::String) = executeDockerCompose([cmd])
 # be mocked out in tests
 const EXECUTE_DOCKER_COMPOSE = Ref{Any}(executeDockerCompose)
 
+# The `parse` function in `JSON@1` returns a `JSON.Object`, imported as
+# `JSONObject`. Versions prior to that return a regular `Dict`. `JSON@1` is not
+# suported on Julia versions prior to v1.9. The following construct maintains
+# compatibility with older Julia versions down to Julia v1.6
+const KrokiServiceVersionData =
+  @isdefined(JSONObject) ? JSONObject{String, Any} : Dict{String, Any}
+
 function infoVersionOverview(
-  kroki_service_version::Dict{String, Any},
+  kroki_service_version::KrokiServiceVersionData,
   diagram_type_versions::Vector{String},
 )
   return parseMarkdown(

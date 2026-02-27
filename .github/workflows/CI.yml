@@ -17,6 +17,7 @@ jobs:
         version:
           - '1.6'
           - '1.10'
+          - '1.12'
         os:
           - ubuntu-latest
           - macOS-latest
@@ -45,6 +46,10 @@ jobs:
       - name: Coveralls parallel
         uses: coverallsapp/github-action@v2
         with:
+          # Temporarily disable this step from failing the job. Coveralls is
+          # experiencing infrastrucure issues preventing the full CI suite from
+          # running. See https://status.coveralls.io/
+          fail-on-error: false
           github-token: ${{ secrets.GITHUB_TOKEN }}
           parallel: true
           path-to-lcov: ./lcov.info

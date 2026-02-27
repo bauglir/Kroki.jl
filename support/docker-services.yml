@@ -1,5 +1,4 @@
 ---
-version: "3"
 services:
   core:
     image: yuzutech/kroki:${KROKI_CONTAINER_IMAGE_TAG:-latest}
