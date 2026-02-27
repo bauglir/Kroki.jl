@@ -55,7 +55,13 @@ end
                                             DIAGRAM_EXAMPLES
       rendered = String(render(Diagram(diagram_format, specification), "svg"))
 
-      @test startswith(rendered, "<?xml")
+      # All renderers include some metadata before the actual SVG data. For
+      # instance, processing instructions, i.e. elements starting with `<?`,
+      # declarations and/or comments, i.e. elements starting with `<!`. The
+      # elements differ per renderer and some are separated by newlines, they
+      # should all be ignored for testing purposes. The important bit is a
+      # starting `<svg` tag.
+      @test startswith(rendered, r"(<(\?|!)[^>]+>\n?)*<svg")
       # Some renderers (e.g. Graphviz) include additional whitespace/newlines
       # after the render, these should be ignored when matching
       @test endswith(rendered, r"</svg>\s?")

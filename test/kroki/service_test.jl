@@ -18,7 +18,7 @@ using SimpleMock
 using Test: @test, @test_logs, @test_skip, @test_throws, @testset
 
 # Helper function to temporarily replace `EXECUTE_DOCKER_COMPOSE` with a
-# `Mock`. Used to gain control over `docker-compose` behavior for local service
+# `Mock`. Used to gain control over `docker compose` behavior for local service
 # instance management tests
 function mockExecuteDockerCompose(f::Function, mock::Mock)
   EXECUTE_DOCKER_COMPOSE[] = mock
@@ -121,18 +121,18 @@ end
   end
 
   @testset "local instance management" begin
-    @static if Sys.which("docker-compose") !== nothing
-      @testset "wraps `docker-compose` with local service definitions" begin
+    @static if Sys.which("docker") !== nothing
+      @testset "wraps `docker compose` with local service definitions" begin
         status_report = executeDockerCompose("ps")
 
-        # Verify known pieces of `docker-compose ps` output are returned
-        @test occursin("Name", status_report)
-        @test occursin("Command", status_report)
-        @test occursin("State", status_report)
-        @test occursin("Ports", status_report)
+        # Verify known pieces of `docker compose ps` output are returned
+        @test occursin("NAME", status_report)
+        @test occursin("COMMAND", status_report)
+        @test occursin("STATUS", status_report)
+        @test occursin("PORTS", status_report)
       end
     else
-      @test_skip "Tests requiring `docker-compose` are skipped"
+      @test_skip "Tests requiring `docker compose` are skipped"
     end
 
     @testset "`executeDockerCompose` throws descriptive errors indicating" begin
@@ -150,12 +150,12 @@ end
         end
       end
 
-      # These tests require `docker-compose` to be available, as they
-      # specifically test errors in the interface from Kroki.jl to it.
+      # These tests require `docker`, specifically the `compose` plugin, to be
+      # available, as they test errors in the interface from Kroki.jl to it.
       #
       # This construct ensures the tests are always run if possible and clearly
       # marked broken on unsupported platforms
-      @static if Sys.which("docker-compose") !== nothing
+      @static if Sys.which("docker") !== nothing
         @testset "to file an issue on indications of errors in Kroki.jl" begin
           try
             executeDockerCompose(["--non-existent", "ps"])
@@ -163,13 +163,13 @@ end
             @test exception isa DockerComposeExecutionError
 
             error_message = sprint(showerror, exception)
-            @test occursin("docker-compose", error_message)
+            @test occursin("docker compose", error_message)
             @test occursin("file an issue", error_message)
             @test occursin("The reported error was", error_message)
           end
         end
       else
-        @test_skip "Tests requiring `docker-compose` are skipped"
+        @test_skip "Tests requiring `docker compose` are skipped"
       end
     end
 
@@ -192,7 +192,7 @@ end
             @test_logs (:info, "Starting Kroki service components.") match_mode = :any start!()
 
           # Ensure nothing gets returned from a call to `start!` instead of
-          # `Process`es from the `docker-compose` execution
+          # `Process`es from the `docker compose` execution
           @test returned === nothing
           @test called_with(_executeDockerCompose, ["up", "--detach"])
 
@@ -262,7 +262,7 @@ end
           @test_logs (:info, "Stopping Kroki service components.") match_mode = :any stop!()
 
         # Ensure nothing gets returned from a call to `stop!` instead of
-        # `Process`es from the `docker-compose` execution
+        # `Process`es from the `docker compose` execution
         @test returned === nothing
         @test called_with(_executeDockerCompose, "stop")
         @test called_with(_executeDockerCompose, ["rm", "--force"])
@@ -276,7 +276,7 @@ end
       @testset "optionally without cleaning up containers" begin
         mockExecuteDockerCompose(Mock()) do _executeDockerCompose
           # Ensure nothing gets returned from a call to `stop!` instead of
-          # `Process`es from the `docker-compose` execution
+          # `Process`es from the `docker compose` execution
           @test stop!(false) === nothing
           @test called_once_with(_executeDockerCompose, "stop")
         end
@@ -288,7 +288,7 @@ end
     @testset "`update!` pulls Kroki service component Docker images" begin
       mockExecuteDockerCompose(Mock()) do _executeDockerCompose
         # Ensure nothing gets returned from a call to `update!` instead of
-        # `Process`es from the `docker-compose` execution
+        # `Process`es from the `docker compose` execution
         @test update!() === nothing
         @test called_with(_executeDockerCompose, ["pull", "--quiet"])
       end
