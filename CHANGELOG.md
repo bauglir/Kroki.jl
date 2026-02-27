@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.1](https://github.com/bauglir/Kroki.jl/compare/v1.0.0...v1.0.1) (2026-02-27)
+
+
+### Bug Fixes
+
+* **deps:** declare compatibility with `JSON@1` ([ca49823](https://github.com/bauglir/Kroki.jl/commit/ca49823b9a3d1dae0d6e5750595cc2bf056dbbdd))
+* **service:** migrate to Docker Compose v2 (or later) ([bedf8cb](https://github.com/bauglir/Kroki.jl/commit/bedf8cb0a0dde759b55d9dea3bca807e04fba4d8))
+
 # [1.0.0](https://github.com/bauglir/Kroki.jl/compare/v0.2.0...v1.0.0) (2024-04-26)
 
 
