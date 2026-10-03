@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/bauglir/Kroki.jl/compare/v1.0.1...v1.0.2) (2026-10-03)
+
+
+### Bug Fixes
+
+* **deps:** declare compatibility with `HTTP@2` ([287dcda](https://github.com/bauglir/Kroki.jl/commit/287dcda2691f1d9c93a15854a65f0c5b8d395e04))
+
 ## [1.0.1](https://github.com/bauglir/Kroki.jl/compare/v1.0.0...v1.0.1) (2026-02-27)
 
 
