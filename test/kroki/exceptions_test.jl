@@ -81,10 +81,9 @@ end
     # `RenderError`s are thrown from the `render` function whenever an error
     # occurs. Some of these benefit from rewrites into more descriptive
     # errors
-    @testset "transforms rewritable `HTTP.ExceptionRequest.StatusError`s" begin
-      # Errors in the Kroki service are thrown as
-      # `HTTP.ExceptionRequest.StatusError` and should be rewritten in more
-      # descriptive errors
+    @testset "transforms rewritable `HTTP.StatusError`s" begin
+      # Errors in the Kroki service are thrown as `HTTP.StatusError` and should
+      # be rewritten in more descriptive errors
       testRenderError(
         "invalid diagram specification",
         :PlantUML,
@@ -104,7 +103,7 @@ end
       )
     end
 
-    @testset "passes unknown `HTTP.ExceptionRequest.StatusError`s as-is" begin
+    @testset "passes unknown `HTTP.StatusError`s as-is" begin
       # Any HTTP related errors that are not due to rendering errors in the
       # Kroki service (e.g. unknown endpoints), should be thrown from
       # `RenderError` as-is
@@ -114,17 +113,20 @@ end
     @testset "passes other errors as-is" begin
       # Non-`StatusError`s (e.g. `IOError`s due to incorrect hostnames should
       # be thrown/returned as-is
-      expected_service_host = "http://localhost:1"
-      expected_diagram_type = :plantuml
-      setEndpoint!(expected_service_host)
+      expected_service_host = "127.0.0.1:1"
+
+      setEndpoint!("http://$(expected_service_host)")
 
       try
-        render(Diagram(expected_diagram_type, "A -> B: C"), "svg")
+        render(Diagram(:plantuml, "A -> B: C"), "svg")
       catch exception
         rendered_buffer = sprint(showerror, exception)
 
-        @test occursin("ECONNREFUSED", rendered_buffer)
-        @test occursin("$(expected_service_host)/$(expected_diagram_type)", rendered_buffer)
+        # The following assertions are written in such a way they will pass on
+        # both HTTP@1 and HTTP@2 which generate differently shaped errors
+        # depending on the version and the platform
+        @test occursin(Regex("(IO|System)Error: connect(ex)?:"), rendered_buffer)
+        @test occursin(expected_service_host, rendered_buffer)
       end
 
       setEndpoint!()
