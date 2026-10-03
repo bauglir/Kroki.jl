@@ -134,9 +134,8 @@ If the Kroki service responds with an error, throws an
 [`InvalidDiagramSpecificationError`](@ref
 Kroki.Exceptions.InvalidDiagramSpecificationError) or
 [`InvalidOutputFormatError`](@ref Kroki.Exceptions.InvalidOutputFormatError) if
-a known type of error occurs. Other errors (e.g.
-`HTTP.ExceptionRequest.StatusError` for connection errors) are propagated if
-they occur.
+a known type of error occurs. Other errors (e.g. `HTTP.StatusError` for
+connection errors) are propagated if they occur.
 
 _SVG output is supported for all [`Diagram`](@ref) types_. See the [support
 table](@ref diagram-support) for an overview of other supported output formats

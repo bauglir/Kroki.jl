@@ -4,7 +4,7 @@ package along with their corresponding `Base.showerror` overloads.
 """
 module Exceptions
 
-using HTTP.ExceptionRequest: StatusError
+using HTTP: StatusError
 
 using ..Kroki: Diagram, Kroki, Maybe
 
@@ -120,8 +120,8 @@ function RenderErrorHeader(
   """
 end
 
-# Rewrites generic `HTTP.ExceptionRequest.StatusError`s into more specific
-# errors based on Kroki's response if possible
+# Rewrites generic `HTTP.StatusError`s into more specific errors based on
+# Kroki's response if possible
 function RenderError(diagram::Diagram, exception::StatusError)
   # Both errors related to invalid diagram specifications and invalid or
   # unsupported output formats are denoted by 400 responses, so further
