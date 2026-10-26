@@ -242,6 +242,7 @@ DIAGRAM_TYPE_METADATA = Dict{Symbol, DiagramTypeMetadata}(
   :ditaa => DiagramTypeMetadata("ditaa", "http://ditaa.sourceforge.net"),
   :erd => DiagramTypeMetadata("erd", "https://github.com/BurntSushi/erd"),
   :excalidraw => DiagramTypeMetadata("Excalidraw", "https://excalidraw.com"),
+  :goat => DiagramTypeMetadata("GoAT", "https://github.com/blampe/goat"),
   :graphviz => DiagramTypeMetadata("Graphviz", "https://graphviz.org"),
   :mermaid => DiagramTypeMetadata("Mermaid", "https://mermaid-js.github.io"),
   :nomnoml => DiagramTypeMetadata("nomnoml", "https://www.nomnoml.com"),
@@ -336,8 +337,18 @@ const LIMITED_DIAGRAM_SUPPORT = MIMEToDiagramTypeMap(
     :vegalite,
     :wireviz,
   ),
-  MIME"image/svg+xml"() =>
-    (:bpmn, :bytefield, :d2, :dbml, :excalidraw, :nomnoml, :pikchr, :svgbob, :wavedrom),
+  MIME"image/svg+xml"() => (
+    :bpmn,
+    :bytefield,
+    :d2,
+    :dbml,
+    :excalidraw,
+    :goat,
+    :nomnoml,
+    :pikchr,
+    :svgbob,
+    :wavedrom,
+  ),
   MIME"text/plain"() => (:c4plantuml, :plantuml, :structurizr),
   MIME"text/plain; charset=utf-8"() => (:c4plantuml, :plantuml, :structurizr),
 )
