@@ -17,7 +17,7 @@ CodecZlib = "0.7"
 # `DocStringExtensions is a development dependency, so its compatibility range
 # is wider to not restrict dependents of this package in their dependency on
 # `DocStringExtensions`
-DocStringExtensions = "0.8, 0.9"
+DocStringExtensions = "0.8, 0.9, 0.10"
 # The wider compatibility range for `HTTP` ensures compatibility with
 # up-to-date versions of `Pluto`, etc.
 HTTP = "0.8, 0.9, 1, 2"
