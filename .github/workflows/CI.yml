@@ -14,16 +14,28 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        os:
+          - macos-latest
+          - ubuntu-latest
+          - windows-latest
         version:
           - '1.6'
           - '1.10'
           - '1.13'
-        os:
-          - ubuntu-latest
-          - macOS-latest
-          - windows-latest
-        arch:
-          - x64
+        include:
+          # Use the native architecture per operating system. These have to
+          # come first due to how the matrix expands for specific overrides
+          # defined later to take effect properly!
+          - os: macos-latest
+            arch: aarch64
+          - os: ubuntu-latest
+            arch: x64
+          - os: windows-latest
+            arch: x64
+          # Except Julia v1.6 on macOS aarch64 given that those builds do not exist
+          - os: macos-latest
+            arch: x64
+            version: '1.6'
     env:
       OS: ${{ matrix.os }}
       JULIA: ${{ matrix.version }}
