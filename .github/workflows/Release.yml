@@ -12,9 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 #v7.0.1
       - name: Semantic Release
-        uses: cycjimmy/semantic-release-action@v6
+        uses: cycjimmy/semantic-release-action@ad51787758d9654d5a75150a89a6fa9b3ccef95e #v8.1.4
         id: semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -25,7 +25,7 @@ jobs:
           extra_plugins: |
             @ethima/semantic-release-configuration
       - name: Notify JuliaRegistrator of new release
-        uses: peter-evans/commit-comment@v3
+        uses: peter-evans/commit-comment@f6d60c65d05bb59f750fa51ad3de1d443ba0eb52 #v4.0.0
         if: steps.semantic-release.outputs.new_release_published == 'true'
         with:
           body: '@JuliaRegistrator register branch=${{ steps.semantic-release.outputs.new_release_git_tag }}'

@@ -11,11 +11,11 @@ jobs:
   code-format-check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: julia-actions/setup-julia@v2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 #v7.0.1
+      - uses: julia-actions/setup-julia@da908477b5db94c10ffce8cfea9f2b3b9d5db687 #v3.0.3
         with:
           version: '1.10'
-      - uses: julia-actions/cache@v1
+      - uses: julia-actions/cache@9353db09a0f2bbbdec6f41791918c75d37391b36 #v3.5.0
       - name: Install JuliaFormatter and format
         run: |
           julia  -e 'using Pkg; Pkg.add(PackageSpec(name="JuliaFormatter", version="1.0.53"))'
