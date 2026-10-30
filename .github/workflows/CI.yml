@@ -14,25 +14,40 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        os:
+          - macos-latest
+          - ubuntu-latest
+          - windows-latest
         version:
           - '1.6'
           - '1.10'
           - '1.13'
-        os:
-          - ubuntu-latest
-          - macOS-latest
-          - windows-latest
-        arch:
-          - x64
+        include:
+          # Use the native architecture per operating system. These have to
+          # come first due to how the matrix expands for specific overrides
+          # defined later to take effect properly!
+          - os: macos-latest
+            arch: aarch64
+          - os: ubuntu-latest
+            arch: x64
+          - os: windows-latest
+            arch: x64
+          # No aarch64 builds exist for Julia v1.6
+          - os: macos-latest
+            arch: x64
+            version: '1.6'
     env:
       OS: ${{ matrix.os }}
       JULIA: ${{ matrix.version }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 #v7.0.1
-      - uses: julia-actions/setup-julia@4c0cb0fce8556fdb04a90347310e5db8b1f98fb9 #v2.7.0
+      - uses: julia-actions/setup-julia@da908477b5db94c10ffce8cfea9f2b3b9d5db687 #v3.0.3
         with:
-          version: ${{ matrix.version }}
           arch: ${{ matrix.arch }}
+          # The Julia v1.6 x64 builds have to run under Rosetta on macOS on
+          # aarch64 machines as no x64 machines are available
+          force-arch: ${{ runner.os == 'macOS' && runner.arch == 'ARM64' && matrix.arch == 'x64' }}
+          version: ${{ matrix.version }}
       - uses: julia-actions/cache@dc1a3cdeacb521b0ca93cfc66143fcadb15a5bd0 #v1.5.2
       - uses: julia-actions/julia-buildpkg@e3eb439fad4f9aba7da2667e7510e4a46ebc46e1 #v1.7.0
       - uses: julia-actions/julia-runtest@6e050c8013b833b1195105ff2fce9cd802f53271 #v1.12.0
