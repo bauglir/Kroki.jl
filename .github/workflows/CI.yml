@@ -29,7 +29,7 @@ jobs:
       JULIA: ${{ matrix.version }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 #v7.0.1
-      - uses: julia-actions/setup-julia@4c0cb0fce8556fdb04a90347310e5db8b1f98fb9 #v2.7.0
+      - uses: julia-actions/setup-julia@da908477b5db94c10ffce8cfea9f2b3b9d5db687 #v3.0.3
         with:
           version: ${{ matrix.version }}
           arch: ${{ matrix.arch }}
