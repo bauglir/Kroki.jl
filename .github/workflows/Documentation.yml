@@ -20,11 +20,7 @@ jobs:
           version: '1.12'
       - uses: julia-actions/cache@v1
       - name: Install dependencies
-        run: |
-          julia --project=docs -e '
-            using Pkg
-            Pkg.develop(PackageSpec(path=pwd()))
-            Pkg.instantiate()'
+        run: julia --project=docs --eval 'using Pkg' --eval 'Pkg.instantiate()'
       - name: Build & Deploy
         run: julia --project=docs docs/make.jl
         env:
