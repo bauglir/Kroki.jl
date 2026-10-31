@@ -69,7 +69,7 @@ jobs:
           parallel: true
           path-to-lcov: ./lcov.info
   coveralls:
-    needs: test
+    needs: Test
     runs-on: ubuntu-latest
     steps:
       - name: Aggregate Coveralls Reports
