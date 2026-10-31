@@ -1,5 +1,18 @@
 # Changelog
 
+# [1.1.0](https://github.com/bauglir/Kroki.jl/compare/v1.0.2...v1.1.0) (2026-10-31)
+
+
+### Bug Fixes
+
+* **deps:** declare compatibility with `DocStringExtensions@0.10` ([0a3ddc7](https://github.com/bauglir/Kroki.jl/commit/0a3ddc71f6342b98fdb794a76bb7b92323ac2d39))
+
+
+### Features
+
+* support GoAT diagrams ([1ccb2e2](https://github.com/bauglir/Kroki.jl/commit/1ccb2e2a1e3f53307a0993d7e7166cd5f55344e2))
+* support Lini diagrams ([766a1dc](https://github.com/bauglir/Kroki.jl/commit/766a1dce535b4676c26194386119805f33813e88))
+
 ## [1.0.2](https://github.com/bauglir/Kroki.jl/compare/v1.0.1...v1.0.2) (2026-10-03)
 
 
