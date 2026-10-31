@@ -9,10 +9,10 @@ jobs:
   CompatHelper:
     runs-on: ubuntu-latest
     steps:
-      - uses: julia-actions/setup-julia@v2
+      - uses: julia-actions/setup-julia@da908477b5db94c10ffce8cfea9f2b3b9d5db687 #v3.0.3
         with:
           version: '1.10'
-      - uses: julia-actions/cache@v1
+      - uses: julia-actions/cache@9353db09a0f2bbbdec6f41791918c75d37391b36 #v3.5.0
       - name: Install CompatHelper
         run: julia -e 'using Pkg; Pkg.add("CompatHelper")'
       - name: Update Dependencies
